@@ -5,6 +5,7 @@ import React from "react";
 import MenuEditPage from "./pages/MenuEditPage/index.jsx";
 import AdminLandingPage from "./pages/AdminLandingPage/index.jsx";
 import orderListPage from "./pages/OrderListPage/index.jsx";
+import OrderPage from "./pages/OrderPage/index.jsx";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/order",
-    element: React.createElement(LockerKeyPage),
+    element: React.createElement(OrderPage),
   },
   {
     path: "/admin",
