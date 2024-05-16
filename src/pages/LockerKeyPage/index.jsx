@@ -10,9 +10,9 @@ const LockerKeyPage = () => {
   const [number, setNumber] = useState("");
 
   useEffect(() => {
-    // document.addEventListener("touchstart", function () {}, true);
-
     numberRef.current.focus();
+
+    document.addEventListener("touchstart", function () {}, true);
   }, []);
 
   const onChangeNumber = (e) => {
@@ -23,16 +23,14 @@ const LockerKeyPage = () => {
   };
 
   const onClickKayPad = (value) => {
+    if (value === "C") {
+      setNumber("");
+      return;
+    }
+
     if (number.length >= 4) return;
 
-    console.log("value >> ", value);
-
-    if (value === "c") {
-      setNumber("");
-      // return;
-    } else {
-      setNumber((prev) => prev + value);
-    }
+    setNumber((prev) => prev + value);
   };
 
   const onClickDelete = () => {
