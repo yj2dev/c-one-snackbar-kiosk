@@ -1,6 +1,6 @@
 import "./App.css";
 import { RecoilRoot } from "recoil";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import LandingPage from "./pages/LandingPage/index.jsx";
 import OrderPage from "./pages/OrderPage/index.jsx";

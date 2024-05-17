@@ -14,7 +14,7 @@ export const ContentSection = styled.section`
   padding: 16px;
 
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 16px;
   dl {
     //border: 1px solid red;
@@ -26,6 +26,8 @@ export const ContentSection = styled.section`
     //justify-content: center;
     align-items: center;
     img {
+      //width: 156px;
+      //height: 156px;
       width: 100%;
       object-fit: cover;
     }
@@ -38,6 +40,7 @@ export const TabSection = styled.section`
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     list-style: none;
     padding: 0;
+    grid-gap: 8px;
     margin: 16px;
     //border-bottom: 1px solid #111f90;
 
@@ -51,6 +54,8 @@ export const TabSection = styled.section`
       min-width: 64px;
       text-align: center;
       transition: 0.2s;
+      background-color: #fff;
+      border-radius: 20px;
 
       &.active {
         //border-radius: 20px 20px 0 0;

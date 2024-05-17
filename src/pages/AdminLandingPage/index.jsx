@@ -1,7 +1,13 @@
 import { Container } from "./styled.js";
+import { Link } from "react-router-dom";
 
 const AdminLandingPage = () => {
-  return <Container>관리자 메인</Container>;
+  return (
+    <Container>
+      <Link to="/admin/order">주문 내역</Link> <br />
+      <Link to="/admin/menu">메뉴 편집</Link>
+    </Container>
+  );
 };
 
 export default AdminLandingPage;
