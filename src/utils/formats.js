@@ -10,3 +10,7 @@ export const getGender = (number) => {
 
   return gender;
 };
+
+export const getKRW = (amount) => {
+  return amount.toLocaleString("ko-KR");
+};

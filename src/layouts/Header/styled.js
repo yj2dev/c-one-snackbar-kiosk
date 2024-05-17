@@ -3,7 +3,9 @@ import styled from "styled-components";
 export const Container = styled.header`
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(17, 31, 144, 1);
+  border-radius: 0 0 20px 20px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
   padding: 8px;
 
   button.back-btn {
@@ -23,6 +25,20 @@ export const Container = styled.header`
     }
   }
 
+  .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 10px;
+    font-weight: 600;
+    color: rgba(17, 31, 144, 1);
+
+    img {
+      margin-right: 4px;
+      width: 18px;
+      height: 18px;
+    }
+  }
   .user-info {
     span.gender-badge {
       color: #fff;
