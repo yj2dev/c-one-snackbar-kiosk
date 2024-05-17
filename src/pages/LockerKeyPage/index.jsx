@@ -15,7 +15,9 @@ const LockerKeyPage = () => {
   const [user, setUser] = useRecoilState(userState);
   const resetUserState = useResetRecoilState(userState);
 
-  const MAX_NUMBER_LEN = 4;
+  const MAX_NUMBER_LEN = 3;
+
+  const [selectedGender, setSelectedGender] = useState("");
 
   useEffect(() => {
     numberRef.current.focus();
@@ -27,10 +29,10 @@ const LockerKeyPage = () => {
       .replace(/[^0-9]/, "")
       .substring(0, MAX_NUMBER_LEN);
 
-    if (onlyNumber.length > MAX_NUMBER_LEN - 1) {
-      setUser({ number: onlyNumber, gender: getGender(number) });
-      navigate("/order");
-    }
+    // if (onlyNumber.length > MAX_NUMBER_LEN - 1) {
+    //   setUser({ number: onlyNumber, gender: getGender(number) });
+    //   navigate("/order");
+    // }
 
     if (onlyNumber.length > MAX_NUMBER_LEN) return;
 
@@ -45,11 +47,11 @@ const LockerKeyPage = () => {
 
     const onlyNumber = (number + value).substring(0, MAX_NUMBER_LEN);
 
-    if (onlyNumber.length > MAX_NUMBER_LEN - 1) {
-      setUser({ number: onlyNumber, gender: getGender(number) });
-      navigate("/order");
-      return;
-    }
+    // if (onlyNumber.length > MAX_NUMBER_LEN - 1) {
+    //   setUser({ number: onlyNumber, gender: getGender(number) });
+    //   navigate("/order");
+    //   return;
+    // }
 
     if (onlyNumber.length > MAX_NUMBER_LEN) return;
 
@@ -68,36 +70,71 @@ const LockerKeyPage = () => {
   return (
     <Container>
       <button className="back-btn" onClick={onClickReset}>
-        처음으로
+        뒤로가기
       </button>
       <h1>
-        <span>락커키 번호</span>를
+        <span>락커키 정보</span>를
         <br />
         입력해주세요
       </h1>
-      <input
-        type="text"
-        ref={numberRef}
-        value={number}
-        onChange={onChangeNumber}
-        inputMode="none"
-      />
 
-      <div className="keypad">
-        {keyList.map((item, index) => (
+      <ul className={`select-gender ${selectedGender.length > 0 && "hidden"}`}>
+        <li
+          className={selectedGender === "M" && "active"}
+          onClick={() => setSelectedGender("M")}
+        >
+          남자
+        </li>
+        <li
+          className={selectedGender === "F" && "active"}
+          onClick={() => setSelectedGender("F")}
+        >
+          여자
+        </li>
+      </ul>
+      <h2
+        className={`show-select-gender ${selectedGender.length > 0 && "hidden"}`}
+      >
+        성별을 선택해주세요
+      </h2>
+      <div
+        className={`show-input-locker ${selectedGender.length > 0 && "active"}`}
+      >
+        <input
+          type="text"
+          placeholder="락커키 번호"
+          ref={numberRef}
+          value={number}
+          onChange={onChangeNumber}
+          inputMode="none"
+        />
+        <div className="keypad">
+          {keyList.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                onClickKayPad(item);
+              }}
+            >
+              {item}
+            </button>
+          ))}
+
+          <button onClick={onClickDelete}>
+            <FaDeleteLeft />
+          </button>
           <button
-            key={index}
+            className={number.length > 0 && "active"}
             onClick={() => {
-              onClickKayPad(item);
+              if (number === "") return;
+
+              setUser({ number, gender: getGender(selectedGender) });
+              navigate("/order");
             }}
           >
-            {item}
+            입력완료
           </button>
-        ))}
-
-        <button onClick={onClickDelete}>
-          <FaDeleteLeft />
-        </button>
+        </div>
       </div>
     </Container>
   );

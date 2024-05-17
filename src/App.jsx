@@ -8,21 +8,26 @@ import LockerKeyPage from "./pages/LockerKeyPage/index.jsx";
 import AdminLandingPage from "./pages/AdminLandingPage/index.jsx";
 import OrderListPage from "./pages/OrderListPage/index.jsx";
 import MenuEditPage from "./pages/MenuEditPage/index.jsx";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <RecoilRoot>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/locker" element={<LockerKeyPage />} />
-          <Route path="/order" element={<OrderPage />} />
-          <Route path="/admin" element={<AdminLandingPage />} />
-          <Route path="/admin/order" element={<OrderListPage />} />
-          <Route path="/admin/menu" element={<MenuEditPage />} />
-        </Routes>
-      </BrowserRouter>
-    </RecoilRoot>
+    <QueryClientProvider client={queryClient}>
+      <RecoilRoot>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/locker" element={<LockerKeyPage />} />
+            <Route path="/order" element={<OrderPage />} />
+            <Route path="/admin" element={<AdminLandingPage />} />
+            <Route path="/admin/order" element={<OrderListPage />} />
+            <Route path="/admin/menu" element={<MenuEditPage />} />
+          </Routes>
+        </BrowserRouter>
+      </RecoilRoot>
+    </QueryClientProvider>
   );
 }
 

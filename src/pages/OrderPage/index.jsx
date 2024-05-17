@@ -5,32 +5,24 @@ import Header from "../../layouts/Header/index.jsx";
 import { useEffect, useRef, useState } from "react";
 import { getKRW } from "../../utils/formats.js";
 import { createClient } from "@supabase/supabase-js";
-import { categoryState } from "../../recoil/atoms/categoryState.js";
+import { useQuery } from "react-query";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_CLIENT_URL,
   import.meta.env.VITE_SUPABASE_ANON_KEY,
 );
 
+const getCategory = async () => {
+  const { data, error } = await supabase.from("category").select();
+  if (error) throw new Error("카테고리를 가져오지 못했습니다.");
+  return data;
+};
+
 const OrderPage = () => {
   const user = useRecoilValue(userState);
   const [curTab, setCurTab] = useState(0);
 
-  // const [category, setCategory] = useState([]);
-  const [category, setCategory] = useRecoilState(categoryState);
-
-  const getCategory = async () => {
-    if (category.length !== 0) return;
-
-    let { data, error } = await supabase.from("category").select();
-    if (error) console.error("카테고리를 가져오지 못했습니다.");
-    console.log("data >> ", data);
-    setCategory(data);
-  };
-
-  useEffect(() => {
-    getCategory();
-  }, []);
+  const { data: category } = useQuery("categories", getCategory);
 
   const product = [
     {
