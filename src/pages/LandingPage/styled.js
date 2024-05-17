@@ -11,37 +11,21 @@ export const Container = styled.div`
   box-sizing: border-box;
   overflow: hidden;
   user-select: none;
-
-  //button.order-start-btn {
-  //  font-size: 4em;
-  //  padding: 0.5em 1.8em;
-  //  margin-bottom: 1em;
-  //  border: none;
-  //  border-radius: 12px;
-  //  cursor: pointer;
-  //  outline: none;
-  //  background-color: #111f90;
-  //  color: #fff;
-  //  box-shadow: #322727 4px 4px 12px;
-  //  transition: 0.2s;
-  //
-  //  &:hover {
-  //    box-shadow: #322727 0 0 0;
-  //  }
-  //}
+  justify-content: center;
 
   h1 {
     text-align: center;
-    font-size: 4em;
-    margin: 1.4em 0 1.5em 0;
+    font-size: 5.4em;
     padding: 0;
     color: #111f90;
+    //margin: 1.4em 0 1.5em 0;
   }
 
   img.c-one-logo {
     width: 100px;
-    position: absolute;
-    bottom: 28%;
+    //position: absolute;
+    //bottom: 28%;
+    margin: 0 0 4em 0;
   }
 
   p {
@@ -54,29 +38,28 @@ export const Container = styled.div`
     align-items: center;
     flex-direction: column;
 
-    position: absolute;
+    //position: absolute;
     bottom: 15%;
     font-family: "Forum", sans-serif;
     font-size: 1.5em;
     font-weight: 800;
     padding: 0;
-    margin: 0;
+
+    margin: 0 0 6em 0;
   }
 
   img.snackbar-img {
     z-index: -1;
     position: absolute;
 
-    //width: 100%;
-    //transform: rotate(5deg);
-    opacity: 0.4;
+    opacity: 0.5;
   }
 
   span {
     position: absolute;
     bottom: 0;
-    font-size: 1.5em;
-    padding: 1em;
+    font-size: 1.8em;
+    padding: 0.8em;
     width: 100%;
     text-align: center;
     color: #fff;
