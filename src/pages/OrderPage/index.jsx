@@ -41,6 +41,8 @@ const OrderPage = () => {
 
   const [basket, setBasket] = useState([]);
 
+  const [cornerState, setCornerState] = useState("");
+
   const sumPrice = (arr) => {
     if (arr.length > 0) {
       return arr.reduce((prev, cur) => prev + cur.price, 0);
@@ -63,9 +65,28 @@ const OrderPage = () => {
   }, [basket]);
   useEffect(() => {}, []);
 
+  useEffect(() => {
+    if (curTab === 0) {
+      setCornerState("l-corner");
+    } else if (curTab === category.length - 1) {
+      setCornerState("r-corner");
+    } else {
+      setCornerState("");
+    }
+  }, [curTab]);
+
   const onClickTab = (e) => {
     setCurTab(e.target.value);
   };
+
+  const onSubmitOrder = () => {
+    console.log("주문");
+
+    const paylaod = {};
+
+    console.log("payload >> ", payload);
+  };
+
   return (
     <Container>
       <Header user={user} />
@@ -86,7 +107,7 @@ const OrderPage = () => {
         </ul>
       </TabSection>
 
-      <ContentSection>
+      <ContentSection className={cornerState}>
         {product && product[curTab].product.length > 0 ? (
           product?.[curTab]?.product?.map((v, i) => (
             <dl
@@ -115,28 +136,33 @@ const OrderPage = () => {
 
       <BasketSection>
         <div className="content">
-          주문 금액: {getKRW(sumPrice(basket))}원
-          <br />
-          개수: {sumCnt(basket)}
           <table className="basket-list">
-            {basket.length > 0 ? (
+            {basket.length > 0 &&
               basket.map((v, i) => (
                 <tr>
                   <td>{v.name}</td>
-                  <td>{v.price}</td>
+                  <td>{getKRW(v.price)}</td>
                   <td>{v.cnt}</td>
+                  <td>{getKRW(v.cnt * v.price)}</td>
                 </tr>
-              ))
-            ) : (
-              <div className="center">주문할 상품을 선택해주세요</div>
-            )}
+              ))}
+            <tr>
+              <td></td>
+              <td></td>
+              <td>{sumCnt(basket)}</td>
+              <td>{getKRW(sumPrice(basket))}</td>
+            </tr>
           </table>
+          {basket.length === 0 && (
+            <div className="center">주문할 상품을 선택해주세요</div>
+          )}
         </div>
-        <button
-          onClick={() => {
-            console.log("주문");
-          }}
-        >
+        <button onClick={onSubmitOrder}>
+          {basket.length !== 0 && (
+            <>
+              {getKRW(sumPrice(basket))}원 <br />
+            </>
+          )}
           주문하기
         </button>
       </BasketSection>

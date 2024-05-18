@@ -4,8 +4,9 @@ export const Container = styled.div`
   border: 1px solid blue;
 
   label {
-    width: 240px;
-    height: 240px;
+    cursor: pointer;
+    width: 180px;
+    height: 180px;
     border: 2px dashed gray;
     border-radius: 8px;
     display: block;

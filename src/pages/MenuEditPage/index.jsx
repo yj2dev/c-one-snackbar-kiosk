@@ -25,7 +25,13 @@ const MenuEdit = () => {
   const [productState, setProductState] = useState("판매중");
   const [productCategoryId, setProductCategoryId] = useState(0);
 
+  console.log(categoryList.length);
   const onSubmitCreateCategory = async () => {
+    if (categoryList.length >= 5) {
+      alert("카테고리는 5개 까지만 등록할 수 있습니다.");
+      return;
+    }
+
     const { data, error } = await supabase
       .from("category")
       .insert({ name: categoryName });
@@ -66,6 +72,10 @@ const MenuEdit = () => {
     <Container>
       <Link to="/">뒤로가기</Link>
       <h1>메뉴 편집</h1>
+      <h2>카테고리</h2>
+      <p>
+        <span style={{ color: "red" }}>*</span> 최대 5가지 등록
+      </p>
       {categoryList &&
         categoryList.map((v, i) => (
           <div key={i}>
@@ -82,6 +92,7 @@ const MenuEdit = () => {
       <input type="text" value={categoryName} onChange={onChangeCategoryName} />
       <button onClick={onSubmitCreateCategory}>카테고리 추가</button>
       <hr />
+      <h2>상품</h2>
       <label
         className={isDrag && "active"}
         onDrop={(e) => {
