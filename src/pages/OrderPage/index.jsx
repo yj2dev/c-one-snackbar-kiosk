@@ -12,6 +12,9 @@ import { getKRW } from "../../utils/formats.js";
 import { createClient } from "@supabase/supabase-js";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { IoClose } from "@react-icons/all-files/io5/IoClose.js";
+import { IoRemove } from "@react-icons/all-files/io5/IoRemove.js";
+import { IoAdd } from "@react-icons/all-files/io5/IoAdd.js";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_CLIENT_URL,
@@ -48,7 +51,7 @@ const OrderPage = () => {
 
   const sumPrice = (arr) => {
     if (arr.length > 0) {
-      return arr.reduce((prev, cur) => prev + cur.price, 0);
+      return arr.reduce((prev, cur) => prev + cur.price * cur.cnt, 0);
     }
 
     return null;
@@ -60,13 +63,6 @@ const OrderPage = () => {
 
     return null;
   };
-
-  useEffect(() => {
-    console.log("basket >> ", basket);
-    console.log("sumPrice(basket) >> ", sumPrice(basket));
-    console.log("sumCnt(basket) >> ", sumCnt(basket));
-  }, [basket]);
-  useEffect(() => {}, []);
 
   useEffect(() => {
     if (curTab === 0) {
@@ -88,6 +84,32 @@ const OrderPage = () => {
     const paylaod = {};
 
     console.log("payload >> ", payload);
+  };
+
+  const MIN_BASKET_ITEM_CNT = 1;
+  const MAX_BASKET_ITEM_CNT = 99;
+
+  const increaseBasketItem = (index) => {
+    const _basket = [...basket];
+    if (_basket[index].cnt < MAX_BASKET_ITEM_CNT) {
+      _basket[index].cnt += 1;
+    }
+    setBasket([..._basket]);
+  };
+
+  const decreaseBasketItem = (index) => {
+    const _basket = [...basket];
+
+    if (_basket[index].cnt > MIN_BASKET_ITEM_CNT) {
+      _basket[index].cnt -= 1;
+    }
+    setBasket(_basket);
+  };
+
+  const deleteBasketItem = (index) => {
+    let _basket = [...basket];
+    _basket.splice(index, 1);
+    setBasket(_basket);
   };
 
   return (
@@ -143,15 +165,34 @@ const OrderPage = () => {
             {basket.length > 0 &&
               basket.map((v, i) => (
                 <tr key={i}>
-                  <td>9{i + 1}</td>
+                  <td>{i + 1}</td>
                   <td>{v.name}</td>
                   <td>
-                    <button>-</button>
-                    {v.cnt} <button>+</button>
+                    <button
+                      onClick={() => {
+                        decreaseBasketItem(i);
+                      }}
+                    >
+                      <IoRemove />
+                    </button>
+                    <p>{v.cnt}</p>
+                    <button
+                      onClick={() => {
+                        increaseBasketItem(i);
+                      }}
+                    >
+                      <IoAdd />
+                    </button>
                   </td>
-                  <td>{getKRW(v.cnt * v.price)}</td>
+                  <td>{getKRW(v.cnt * v.price)}원</td>
                   <td>
-                    <button>빼기</button>
+                    <button
+                      onClick={() => {
+                        deleteBasketItem(i);
+                      }}
+                    >
+                      <IoClose />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -161,19 +202,15 @@ const OrderPage = () => {
           )}
         </article>
         <article className="order-info">
-          <div className="info">
-            {basket.length !== 0 && (
-              <>
-                <p>
-                  <span>수량</span>
-                  {sumCnt(basket)}개<br />
-                </p>
-                <p>
-                  <span>금액</span>
-                  {getKRW(sumPrice(basket))}원 <br />
-                </p>
-              </>
-            )}
+          <div className={`info ${basket.length !== 0 && "active"}`}>
+            <p>
+              <span>수량</span>
+              {sumCnt(basket) || 0}개<br />
+            </p>
+            <p>
+              <span>금액</span>
+              {getKRW(sumPrice(basket)) || 0}원 <br />
+            </p>
           </div>
           <button
             className="cancel"

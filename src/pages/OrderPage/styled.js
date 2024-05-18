@@ -35,43 +35,71 @@ export const BasketSection = styled.section`
     }
     table.basket-list {
       border-collapse: collapse;
-      //border: 1px solid green;
       width: 100%;
       tr {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        //justify-content: space-around;
-        td {
-          font-size: 1.4em;
-          text-align: start;
-          padding: 12px;
+        border-bottom: 2px solid #e7e8ec;
 
-          border-bottom: 1px solid #dddddd;
-          border: 1px solid pink;
+        &:last-child {
+          border: none;
+        }
+
+        td {
+          font-size: 1.2em;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 6px 4px;
 
           button {
+            cursor: pointer;
+            border-radius: 12px;
             width: 32px;
             height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1em;
+            border: none;
+            outline: none;
+            background-color: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            transition: 0.1s;
+            &:active {
+              box-shadow: 0 0 0 0;
+              transform: translate(1px, 1px);
+            }
           }
 
           &:nth-child(1) {
             width: 28px;
-            text-align: center;
             color: #111f90;
+            font-weight: 600;
           }
           &:nth-child(2) {
-            width: 180px;
+            justify-content: start;
+            width: 150px;
           }
           &:nth-child(3) {
-            width: 100px;
+            width: 120px;
+            p {
+              text-align: center;
+              width: 44px;
+              padding: 0;
+              margin: 0;
+            }
           }
           &:nth-child(4) {
-            width: 100px;
+            justify-content: end;
+            flex: 1;
           }
           &:nth-child(5) {
-            text-align: end;
-            //width: 100%;
+            button {
+              background-color: #f05855;
+            }
           }
         }
       }
@@ -87,38 +115,60 @@ export const BasketSection = styled.section`
 
   article.order-info {
     position: fixed;
-    top: 604px;
+
+    //top: 604px; // 컨텐츠 2줄 일때
+    top: 834px; // 컨텐츠 3줄 일때
+
     bottom: 0;
     right: 0;
     margin: 16px;
     width: 24%;
-    //border: 1px solid red;
 
     display: flex;
     flex-direction: column;
     gap: 16px;
 
     .info {
-      flex: 1;
+      transition: 0.1s;
+      height: 100%;
+
+      p {
+        text-align: end;
+        font-size: 1.5em;
+        font-weight: 600;
+        padding: 0 0 0 40px;
+        margin: 0;
+        position: relative;
+        span {
+          position: absolute;
+          left: 0;
+          font-size: 0.8em;
+          color: #111f90;
+        }
+      }
+
+      &.active {
+      }
     }
     button {
       &.cancel {
-        background-color: #e7e8ec;
-        flex: 1;
+        background-color: rgba(0, 0, 0, 0.2);
+        //display: none;
+        padding: 0;
       }
 
       &.submit {
-        flex: 2;
       }
 
+      padding: 12px 0;
       border: none;
       outline: none;
       background-color: #111f90;
       color: #fff;
       font-weight: 800;
-      font-size: 2em;
+      font-size: 1.9em;
       border-radius: 4px;
-      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 
       transition: 0.2s;
       cursor: pointer;
@@ -132,7 +182,7 @@ export const BasketSection = styled.section`
 
       &:active {
         transform: translate(2px, 2px);
-        //box-shadow: 0 0 0 rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
       }
     }
   }
@@ -150,9 +200,10 @@ export const ContentSection = styled.section`
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
   grid-gap: 16px;
-  height: 436px;
+  height: 664px;
+  //height: 436px;
   overflow: scroll;
   transition: 0.1s;
 
@@ -166,7 +217,7 @@ export const ContentSection = styled.section`
 
   .center {
     grid-column: 1/5;
-    grid-row: 1/3;
+    grid-row: 1/4;
     display: flex;
     justify-content: center;
     align-items: center;
