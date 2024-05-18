@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import { getKRW } from "../../utils/formats.js";
 import { createClient } from "@supabase/supabase-js";
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_CLIENT_URL,
@@ -32,6 +33,8 @@ const getProduct = async () => {
 };
 
 const OrderPage = () => {
+  const navigate = useNavigate();
+
   const user = useRecoilValue(userState);
   const [curTab, setCurTab] = useState(0);
 
@@ -135,36 +138,59 @@ const OrderPage = () => {
       </ContentSection>
 
       <BasketSection>
-        <div className="content">
+        <article className="content">
           <table className="basket-list">
             {basket.length > 0 &&
               basket.map((v, i) => (
-                <tr>
+                <tr key={i}>
+                  <td>9{i + 1}</td>
                   <td>{v.name}</td>
-                  <td>{getKRW(v.price)}</td>
-                  <td>{v.cnt}</td>
+                  <td>
+                    <button>-</button>
+                    {v.cnt} <button>+</button>
+                  </td>
                   <td>{getKRW(v.cnt * v.price)}</td>
+                  <td>
+                    <button>빼기</button>
+                  </td>
                 </tr>
               ))}
-            <tr>
-              <td></td>
-              <td></td>
-              <td>{sumCnt(basket)}</td>
-              <td>{getKRW(sumPrice(basket))}</td>
-            </tr>
           </table>
           {basket.length === 0 && (
             <div className="center">주문할 상품을 선택해주세요</div>
           )}
-        </div>
-        <button onClick={onSubmitOrder}>
-          {basket.length !== 0 && (
-            <>
-              {getKRW(sumPrice(basket))}원 <br />
-            </>
-          )}
-          주문하기
-        </button>
+        </article>
+        <article className="order-info">
+          <div className="info">
+            {basket.length !== 0 && (
+              <>
+                <p>
+                  <span>수량</span>
+                  {sumCnt(basket)}개<br />
+                </p>
+                <p>
+                  <span>금액</span>
+                  {getKRW(sumPrice(basket))}원 <br />
+                </p>
+              </>
+            )}
+          </div>
+          <button
+            className="cancel"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            주문취소
+          </button>
+          <button
+            className="submit"
+            disabled={basket.length === 0}
+            onClick={onSubmitOrder}
+          >
+            주문하기
+          </button>
+        </article>
       </BasketSection>
     </Container>
   );
