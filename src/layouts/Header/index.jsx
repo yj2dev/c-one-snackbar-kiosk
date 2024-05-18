@@ -15,8 +15,8 @@ const Header = ({ user }) => {
         씨원리조트 스낵바
       </div>
       <div className="user-info">
-        <span className={`gender-badge ${user.gender === "남" ? "M" : "F"}`}>
-          {user.gender}
+        <span className={`gender-badge ${user.gender}`}>
+          {user.gender === "M" ? "남" : "여"}
         </span>
         {user.number}
       </div>

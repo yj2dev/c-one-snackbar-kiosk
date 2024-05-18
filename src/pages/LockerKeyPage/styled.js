@@ -76,11 +76,13 @@ export const Container = styled.div`
     }
 
     li {
+      cursor: pointer;
       width: 100%;
       padding: 8px 0;
       border-radius: 12px;
       text-align: center;
-      transition: 0.2s;
+      transition: 0.025s;
+
       font-weight: 800;
 
       &:first-child {

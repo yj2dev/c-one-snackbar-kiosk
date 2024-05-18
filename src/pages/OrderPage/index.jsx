@@ -1,4 +1,9 @@
-import { Container, ContentSection, TabSection } from "./styled.js";
+import {
+  BasketSection,
+  Container,
+  ContentSection,
+  TabSection,
+} from "./styled.js";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "../../recoil/atoms/userState.js";
 import Header from "../../layouts/Header/index.jsx";
@@ -18,49 +23,45 @@ const getCategory = async () => {
   return data;
 };
 
+const getProduct = async () => {
+  const { data, error } = await supabase
+    .from("category")
+    .select(`id, product(*)`);
+  if (error) throw new Error("상품을 가져오지 못했습니다.");
+  return data;
+};
+
 const OrderPage = () => {
   const user = useRecoilValue(userState);
   const [curTab, setCurTab] = useState(0);
 
   const { data: category } = useQuery("categories", getCategory);
+  // const [product, setProduct] = useState([]);
+  const { data: product, isLoading } = useQuery("products", getProduct);
 
-  const product = [
-    {
-      img: "http://placehold.it/200x200",
-      name: "닭강정1",
-      price: getKRW(3500),
-    },
-    {
-      img: "http://placehold.it/200x200",
-      name: "콩",
-      price: getKRW(35000),
-    },
-    {
-      img: "http://placehold.it/100x50",
-      name: "김치",
-      price: getKRW(300),
-    },
-    {
-      img: "http://placehold.it/200x200",
-      name: "닭강정 옥수수 땅콩",
-      price: getKRW(123500),
-    },
-    {
-      img: "http://placehold.it/200x200",
-      name: "닭강정입니다",
-      price: getKRW(3500),
-    },
-    {
-      img: null,
-      name: "치킨너겟입니다",
-      price: getKRW(3500),
-    },
-    {
-      img: "http://placehold.it/200x200",
-      name: "아이스크림",
-      price: getKRW(3500),
-    },
-  ];
+  const [basket, setBasket] = useState([]);
+
+  const sumPrice = (arr) => {
+    if (arr.length > 0) {
+      return arr.reduce((prev, cur) => prev + cur.price, 0);
+    }
+
+    return null;
+  };
+  const sumCnt = (arr) => {
+    if (arr.length > 0) {
+      return arr.reduce((prev, cur) => prev + cur.cnt, 0);
+    }
+
+    return null;
+  };
+
+  useEffect(() => {
+    console.log("basket >> ", basket);
+    console.log("sumPrice(basket) >> ", sumPrice(basket));
+    console.log("sumCnt(basket) >> ", sumCnt(basket));
+  }, [basket]);
+  useEffect(() => {}, []);
 
   const onClickTab = (e) => {
     setCurTab(e.target.value);
@@ -86,15 +87,59 @@ const OrderPage = () => {
       </TabSection>
 
       <ContentSection>
-        {product &&
-          product.map((v, i) => (
-            <dl key={i}>
-              <img src={v.img} />
+        {product && product[curTab].product.length > 0 ? (
+          product?.[curTab]?.product?.map((v, i) => (
+            <dl
+              key={i}
+              onClick={() => {
+                setBasket((prev) => [
+                  ...prev,
+                  {
+                    name: v.name,
+                    price: v.price,
+                    img: v.img,
+                    cnt: 1,
+                  },
+                ]);
+              }}
+            >
+              <img src={`${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`} />
               <dt>{v.name}</dt>
-              <dd>{v.price}원</dd>
+              <dd>{getKRW(v.price)}원</dd>
             </dl>
-          ))}
+          ))
+        ) : (
+          <div className="center">등록된 상품이 없습니다</div>
+        )}
       </ContentSection>
+
+      <BasketSection>
+        <div className="content">
+          주문 금액: {getKRW(sumPrice(basket))}원
+          <br />
+          개수: {sumCnt(basket)}
+          <table className="basket-list">
+            {basket.length > 0 ? (
+              basket.map((v, i) => (
+                <tr>
+                  <td>{v.name}</td>
+                  <td>{v.price}</td>
+                  <td>{v.cnt}</td>
+                </tr>
+              ))
+            ) : (
+              <div className="center">주문할 상품을 선택해주세요</div>
+            )}
+          </table>
+        </div>
+        <button
+          onClick={() => {
+            console.log("주문");
+          }}
+        >
+          주문하기
+        </button>
+      </BasketSection>
     </Container>
   );
 };

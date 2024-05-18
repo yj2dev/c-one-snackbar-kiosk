@@ -4,7 +4,6 @@ import { FaDeleteLeft } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { userState } from "../../recoil/atoms/userState.js";
-import { getGender } from "../../utils/formats.js";
 
 const LockerKeyPage = () => {
   const navigate = useNavigate();
@@ -17,10 +16,11 @@ const LockerKeyPage = () => {
 
   const MAX_NUMBER_LEN = 3;
 
-  const [selectedGender, setSelectedGender] = useState("");
+  const [gender, setGender] = useState("");
 
   useEffect(() => {
     numberRef.current.focus();
+    setGender(user.gender);
     setNumber(user.number);
   }, []);
 
@@ -70,7 +70,7 @@ const LockerKeyPage = () => {
   return (
     <Container>
       <button className="back-btn" onClick={onClickReset}>
-        뒤로가기
+        처음으로
       </button>
       <h1>
         <span>락커키 정보</span>를
@@ -78,28 +78,24 @@ const LockerKeyPage = () => {
         입력해주세요
       </h1>
 
-      <ul className={`select-gender ${selectedGender.length > 0 && "hidden"}`}>
+      <ul className={`select-gender ${gender !== "" && "hidden"}`}>
         <li
-          className={selectedGender === "M" && "active"}
-          onClick={() => setSelectedGender("M")}
+          className={gender === "M" && "active"}
+          onClick={() => setGender("M")}
         >
           남자
         </li>
         <li
-          className={selectedGender === "F" && "active"}
-          onClick={() => setSelectedGender("F")}
+          className={gender === "F" && "active"}
+          onClick={() => setGender("F")}
         >
           여자
         </li>
       </ul>
-      <h2
-        className={`show-select-gender ${selectedGender.length > 0 && "hidden"}`}
-      >
+      <h2 className={`show-select-gender ${gender !== "" && "hidden"}`}>
         성별을 선택해주세요
       </h2>
-      <div
-        className={`show-input-locker ${selectedGender.length > 0 && "active"}`}
-      >
+      <div className={`show-input-locker ${gender !== "" && "active"}`}>
         <input
           type="text"
           placeholder="락커키 번호"
@@ -128,7 +124,7 @@ const LockerKeyPage = () => {
             onClick={() => {
               if (number === "") return;
 
-              setUser({ number, gender: getGender(selectedGender) });
+              setUser({ number, gender });
               navigate("/order");
             }}
           >

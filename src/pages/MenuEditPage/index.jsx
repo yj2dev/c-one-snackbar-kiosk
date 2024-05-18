@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 
-// import { v4 as uuidv4 } from "uuid";
 import { resizeFile } from "../../utils/resize.js";
 
 const supabase = createClient(
@@ -42,18 +41,17 @@ const MenuEdit = () => {
       .from("category")
       .delete()
       .eq("id", id);
-    console.log("del data >> ", data);
     onShowCategory();
   };
 
   const onShowCategory = async () => {
     let { data, error } = await supabase.from("category").select("*");
-
-    console.log("data >> ", data);
-
     setCategoryList(data);
-    console.log("error >> ", error);
   };
+
+  useEffect(() => {
+    setProductCategoryId(categoryList?.[0]?.id);
+  }, [categoryList]);
 
   useEffect(() => {
     onShowCategory();
@@ -63,8 +61,6 @@ const MenuEdit = () => {
     if (e.target.value.length > 7) return;
     setCategoryName(e.target.value);
   };
-
-  const onClickUploadProduct = async (e) => {};
 
   return (
     <Container>
@@ -83,21 +79,19 @@ const MenuEdit = () => {
             </button>
           </div>
         ))}
-      <button onClick={onShowCategory}>카테고리 조회</button> <br />
       <input type="text" value={categoryName} onChange={onChangeCategoryName} />
       <button onClick={onSubmitCreateCategory}>카테고리 추가</button>
+      <hr />
       <label
         className={isDrag && "active"}
         onDrop={(e) => {
           e.preventDefault();
           const file = e.dataTransfer.files[0];
-          console.log("file >> ", file);
           setFile(file);
           setIsDrag(false);
         }}
         onDragOver={(e) => {
           e.preventDefault();
-          console.log("over");
         }}
         onDragEnter={(e) => {
           setIsDrag(true);
@@ -114,40 +108,7 @@ const MenuEdit = () => {
           }}
         />
       </label>
-      <button
-        onClick={async () => {
-          const resizedFile = await resizeFile(file);
 
-          console.log("resizedFile >> ", resizedFile);
-
-          const { data: imgData, error } = await supabase.storage
-            .from("product-image")
-            .upload(`${Date.now()}.jpeg`, resizedFile);
-          console.log(imgData, error);
-
-          if (imgData) {
-            const price = parseInt(productPrice.replaceAll(",", ""));
-
-            const payload = {
-              name: productName,
-              img: imgData.path,
-              state: productState,
-              price,
-              category_id: productCategoryId,
-            };
-
-            console.log("payload >> ", payload);
-
-            const { data, error } = await supabase
-              .from("product")
-              .insert(payload);
-
-            console.log("data, error >> ", data, error);
-          }
-        }}
-      >
-        업로드
-      </button>
       <select
         value={productCategoryId}
         onChange={(e) => {
@@ -160,6 +121,18 @@ const MenuEdit = () => {
           </option>
         ))}
       </select>
+
+      <select
+        value={productState}
+        onChange={(e) => {
+          setProductState(e.target.value);
+        }}
+      >
+        <option value="판매중">판매중</option>
+        <option value="품절">품절</option>
+        <option value="숨기기">숨기기</option>
+      </select>
+
       <br />
       <input
         type="text"
@@ -170,7 +143,7 @@ const MenuEdit = () => {
           setProductName(e.target.value);
         }}
       />
-      상품명
+
       <br />
       <input
         type="text"
@@ -195,17 +168,38 @@ const MenuEdit = () => {
         }}
       />
       <br />
-      <select
-        // defaultValue={productState}
-        value={productState}
-        onChange={(e) => {
-          setProductState(e.target.value);
+
+      <button
+        onClick={async () => {
+          const resizedFile = await resizeFile(file);
+
+          const { data: imgData, error } = await supabase.storage
+            .from("product-image")
+            .upload(`${Date.now()}.jpeg`, resizedFile);
+
+          if (imgData) {
+            const price = parseInt(productPrice.replaceAll(",", ""));
+
+            const payload = {
+              name: productName,
+              img: imgData.path,
+              state: productState,
+              price,
+              category_id: productCategoryId,
+            };
+
+            console.log("payload >> ", payload);
+
+            const { data, error } = await supabase
+              .from("product")
+              .insert(payload);
+
+            console.log("data, error >> ", data, error);
+          }
         }}
       >
-        <option value="판매중">판매중</option>
-        <option value="품절">품절</option>
-        <option value="숨기기">숨기기</option>
-      </select>
+        업로드
+      </button>
     </Container>
   );
 };

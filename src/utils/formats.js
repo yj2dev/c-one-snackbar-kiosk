@@ -8,8 +8,9 @@ export const getGender = (char) => {
   return gender;
 };
 
-export const getKRW = (amount) => {
-  return amount.toLocaleString("ko-KR");
+export const getKRW = (price) => {
+  if (!price) return;
+  return price.toLocaleString("ko-KR");
 };
 // export const getGenderV1 = (number) => {
 //   const char = number?.charAt(0);
