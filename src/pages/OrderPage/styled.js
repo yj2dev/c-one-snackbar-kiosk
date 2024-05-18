@@ -141,25 +141,14 @@ export const BasketSection = styled.section`
         position: relative;
         span {
           position: absolute;
+          top: 0;
           left: 0;
           font-size: 0.8em;
           color: #111f90;
         }
       }
-
-      &.active {
-      }
     }
     button {
-      &.cancel {
-        background-color: rgba(0, 0, 0, 0.2);
-        //display: none;
-        padding: 0;
-      }
-
-      &.submit {
-      }
-
       padding: 12px 0;
       border: none;
       outline: none;
@@ -173,11 +162,19 @@ export const BasketSection = styled.section`
       transition: 0.2s;
       cursor: pointer;
 
-      &:disabled {
-        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-        background-color: rgba(17, 31, 144, 0.5);
-        //transform: translate(2px, 2px);
-        cursor: default;
+      &.cancel {
+        background-color: rgba(0, 0, 0, 0.2);
+        //display: none;
+        padding: 0;
+      }
+
+      &.submit {
+        &:disabled {
+          box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+          background-color: rgba(17, 31, 144, 0.5);
+          //transform: translate(2px, 2px);
+          cursor: default;
+        }
       }
 
       &:active {

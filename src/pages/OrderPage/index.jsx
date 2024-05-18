@@ -4,7 +4,7 @@ import {
   ContentSection,
   TabSection,
 } from "./styled.js";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { userState } from "../../recoil/atoms/userState.js";
 import Header from "../../layouts/Header/index.jsx";
 import { useEffect, useRef, useState } from "react";
@@ -36,9 +36,14 @@ const getProduct = async () => {
 };
 
 const OrderPage = () => {
+  const MIN_BASKET_ITEM_CNT = 1;
+  const MAX_BASKET_ITEM_CNT = 99;
+
   const navigate = useNavigate();
 
   const user = useRecoilValue(userState);
+  const resetUserState = useResetRecoilState(userState);
+
   const [curTab, setCurTab] = useState(0);
 
   const { data: category } = useQuery("categories", getCategory);
@@ -65,6 +70,12 @@ const OrderPage = () => {
   };
 
   useEffect(() => {
+    if (!user.number || !user.gender) {
+      navigate(-1);
+    }
+  }, []);
+
+  useEffect(() => {
     if (curTab === 0) {
       setCornerState("l-corner");
     } else if (curTab === category.length - 1) {
@@ -78,16 +89,46 @@ const OrderPage = () => {
     setCurTab(e.target.value);
   };
 
-  const onSubmitOrder = () => {
+  const onSubmitOrder = async () => {
     console.log("주문");
 
-    const paylaod = {};
+    console.log(basket);
 
-    console.log("payload >> ", payload);
+    const orderPayload = {
+      number: user.number,
+      gender: user.gender,
+    };
+
+    console.log("orderPayload >> ", orderPayload);
+
+    const { data: orderData, error: orderError } = await supabase
+      .from("order")
+      .insert(orderPayload)
+      .select();
+
+    console.log(orderData, orderError);
+
+    if (orderData.length === 0) return;
+
+    const orderDetailPayload = [];
+
+    basket.map((v) => {
+      orderDetailPayload.push({
+        order_id: orderData[0].id,
+        product_id: v.id,
+        quantity: v.cnt,
+      });
+    });
+
+    console.log("orderDetailPayload >> ", orderDetailPayload);
+
+    const { data: detailData, error: detailError } = await supabase
+      .from("order_detail")
+      .insert(orderDetailPayload)
+      .select();
+
+    console.log(detailData, detailError);
   };
-
-  const MIN_BASKET_ITEM_CNT = 1;
-  const MAX_BASKET_ITEM_CNT = 99;
 
   const increaseBasketItem = (index) => {
     const _basket = [...basket];
@@ -138,15 +179,18 @@ const OrderPage = () => {
             <dl
               key={i}
               onClick={() => {
-                setBasket((prev) => [
-                  ...prev,
-                  {
-                    name: v.name,
-                    price: v.price,
-                    img: v.img,
-                    cnt: 1,
-                  },
-                ]);
+                const item = {
+                  cnt: 1,
+                  id: v.id,
+                  name: v.name,
+                  price: v.price,
+                };
+
+                const findItem = basket.find((item) => item.id === v.id);
+
+                if (findItem) return;
+
+                setBasket((prev) => [...prev, item]);
               }}
             >
               <img src={`${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`} />
@@ -202,19 +246,22 @@ const OrderPage = () => {
           )}
         </article>
         <article className="order-info">
-          <div className={`info ${basket.length !== 0 && "active"}`}>
+          <div className="info">
             <p>
               <span>수량</span>
-              {sumCnt(basket) || 0}개<br />
+              {sumCnt(basket) || 0}&nbsp;개
+              <br />
             </p>
             <p>
               <span>금액</span>
-              {getKRW(sumPrice(basket)) || 0}원 <br />
+              {getKRW(sumPrice(basket)) || 0}&nbsp;원
+              <br />
             </p>
           </div>
           <button
             className="cancel"
             onClick={() => {
+              resetUserState();
               navigate("/");
             }}
           >
