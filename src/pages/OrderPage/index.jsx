@@ -5,11 +5,12 @@ import {
   SucceedOrderPopup,
   TabSection,
   Screen,
+  AlreadyItemAlert,
 } from "./styled.js";
-import { useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilValue, useResetRecoilState, waitForAllSettled } from "recoil";
 import { userState } from "../../recoil/atoms/userState.js";
 import Header from "../../layouts/Header/index.jsx";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getKRW } from "../../utils/formats.js";
 import { createClient } from "@supabase/supabase-js";
 import { useQuery } from "react-query";
@@ -41,6 +42,8 @@ const OrderPage = () => {
   const MIN_BASKET_ITEM_CNT = 1;
   const MAX_BASKET_ITEM_CNT = 99;
 
+  let alreadyItemAlertId = useRef(null);
+
   const navigate = useNavigate();
   const user = useRecoilValue(userState);
   const resetUserState = useResetRecoilState(userState);
@@ -52,6 +55,7 @@ const OrderPage = () => {
   const [isOrderLoading, setIsOrderLoading] = useState(false);
   const [succeedOrder, setSucceedOrder] = useState(false);
   const [landingTimer, setLandingTimer] = useState(5);
+  const [showAlreadyItemAlert, setShowAlreadyItemAlert] = useState(false);
 
   const sumPrice = (arr) => {
     if (arr.length > 0) {
@@ -165,8 +169,10 @@ const OrderPage = () => {
 
   return (
     <Container>
+      <AlreadyItemAlert className={showAlreadyItemAlert && "show"}>
+        이미 선택된 상품입니다. 수량은 장바구니에서 조절해주세요.
+      </AlreadyItemAlert>
       <Header user={user} />
-
       <TabSection>
         <ul>
           {category &&
@@ -198,7 +204,19 @@ const OrderPage = () => {
 
                 const findItem = basket.find((item) => item.id === v.id);
 
-                if (findItem) return;
+                if (findItem) {
+                  setShowAlreadyItemAlert(true);
+
+                  if (alreadyItemAlertId.current) {
+                    clearTimeout(alreadyItemAlertId.current);
+                  }
+
+                  alreadyItemAlertId.current = setTimeout(() => {
+                    setShowAlreadyItemAlert(false);
+                  }, 3000);
+
+                  return;
+                }
 
                 setBasket((prev) => [...prev, item]);
               }}

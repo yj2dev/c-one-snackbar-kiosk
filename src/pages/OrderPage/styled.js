@@ -9,6 +9,26 @@ export const Container = styled.div`
   overflow: hidden;
 `;
 
+export const AlreadyItemAlert = styled.div`
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  transition: 0.2s;
+  position: fixed;
+  width: 100%;
+  height: 54px;
+  background-color: #111f90;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
+  font-size: 1.4em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  z-index: 10;
+  top: -60px;
+
+  &.show {
+    top: 0;
+  }
+`;
 export const Screen = styled.div`
   &.show {
     position: absolute;
@@ -26,7 +46,8 @@ export const SucceedOrderPopup = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
+  background-color: #111f90;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
   font-size: 2.8em;
   color: #fff;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
@@ -37,7 +58,6 @@ export const SucceedOrderPopup = styled.div`
   height: 600px;
   position: fixed;
   left: 50%;
-  background-color: #111f90;
   transition: 0.2s;
   transform: translate(-50%, -50%);
   //bottom: -150%;
