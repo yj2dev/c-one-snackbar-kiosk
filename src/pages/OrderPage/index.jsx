@@ -125,20 +125,18 @@ const OrderPage = () => {
       setBasket([]);
       setSucceedOrder(true);
 
-      // id로 관리할 것
-      setInterval(() => {
-        console.log(landingTimer);
-
-        setLandingTimer((prev) => prev - 1);
-
-        if (landingTimer <= 0) {
-          navigate("/");
-        }
+      const landingIntervalId = setInterval(() => {
+        setLandingTimer((prev) => {
+          if (prev <= 1) {
+            clearInterval(landingIntervalId);
+            navigate("/");
+          }
+          return prev - 1;
+        });
       }, 1000);
     } else {
       console.error("주문이 누락되었습니다. 직원을 통해 주문해주세요.");
     }
-
     setIsOrderLoading(false);
   };
 
@@ -213,24 +211,6 @@ const OrderPage = () => {
         ) : (
           <div className="center">등록된 상품이 없습니다</div>
         )}
-        <button
-          onClick={() => {
-            setSucceedOrder((prev) => !prev);
-
-            setInterval(() => {
-              setLandingTimer((prev) => {
-                console.log("prev >>", prev);
-                if (prev <= 0) {
-                  navigate("/");
-                }
-
-                return prev - 1;
-              });
-            }, 1000);
-          }}
-        >
-          toggle
-        </button>
       </ContentSection>
 
       <BasketSection>
@@ -306,7 +286,12 @@ const OrderPage = () => {
           </button>
         </article>
       </BasketSection>
-      <SucceedOrderPopup className={succeedOrder && "show"}>
+      <SucceedOrderPopup
+        className={succeedOrder && "show"}
+        onClick={() => {
+          navigate("/");
+        }}
+      >
         <p>주문이 완료되었습니다</p>
         <p>음식이 준비되면 락커키 번호로 불러드리겠습니다</p>
 

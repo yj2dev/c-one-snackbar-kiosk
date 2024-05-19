@@ -48,9 +48,8 @@ export const SucceedOrderPopup = styled.div`
 
   p {
     padding: 0;
-    margin: 0;
     text-align: center;
-    margin-bottom: 48px;
+    margin: 0 0 48px 0;
     letter-spacing: 2px;
   }
 `;
@@ -196,7 +195,6 @@ export const BasketSection = styled.section`
       }
     }
     button {
-      //padding: 16px 0;
       border: none;
       outline: none;
       background-color: #111f90;
@@ -212,8 +210,6 @@ export const BasketSection = styled.section`
       &.cancel {
         background-color: rgba(0, 0, 0, 0.2);
         box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-
-        //display: none;
         padding: 0;
         height: 50%;
       }
@@ -223,7 +219,6 @@ export const BasketSection = styled.section`
         &:disabled {
           box-shadow: 0 0 0 rgba(0, 0, 0, 0);
           background-color: rgba(17, 31, 144, 0.5);
-          transform: translate(2px, 2px);
           cursor: default;
         }
       }

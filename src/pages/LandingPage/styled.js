@@ -2,6 +2,7 @@ import styled from "styled-components";
 import snackbar from "/public/assets/images/snackbar.jpg";
 
 export const Container = styled.div`
+  cursor: pointer;
   position: relative;
   display: flex;
   flex-direction: column;

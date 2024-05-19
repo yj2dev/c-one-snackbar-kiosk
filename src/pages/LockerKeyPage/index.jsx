@@ -29,11 +29,6 @@ const LockerKeyPage = () => {
       .replace(/[^0-9]/, "")
       .substring(0, MAX_NUMBER_LEN);
 
-    // if (onlyNumber.length > MAX_NUMBER_LEN - 1) {
-    //   setUser({ number: onlyNumber, gender: getGender(number) });
-    //   navigate("/order");
-    // }
-
     if (onlyNumber.length > MAX_NUMBER_LEN) return;
 
     setNumber(onlyNumber);
@@ -47,12 +42,6 @@ const LockerKeyPage = () => {
 
     const onlyNumber = (number + value).substring(0, MAX_NUMBER_LEN);
 
-    // if (onlyNumber.length > MAX_NUMBER_LEN - 1) {
-    //   setUser({ number: onlyNumber, gender: getGender(number) });
-    //   navigate("/order");
-    //   return;
-    // }
-
     if (onlyNumber.length > MAX_NUMBER_LEN) return;
 
     setNumber(onlyNumber);
@@ -64,7 +53,7 @@ const LockerKeyPage = () => {
 
   const onClickReset = () => {
     resetUserState();
-    navigate(-1);
+    navigate("/");
   };
 
   return (

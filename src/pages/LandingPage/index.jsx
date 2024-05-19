@@ -4,24 +4,23 @@ import islandIcon from "/public/assets/images/island_icon.png";
 import snackbar from "/public/assets/images/snackbar.jpg";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useResetRecoilState } from "recoil";
+import { userState } from "../../recoil/atoms/userState.js";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const resetUserState = useResetRecoilState(userState);
+
+  const next = () => {
+    navigate("/locker");
+  };
 
   useEffect(() => {
-    const next = () => {
-      navigate("/locker");
-    };
-
-    window.addEventListener("click", next);
-
-    return () => {
-      window.removeEventListener("click", next);
-    };
+    resetUserState();
   }, []);
 
   return (
-    <Container>
+    <Container onClick={() => next()}>
       <img className="snackbar-img" src={snackbar} alt="스낵바 배경이미지" />
       <h1>
         여기에서
