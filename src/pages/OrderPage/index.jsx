@@ -4,11 +4,12 @@ import {
   ContentSection,
   SucceedOrderPopup,
   TabSection,
+  Screen,
 } from "./styled.js";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import { userState } from "../../recoil/atoms/userState.js";
 import Header from "../../layouts/Header/index.jsx";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { getKRW } from "../../utils/formats.js";
 import { createClient } from "@supabase/supabase-js";
 import { useQuery } from "react-query";
@@ -44,12 +45,13 @@ const OrderPage = () => {
   const user = useRecoilValue(userState);
   const resetUserState = useResetRecoilState(userState);
   const { data: category } = useQuery("categories", getCategory);
-  const { data: product, isLoading } = useQuery("products", getProduct);
+  const { data: product } = useQuery("products", getProduct);
   const [curTab, setCurTab] = useState(0);
   const [basket, setBasket] = useState([]);
   const [cornerState, setCornerState] = useState("");
   const [isOrderLoading, setIsOrderLoading] = useState(false);
   const [succeedOrder, setSucceedOrder] = useState(false);
+  const [landingTimer, setLandingTimer] = useState(5);
 
   const sumPrice = (arr) => {
     if (arr.length > 0) {
@@ -87,17 +89,23 @@ const OrderPage = () => {
   };
 
   const onSubmitOrder = async () => {
+    setIsOrderLoading(true);
+
     const orderPayload = {
       number: user.number,
       gender: user.gender,
     };
 
-    const { data: orderData, error: orderError } = await supabase
+    const { data: orderData } = await supabase
       .from("order")
       .insert(orderPayload)
       .select();
 
-    if (orderData.length === 0) return;
+    if (orderData.length === 0) {
+      setIsOrderLoading(false);
+      console.error("주문에 실패했습니다.");
+      return;
+    }
 
     const orderDetailPayload = [];
     basket.map((v) => {
@@ -108,15 +116,30 @@ const OrderPage = () => {
       });
     });
 
-    const { data: detailData, error: detailError } = await supabase
+    const { data: detailData } = await supabase
       .from("order_detail")
       .insert(orderDetailPayload)
       .select();
 
-    if (detailData.length > 0) {
+    if (detailData.length === basket.length) {
       setBasket([]);
       setSucceedOrder(true);
+
+      // id로 관리할 것
+      setInterval(() => {
+        console.log(landingTimer);
+
+        setLandingTimer((prev) => prev - 1);
+
+        if (landingTimer <= 0) {
+          navigate("/");
+        }
+      }, 1000);
+    } else {
+      console.error("주문이 누락되었습니다. 직원을 통해 주문해주세요.");
     }
+
+    setIsOrderLoading(false);
   };
 
   const increaseBasketItem = (index) => {
@@ -190,15 +213,26 @@ const OrderPage = () => {
         ) : (
           <div className="center">등록된 상품이 없습니다</div>
         )}
+        <button
+          onClick={() => {
+            setSucceedOrder((prev) => !prev);
+
+            setInterval(() => {
+              setLandingTimer((prev) => {
+                console.log("prev >>", prev);
+                if (prev <= 0) {
+                  navigate("/");
+                }
+
+                return prev - 1;
+              });
+            }, 1000);
+          }}
+        >
+          toggle
+        </button>
       </ContentSection>
 
-      <button
-        onClick={() => {
-          setSucceedOrder((prev) => !prev);
-        }}
-      >
-        toggle
-      </button>
       <BasketSection>
         <article className="content">
           <table className="basket-list">
@@ -273,8 +307,12 @@ const OrderPage = () => {
         </article>
       </BasketSection>
       <SucceedOrderPopup className={succeedOrder && "show"}>
-        주문이 완료되었습니다.
+        <p>주문이 완료되었습니다</p>
+        <p>음식이 준비되면 락커키 번호로 불러드리겠습니다</p>
+
+        <span>{landingTimer}초 뒤에 처음으로 이동합니다</span>
       </SucceedOrderPopup>
+      <Screen className={succeedOrder && "show"} />
     </Container>
   );
 };

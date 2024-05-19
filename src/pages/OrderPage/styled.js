@@ -8,18 +8,50 @@ export const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
 `;
+
+export const Screen = styled.div`
+  &.show {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 500;
+  }
+`;
 export const SucceedOrderPopup = styled.div`
-  border: 4px dashed deeppink;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
+  font-size: 2.8em;
+  color: #fff;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 24px 64px;
+  z-index: 1000;
+  border-radius: 8px;
   width: 600px;
   height: 600px;
   position: fixed;
   left: 50%;
-  background-color: #fff;
-  transition: 0.2s ease-in-out;
+  background-color: #111f90;
+  transition: 0.2s;
   transform: translate(-50%, -50%);
-  bottom: -60%;
+  //bottom: -150%;
+  top: -400px;
   &.show {
-    bottom: calc(50% - 400px);
+    top: calc(50%);
+  }
+
+  p {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    margin-bottom: 48px;
+    letter-spacing: 2px;
   }
 `;
 export const BasketSection = styled.section`
@@ -131,8 +163,8 @@ export const BasketSection = styled.section`
   article.order-info {
     position: fixed;
 
-    //top: 604px; // 컨텐츠 2줄 일때
-    top: 834px; // 컨텐츠 3줄 일때
+    top: 604px; // 컨텐츠 2줄 일때
+    //top: 834px; // 컨텐츠 3줄 일때
 
     bottom: 0;
     right: 0;
@@ -164,7 +196,7 @@ export const BasketSection = styled.section`
       }
     }
     button {
-      padding: 12px 0;
+      //padding: 16px 0;
       border: none;
       outline: none;
       background-color: #111f90;
@@ -179,11 +211,15 @@ export const BasketSection = styled.section`
 
       &.cancel {
         background-color: rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+
         //display: none;
         padding: 0;
+        height: 50%;
       }
 
       &.submit {
+        height: 100%;
         &:disabled {
           box-shadow: 0 0 0 rgba(0, 0, 0, 0);
           background-color: rgba(17, 31, 144, 0.5);
@@ -212,10 +248,10 @@ export const ContentSection = styled.section`
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   grid-gap: 16px;
-  height: 664px;
-  //height: 436px;
+  //height: 666px;
+  height: 436px; //컨텐츠 2줄일 때
   overflow: scroll;
   transition: 0.1s;
 
