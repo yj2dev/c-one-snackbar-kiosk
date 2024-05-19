@@ -2,6 +2,7 @@ import {
   BasketSection,
   Container,
   ContentSection,
+  SucceedOrderPopup,
   TabSection,
 } from "./styled.js";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
@@ -40,19 +41,15 @@ const OrderPage = () => {
   const MAX_BASKET_ITEM_CNT = 99;
 
   const navigate = useNavigate();
-
   const user = useRecoilValue(userState);
   const resetUserState = useResetRecoilState(userState);
-
-  const [curTab, setCurTab] = useState(0);
-
   const { data: category } = useQuery("categories", getCategory);
-  // const [product, setProduct] = useState([]);
   const { data: product, isLoading } = useQuery("products", getProduct);
-
+  const [curTab, setCurTab] = useState(0);
   const [basket, setBasket] = useState([]);
-
   const [cornerState, setCornerState] = useState("");
+  const [isOrderLoading, setIsOrderLoading] = useState(false);
+  const [succeedOrder, setSucceedOrder] = useState(false);
 
   const sumPrice = (arr) => {
     if (arr.length > 0) {
@@ -90,28 +87,19 @@ const OrderPage = () => {
   };
 
   const onSubmitOrder = async () => {
-    console.log("주문");
-
-    console.log(basket);
-
     const orderPayload = {
       number: user.number,
       gender: user.gender,
     };
-
-    console.log("orderPayload >> ", orderPayload);
 
     const { data: orderData, error: orderError } = await supabase
       .from("order")
       .insert(orderPayload)
       .select();
 
-    console.log(orderData, orderError);
-
     if (orderData.length === 0) return;
 
     const orderDetailPayload = [];
-
     basket.map((v) => {
       orderDetailPayload.push({
         order_id: orderData[0].id,
@@ -120,14 +108,15 @@ const OrderPage = () => {
       });
     });
 
-    console.log("orderDetailPayload >> ", orderDetailPayload);
-
     const { data: detailData, error: detailError } = await supabase
       .from("order_detail")
       .insert(orderDetailPayload)
       .select();
 
-    console.log(detailData, detailError);
+    if (detailData.length > 0) {
+      setBasket([]);
+      setSucceedOrder(true);
+    }
   };
 
   const increaseBasketItem = (index) => {
@@ -203,6 +192,13 @@ const OrderPage = () => {
         )}
       </ContentSection>
 
+      <button
+        onClick={() => {
+          setSucceedOrder((prev) => !prev);
+        }}
+      >
+        toggle
+      </button>
       <BasketSection>
         <article className="content">
           <table className="basket-list">
@@ -269,13 +265,16 @@ const OrderPage = () => {
           </button>
           <button
             className="submit"
-            disabled={basket.length === 0}
+            disabled={basket.length === 0 || isOrderLoading}
             onClick={onSubmitOrder}
           >
             주문하기
           </button>
         </article>
       </BasketSection>
+      <SucceedOrderPopup className={succeedOrder && "show"}>
+        주문이 완료되었습니다.
+      </SucceedOrderPopup>
     </Container>
   );
 };

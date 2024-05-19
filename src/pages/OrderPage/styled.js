@@ -6,6 +6,21 @@ export const Container = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+`;
+export const SucceedOrderPopup = styled.div`
+  border: 4px dashed deeppink;
+  width: 600px;
+  height: 600px;
+  position: fixed;
+  left: 50%;
+  background-color: #fff;
+  transition: 0.2s ease-in-out;
+  transform: translate(-50%, -50%);
+  bottom: -60%;
+  &.show {
+    bottom: calc(50% - 400px);
+  }
 `;
 export const BasketSection = styled.section`
   background-color: #fff;
@@ -172,7 +187,7 @@ export const BasketSection = styled.section`
         &:disabled {
           box-shadow: 0 0 0 rgba(0, 0, 0, 0);
           background-color: rgba(17, 31, 144, 0.5);
-          //transform: translate(2px, 2px);
+          transform: translate(2px, 2px);
           cursor: default;
         }
       }
