@@ -33,8 +33,13 @@ const MenuEdit = () => {
   const [image, setImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
+  const [curTab, setCurTab] = useState(0);
+
   const onSubmitCreateCategory = async () => {
-    if (categoryName.trim().length === 0) return;
+    if (categoryName.trim().length === 0) {
+      alert("내용을 입력하세요.");
+      return;
+    }
 
     if (category.length >= 5) {
       alert("카테고리는 5개 까지만 등록할 수 있습니다.");
@@ -125,13 +130,26 @@ const MenuEdit = () => {
               </button>
             </div>
           ))}
-        <input
-          type="text"
-          value={categoryName}
-          onChange={onChangeCategoryName}
-        />
-        <button onClick={onSubmitCreateCategory}>카테고리 추가</button>
+        <div>
+          <input
+            type="text"
+            value={categoryName}
+            onChange={onChangeCategoryName}
+          />
+          <button onClick={onSubmitCreateCategory}>+</button>
+        </div>
       </div>
+
+      {product && product?.[curTab]?.product.length > 0 ? (
+        product?.[curTab]?.product?.map((v, i) => (
+          <div className="product-item" key={i}>
+            {v.name}/ {v.price} / {v.img}
+          </div>
+        ))
+      ) : (
+        <>undefined</>
+      )}
+
       <hr />
       <h2>상품 추가</h2>
       <label
@@ -156,7 +174,7 @@ const MenuEdit = () => {
           <img src={previewImage} />
         ) : (
           <div className="desc">
-            이미지를
+            상품 이미지를
             <br />
             드래그해주세요
           </div>

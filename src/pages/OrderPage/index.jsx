@@ -230,7 +230,7 @@ const OrderPage = () => {
                         decreaseBasketItem(i);
                       }}
                     >
-                      <IoRemove />
+                      <IoRemove stlye={{ width: "100%", height: "100%" }} />
                     </button>
                     <p>{v.cnt}</p>
                     <button
@@ -238,7 +238,7 @@ const OrderPage = () => {
                         increaseBasketItem(i);
                       }}
                     >
-                      <IoAdd />
+                      <IoAdd stlye={{ width: "100%", height: "100%" }} />
                     </button>
                   </td>
                   <td>{getKRW(v.cnt * v.price)}원</td>
@@ -248,7 +248,7 @@ const OrderPage = () => {
                         deleteBasketItem(i);
                       }}
                     >
-                      <IoClose />
+                      <IoClose stlye={{ width: "100%", height: "100%" }} />
                     </button>
                   </td>
                 </tr>

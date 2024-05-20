@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
+  .product-item {
+    border: 1px solid orangered;
+  }
+
   button {
     cursor: pointer;
   }
@@ -15,11 +19,16 @@ export const Container = styled.div`
   .category-list {
     border: 1px solid #000;
     display: flex;
+    gap: 12px;
+
+    input[type="text"] {
+      width: 70px;
+    }
 
     .category {
       border: 1px solid #000;
       display: flex;
-      gap: 4px;
+      gap: 8px;
     }
   }
 
