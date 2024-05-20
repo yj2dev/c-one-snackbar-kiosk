@@ -82,6 +82,7 @@ const OrderPage = () => {
     const orderPayload = {
       number: user.number,
       gender: user.gender,
+      price: sumPrice(basket),
     };
 
     const { data: orderData, error } = await supabase

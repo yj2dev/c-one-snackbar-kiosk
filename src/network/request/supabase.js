@@ -4,6 +4,17 @@ const CLIENT_URL = import.meta.env.VITE_SUPABASE_CLIENT_URL;
 const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(CLIENT_URL, ANON_KEY);
 
+export const getOrderList = async () => {
+  const { data, error } = await supabase
+    .from("order")
+    .select()
+    .order("created_at", { ascending: true });
+
+  if (error) console.error("주문 목록을 가져오지 못했습니다.");
+
+  return data;
+};
+
 export const getCategory = async () => {
   const { data, error } = await supabase
     .from("category")
