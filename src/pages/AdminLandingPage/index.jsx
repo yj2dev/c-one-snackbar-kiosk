@@ -4,8 +4,14 @@ import { Link } from "react-router-dom";
 const AdminLandingPage = () => {
   return (
     <Container>
-      <Link to="/admin/order">주문 내역</Link> <br />
-      <Link to="/admin/menu">메뉴 수정</Link>
+      <h1>씨원리조트 스낵바 관리자</h1>
+      <div className="content">
+        <Link to="/admin/order">주문 내역</Link>
+        <Link to="/admin/menu">메뉴 수정</Link>
+      </div>
+      <Link className="move-landing" to="/">
+        손님화면전환
+      </Link>
     </Container>
   );
 };

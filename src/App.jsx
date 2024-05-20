@@ -6,8 +6,8 @@ import LandingPage from "./pages/LandingPage/index.jsx";
 import OrderPage from "./pages/OrderPage/index.jsx";
 import LockerKeyPage from "./pages/LockerKeyPage/index.jsx";
 import AdminLandingPage from "./pages/AdminLandingPage/index.jsx";
-import OrderListPage from "./pages/OrderListPage/index.jsx";
-import MenuEditPage from "./pages/MenuEditPage/index.jsx";
+import OrderListPage from "./pages/AdminOrderListPage/index.jsx";
+import MenuEditPage from "./pages/AdminMenuEditPage/index.jsx";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient();

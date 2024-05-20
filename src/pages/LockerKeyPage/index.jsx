@@ -25,7 +25,7 @@ const LockerKeyPage = () => {
   }, []);
 
   const onChangeNumber = (e) => {
-    const onlyNumber = e.target.value
+    let onlyNumber = e.target.value
       .replace(/[^0-9]/, "")
       .substring(0, MAX_NUMBER_LEN);
 
@@ -40,9 +40,11 @@ const LockerKeyPage = () => {
       return;
     }
 
-    const onlyNumber = (number + value).substring(0, MAX_NUMBER_LEN);
+    let onlyNumber = (number + value).substring(0, MAX_NUMBER_LEN);
 
     if (onlyNumber.length > MAX_NUMBER_LEN) return;
+
+    onlyNumber = parseInt(onlyNumber) + "";
 
     setNumber(onlyNumber);
   };
@@ -61,30 +63,30 @@ const LockerKeyPage = () => {
       <button className="back-btn" onClick={onClickReset}>
         처음으로
       </button>
-      <h1 className={gender !== "" && "hidden"}>
+      <h1 className={gender !== "" ? "hidden" : ""}>
         <span>락커키 정보</span>를
         <br />
         입력해주세요
       </h1>
 
-      <ul className={`select-gender ${gender !== "" && "hidden"}`}>
+      <ul className={`select-gender ${gender !== "" ? "hidden" : ""}`}>
         <li
-          className={gender === "M" && "active"}
+          className={gender === "M" ? "active" : ""}
           onClick={() => setGender("M")}
         >
           남자
         </li>
         <li
-          className={gender === "F" && "active"}
+          className={gender === "F" ? "active" : ""}
           onClick={() => setGender("F")}
         >
           여자
         </li>
       </ul>
-      <h2 className={`show-select-gender ${gender !== "" && "hidden"}`}>
+      <h2 className={`show-select-gender ${gender !== "" ? "hidden" : ""}`}>
         성별을 선택해주세요
       </h2>
-      <div className={`show-input-locker ${gender !== "" && "active"}`}>
+      <div className={`show-input-locker ${gender !== "" ? "active" : ""}`}>
         <input
           type="text"
           placeholder="락커키 번호"
@@ -109,9 +111,10 @@ const LockerKeyPage = () => {
             <FaDeleteLeft />
           </button>
           <button
-            className={number.length > 0 && "active"}
+            className={number.length > 0 ? "active" : ""}
             onClick={() => {
               if (number === "") return;
+              if (number === 0) return;
 
               setUser({ number, gender });
               navigate("/order");

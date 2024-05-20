@@ -17,10 +17,9 @@ import { useNavigate } from "react-router-dom";
 import { IoClose } from "@react-icons/all-files/io5/IoClose.js";
 import { IoRemove } from "@react-icons/all-files/io5/IoRemove.js";
 import { IoAdd } from "@react-icons/all-files/io5/IoAdd.js";
-import {
+import supabase, {
   getCategory,
   getProduct,
-  supabase,
 } from "../../network/request/supabase.js";
 
 const OrderPage = () => {
@@ -154,17 +153,17 @@ const OrderPage = () => {
 
   return (
     <Container>
-      <AlreadyItemAlert className={showAlreadyItemAlert && "show"}>
+      <AlreadyItemAlert className={showAlreadyItemAlert ? "show" : ""}>
         이미 선택된 상품입니다. 수량은 장바구니에서 조절해주세요.
       </AlreadyItemAlert>
       <Header user={user} />
       <TabSection>
         <ul>
-          {category &&
-            category.map((v, i) => (
+          {product &&
+            product.map((v, i) => (
               <li
                 key={i}
-                className={i === curTab && "active"}
+                className={i === curTab ? "active" : ""}
                 value={i}
                 onClick={onClickTab}
               >
@@ -175,7 +174,7 @@ const OrderPage = () => {
       </TabSection>
 
       <ContentSection className={cornerState}>
-        {product && product[curTab].product.length > 0 ? (
+        {product && product[curTab].product?.length > 0 ? (
           product?.[curTab]?.product?.map((v, i) => (
             <dl
               key={i}
@@ -290,7 +289,7 @@ const OrderPage = () => {
         </article>
       </BasketSection>
       <SucceedOrderPopup
-        className={succeedOrder && "show"}
+        className={succeedOrder ? "show" : ""}
         onClick={() => {
           navigate("/");
         }}
@@ -302,7 +301,7 @@ const OrderPage = () => {
           처음화면으로 이동합니다
         </p>
       </SucceedOrderPopup>
-      <Screen className={succeedOrder && "show"} />
+      <Screen className={succeedOrder ? "show" : ""} />
     </Container>
   );
 };

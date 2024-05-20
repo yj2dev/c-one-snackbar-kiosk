@@ -1,32 +1,31 @@
 import { Container } from "./styled.js";
 import { Link, useNavigate } from "react-router-dom";
-
-import { createClient } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
-
+import { useEffect, useState, useRef } from "react";
 import { resizeFile } from "../../utils/resize.js";
 import { useQuery } from "react-query";
-import { getCategory, getProduct } from "../../network/request/supabase.js";
-
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_CLIENT_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY,
-);
+import supabase, {
+  getCategory,
+  getProduct,
+} from "../../network/request/supabase.js";
 
 const MenuEdit = () => {
+  const MAX_CATEGORY_CNT = 4;
+
   const { data: category } = useQuery("categories", getCategory);
   const { data: product } = useQuery("products", getProduct);
 
   const [resizedImage, setResizedImage] = useState(null);
 
+  const dragCatrogryIndex = useRef(null);
+
   const navigate = useNavigate();
   const [categoryName, setCategoryName] = useState("");
 
   const [isDrag, setIsDrag] = useState(false);
-  const [productName, setProductName] = useState(null);
+  const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productState, setProductState] = useState("판매중");
-  const [productCategoryId, setProductCategoryId] = useState(null);
+  const [productCategoryId, setProductCategoryId] = useState("");
 
   const [categoryList, setCategoryList] = useState([]);
 
@@ -41,8 +40,8 @@ const MenuEdit = () => {
       return;
     }
 
-    if (category.length >= 5) {
-      alert("카테고리는 5개 까지만 등록할 수 있습니다.");
+    if (categoryList.length >= MAX_CATEGORY_CNT) {
+      alert(`카테고리는 ${MAX_CATEGORY_CNT}개 까지만 등록할 수 있습니다.`);
       return;
     }
 
@@ -69,7 +68,7 @@ const MenuEdit = () => {
   };
 
   const onShowCategory = async () => {
-    let { data, error } = await supabase.from("category").select("*");
+    const data = await getCategory();
     setCategoryList(data);
   };
 
@@ -103,6 +102,7 @@ const MenuEdit = () => {
   return (
     <Container>
       <div
+        className="back-btn"
         onClick={() => {
           navigate(-1);
         }}
@@ -113,13 +113,38 @@ const MenuEdit = () => {
       <h2>
         카테고리
         <p>
-          <span>*</span> 최대 5가지 등록
+          <span>*</span> 최대 {MAX_CATEGORY_CNT}개
         </p>
       </h2>
       <div className="category-list">
-        {category &&
-          category?.map((v, i) => (
-            <div className="category" key={i}>
+        {categoryList &&
+          categoryList?.map((v, i) => (
+            <div
+              className="category-item"
+              key={i}
+              draggable={true}
+              onDragStart={(e) => {
+                dragCatrogryIndex.current = i;
+                console.log("onDragStart >>", i);
+                console.log(v.display_sort);
+              }}
+              onDrag={(e) => {
+                e.preventDefault();
+                console.log("onDrag >> ", i);
+              }}
+              onDragOver={(e) => {
+                e.preventDefault();
+                console.log("onDragOver >> ", i);
+
+                if (i === dragCatrogryIndex.current) return;
+
+                console.log(categoryList);
+
+                // setCategoryList((prev) => {
+                //   prev.splice();
+                // });
+              }}
+            >
               <div onClick={() => {}}>{v.name}</div>
               <button
                 onClick={() => {
@@ -130,30 +155,46 @@ const MenuEdit = () => {
               </button>
             </div>
           ))}
-        <div>
-          <input
-            type="text"
-            value={categoryName}
-            onChange={onChangeCategoryName}
-          />
-          <button onClick={onSubmitCreateCategory}>+</button>
-        </div>
+        {categoryList.length < MAX_CATEGORY_CNT && (
+          <div>
+            <input
+              type="text"
+              value={categoryName}
+              onChange={onChangeCategoryName}
+            />
+            <button onClick={onSubmitCreateCategory}>+</button>
+          </div>
+        )}
       </div>
 
-      {product && product?.[curTab]?.product.length > 0 ? (
-        product?.[curTab]?.product?.map((v, i) => (
-          <div className="product-item" key={i}>
-            {v.name}/ {v.price} / {v.img}
-          </div>
-        ))
-      ) : (
-        <>undefined</>
-      )}
+      <table className="product-list">
+        {product &&
+          product?.[curTab]?.product?.length > 0 &&
+          product?.[curTab]?.product?.map((v, i) => (
+            <tr key={i}>
+              <td>{v.img}</td>
+              <td>{v.name}</td>
+              <td>{v.price}</td>
+              <td>
+                <select
+                  value={v.state}
+                  onChange={(e) => {
+                    setProductState(e.target.value);
+                  }}
+                >
+                  <option value="판매중">판매중</option>
+                  <option value="품절">품절</option>
+                  <option value="숨기기">숨기기</option>
+                </select>
+              </td>
+            </tr>
+          ))}
+      </table>
 
       <hr />
       <h2>상품 추가</h2>
       <label
-        className={isDrag && "active"}
+        className={isDrag ? "active" : ""}
         onDrop={(e) => {
           e.preventDefault();
           const file = e.dataTransfer.files[0];

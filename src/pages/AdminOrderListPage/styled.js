@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  border: 1px solid blue;
+  padding: 48px;
+
+  .back-btn {
+    cursor: pointer;
+  }
 `;
