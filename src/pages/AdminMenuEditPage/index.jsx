@@ -2,14 +2,16 @@ import { Container } from "./styled.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { resizeFile } from "../../utils/resize.js";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import supabase, {
   getCategory,
   getProduct,
 } from "../../network/request/supabase.js";
+import { getKRW } from "../../utils/formats.js";
 
 const MenuEdit = () => {
-  const MAX_CATEGORY_CNT = 4;
+  const queryClient = useQueryClient();
+  const MAX_CATEGORY_CNT = 5;
 
   const { data: category } = useQuery("categories", getCategory);
   const { data: product } = useQuery("products", getProduct);
@@ -120,29 +122,55 @@ const MenuEdit = () => {
         {categoryList &&
           categoryList?.map((v, i) => (
             <div
-              className="category-item"
+              className={`category-item ${productCategoryId === v.id ? "active" : ""}`}
               key={i}
               draggable={true}
+              onClick={() => {
+                const findIndex = product.findIndex((x) => x.id === v.id);
+
+                setCurTab(findIndex);
+                setProductCategoryId(v.id);
+              }}
               onDragStart={(e) => {
                 dragCatrogryIndex.current = i;
-                console.log("onDragStart >>", i);
-                console.log(v.display_sort);
               }}
               onDrag={(e) => {
                 e.preventDefault();
-                console.log("onDrag >> ", i);
               }}
               onDragOver={(e) => {
                 e.preventDefault();
-                console.log("onDragOver >> ", i);
+              }}
+              onDrop={async () => {
+                if (dragCatrogryIndex.current === i) return;
 
-                if (i === dragCatrogryIndex.current) return;
+                let _categoryList = [...categoryList];
 
-                console.log(categoryList);
+                const fromIdx = dragCatrogryIndex.current;
+                _categoryList.splice(i, 1);
+                _categoryList.splice(i, 0, categoryList[fromIdx]);
 
-                // setCategoryList((prev) => {
-                //   prev.splice();
-                // });
+                _categoryList.splice(fromIdx, 1);
+                _categoryList.splice(fromIdx, 0, categoryList[i]);
+
+                _categoryList = _categoryList.map((v, i) => {
+                  return {
+                    ...v,
+                    display_sort: i,
+                  };
+                });
+
+                setCategoryList(_categoryList);
+
+                for (const item of _categoryList) {
+                  const { error } = await supabase
+                    .from("category")
+                    .update({ display_sort: item.display_sort })
+                    .eq("id", item.id);
+
+                  if (error) {
+                    console.error("카테고리 정렬에 실패했습니다.");
+                  }
+                }
               }}
             >
               <div onClick={() => {}}>{v.name}</div>
@@ -151,7 +179,7 @@ const MenuEdit = () => {
                   onClickDeleteCategory(v.id);
                 }}
               >
-                -
+                삭제
               </button>
             </div>
           ))}
@@ -162,7 +190,7 @@ const MenuEdit = () => {
               value={categoryName}
               onChange={onChangeCategoryName}
             />
-            <button onClick={onSubmitCreateCategory}>+</button>
+            <button onClick={onSubmitCreateCategory}>추가</button>
           </div>
         )}
       </div>
@@ -172,9 +200,13 @@ const MenuEdit = () => {
           product?.[curTab]?.product?.length > 0 &&
           product?.[curTab]?.product?.map((v, i) => (
             <tr key={i}>
-              <td>{v.img}</td>
+              <td>
+                <img
+                  src={`${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`}
+                />
+              </td>
               <td>{v.name}</td>
-              <td>{v.price}</td>
+              <td>{getKRW(v.price)}원</td>
               <td>
                 <select
                   value={v.state}
@@ -186,6 +218,36 @@ const MenuEdit = () => {
                   <option value="품절">품절</option>
                   <option value="숨기기">숨기기</option>
                 </select>
+              </td>
+              <td>
+                <button
+                  onClick={async () => {
+                    console.log("삭제");
+                    const { data, error } = await supabase
+                      .from("product")
+                      .delete()
+                      .eq("id", v.id);
+
+                    if (error) {
+                      alert("상품 삭제에 실패했습니다.");
+                    }
+
+                    const { data: imageData, imageError } =
+                      await supabase.storage
+                        .from("product-image")
+                        .remove([v.img]);
+
+                    if (imageError) {
+                      alert("상품 이미지 삭제에 실패했습니다.");
+                    }
+
+                    // onShowCategory();
+                    await queryClient.invalidateQueries("categories");
+                    await queryClient.invalidateQueries("products");
+                  }}
+                >
+                  삭제
+                </button>
               </td>
             </tr>
           ))}

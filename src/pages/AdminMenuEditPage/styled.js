@@ -31,6 +31,7 @@ export const Container = styled.div`
   .category-list {
     display: flex;
     gap: 4px;
+    align-items: center;
 
     input[type="text"] {
       width: 70px;
@@ -38,24 +39,56 @@ export const Container = styled.div`
 
     .category-item {
       border: 2px solid #000;
-      //padding: 4px 8px;
-      padding: 12px;
+      padding: 6px 8px;
       display: flex;
       gap: 4px;
+      cursor: pointer;
+
+      &.active {
+        font-weight: 800;
+      }
     }
   }
 
   table.product-list {
     border-collapse: collapse;
+    margin: 12px 0;
+    width: 100%;
 
     tr {
-      //border: 1px solid orangered;
       display: flex;
+      border-bottom: 1px solid #000;
+      padding: 4px 0;
 
+      &:last-child {
+        border-bottom: none;
+      }
       td {
-        padding: 12px 0;
-        width: 100%;
-        border: 1px solid darkorchid;
+        display: flex;
+        align-items: center;
+        &:nth-child(1) {
+          width: 70px;
+          img {
+            width: 50px;
+            height: 50px;
+          }
+        }
+
+        &:nth-child(2) {
+          width: 120px;
+        }
+        &:nth-child(3) {
+          justify-content: end;
+          width: 100px;
+        }
+        &:nth-child(4) {
+          justify-content: end;
+          width: 100px;
+        }
+        &:nth-child(5) {
+          justify-content: end;
+          width: 80px;
+        }
       }
     }
   }
