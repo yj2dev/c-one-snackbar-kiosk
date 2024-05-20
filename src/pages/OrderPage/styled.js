@@ -71,6 +71,14 @@ export const SucceedOrderPopup = styled.div`
     text-align: center;
     margin: 0 0 48px 0;
     letter-spacing: 2px;
+
+    &.landing-timer {
+      position: absolute;
+      font-weight: 200;
+      bottom: 0;
+      font-size: 0.6em;
+      text-align: center;
+    }
   }
 `;
 export const BasketSection = styled.section`

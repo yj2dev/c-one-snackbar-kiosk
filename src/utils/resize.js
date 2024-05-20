@@ -4,8 +4,8 @@ export const resizeFile = async (file) => {
   return new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
-      512,
-      512,
+      256,
+      256,
       "JPEG",
       100,
       0,

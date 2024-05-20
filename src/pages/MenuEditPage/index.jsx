@@ -5,6 +5,8 @@ import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 
 import { resizeFile } from "../../utils/resize.js";
+import { useQuery } from "react-query";
+import { getCategory, getProduct } from "../../network/request/supabase.js";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_CLIENT_URL,
@@ -12,22 +14,29 @@ const supabase = createClient(
 );
 
 const MenuEdit = () => {
+  const { data: category } = useQuery("categories", getCategory);
+  const { data: product } = useQuery("products", getProduct);
+
+  const [resizedImage, setResizedImage] = useState(null);
+
   const navigate = useNavigate();
   const [categoryName, setCategoryName] = useState("");
 
-  const [categoryList, setCategoryList] = useState([]);
-
   const [isDrag, setIsDrag] = useState(false);
-
-  const [file, setFile] = useState(null);
   const [productName, setProductName] = useState(null);
   const [productPrice, setProductPrice] = useState("");
   const [productState, setProductState] = useState("판매중");
-  const [productCategoryId, setProductCategoryId] = useState(0);
+  const [productCategoryId, setProductCategoryId] = useState(null);
 
-  console.log(categoryList.length);
+  const [categoryList, setCategoryList] = useState([]);
+
+  const [image, setImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+
   const onSubmitCreateCategory = async () => {
-    if (categoryList.length >= 5) {
+    if (categoryName.trim().length === 0) return;
+
+    if (category.length >= 5) {
       alert("카테고리는 5개 까지만 등록할 수 있습니다.");
       return;
     }
@@ -36,8 +45,6 @@ const MenuEdit = () => {
       .from("category")
       .insert({ name: categoryName });
 
-    console.log("data >> ", data);
-    console.log("error >> ", error);
     setCategoryName("");
     onShowCategory();
   };
@@ -47,6 +54,12 @@ const MenuEdit = () => {
       .from("category")
       .delete()
       .eq("id", id);
+
+    if (error && error.code === "23503") {
+      alert("카테고리내에 상품을 모두 제거해주세요.");
+      return;
+    }
+
     onShowCategory();
   };
 
@@ -56,8 +69,8 @@ const MenuEdit = () => {
   };
 
   useEffect(() => {
-    setProductCategoryId(categoryList?.[0]?.id);
-  }, [categoryList]);
+    setProductCategoryId(category?.[0]?.id);
+  }, [category]);
 
   useEffect(() => {
     onShowCategory();
@@ -68,37 +81,65 @@ const MenuEdit = () => {
     setCategoryName(e.target.value);
   };
 
+  const runResizedImage = async (file) => {
+    const resizedImage = await resizeFile(file);
+    setImage(file);
+    setResizedImage(resizedImage);
+    setPreviewImage(URL.createObjectURL(resizedImage));
+  };
+
+  const initProduct = () => {
+    setImage(null);
+    setPreviewImage(null);
+    setProductName("");
+    setProductPrice("");
+  };
+
   return (
     <Container>
-      <Link to="/">뒤로가기</Link>
-      <h1>메뉴 편집</h1>
-      <h2>카테고리</h2>
-      <p>
-        <span style={{ color: "red" }}>*</span> 최대 5가지 등록
-      </p>
-      {categoryList &&
-        categoryList.map((v, i) => (
-          <div key={i}>
-            {v.id} / {v.name} /
-            <button
-              onClick={() => {
-                onClickDeleteCategory(v.id);
-              }}
-            >
-              -
-            </button>
-          </div>
-        ))}
-      <input type="text" value={categoryName} onChange={onChangeCategoryName} />
-      <button onClick={onSubmitCreateCategory}>카테고리 추가</button>
+      <div
+        onClick={() => {
+          navigate(-1);
+        }}
+      >
+        뒤로가기
+      </div>
+      <h1>메뉴 수정</h1>
+      <h2>
+        카테고리
+        <p>
+          <span>*</span> 최대 5가지 등록
+        </p>
+      </h2>
+      <div className="category-list">
+        {category &&
+          category?.map((v, i) => (
+            <div className="category" key={i}>
+              <div onClick={() => {}}>{v.name}</div>
+              <button
+                onClick={() => {
+                  onClickDeleteCategory(v.id);
+                }}
+              >
+                -
+              </button>
+            </div>
+          ))}
+        <input
+          type="text"
+          value={categoryName}
+          onChange={onChangeCategoryName}
+        />
+        <button onClick={onSubmitCreateCategory}>카테고리 추가</button>
+      </div>
       <hr />
-      <h2>상품</h2>
+      <h2>상품 추가</h2>
       <label
         className={isDrag && "active"}
         onDrop={(e) => {
           e.preventDefault();
           const file = e.dataTransfer.files[0];
-          setFile(file);
+          runResizedImage(file);
           setIsDrag(false);
         }}
         onDragOver={(e) => {
@@ -111,28 +152,35 @@ const MenuEdit = () => {
           setIsDrag(false);
         }}
       >
-        Dropzone
+        {previewImage ? (
+          <img src={previewImage} />
+        ) : (
+          <div className="desc">
+            이미지를
+            <br />
+            드래그해주세요
+          </div>
+        )}
         <input
           type="file"
           onChange={(e) => {
-            setFile(e.target.files[0]);
+            const file = e.target.files[0];
+            runResizedImage(file);
           }}
         />
       </label>
-
       <select
         value={productCategoryId}
         onChange={(e) => {
           setProductCategoryId(e.target.value);
         }}
       >
-        {categoryList.map((v, i) => (
+        {category?.map((v, i) => (
           <option key={i} value={v.id}>
-            {v.name} / {v.id}
+            {v.name}
           </option>
         ))}
       </select>
-
       <select
         value={productState}
         onChange={(e) => {
@@ -143,7 +191,6 @@ const MenuEdit = () => {
         <option value="품절">품절</option>
         <option value="숨기기">숨기기</option>
       </select>
-
       <br />
       <input
         type="text"
@@ -154,7 +201,6 @@ const MenuEdit = () => {
           setProductName(e.target.value);
         }}
       />
-
       <br />
       <input
         type="text"
@@ -179,14 +225,17 @@ const MenuEdit = () => {
         }}
       />
       <br />
-
       <button
         onClick={async () => {
-          const resizedFile = await resizeFile(file);
-
-          const { data: imgData, error } = await supabase.storage
+          console.log(resizedImage);
+          const { data: imgData, error: imgError } = await supabase.storage
             .from("product-image")
-            .upload(`${Date.now()}.jpeg`, resizedFile);
+            .upload(`${Date.now()}.jpeg`, resizedImage);
+
+          if (imgError) {
+            alert("상품 이미지 등록에 실패했습니다.");
+            console.error(imgData, imgError);
+          }
 
           if (imgData) {
             const price = parseInt(productPrice.replaceAll(",", ""));
@@ -199,13 +248,17 @@ const MenuEdit = () => {
               category_id: productCategoryId,
             };
 
-            console.log("payload >> ", payload);
-
-            const { data, error } = await supabase
+            const { data: productData, error: productError } = await supabase
               .from("product")
-              .insert(payload);
+              .insert(payload)
+              .select();
 
-            console.log("data, error >> ", data, error);
+            console.log(productData, productError);
+
+            if (productData) {
+              initProduct();
+              alert(`${name} 상품이 등록되었습니다`);
+            }
           }
         }}
       >

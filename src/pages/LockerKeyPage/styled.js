@@ -40,6 +40,10 @@ export const Container = styled.div`
     margin: 0;
     color: #111f90;
 
+    &.hidden {
+      display: none;
+    }
+
     span {
       color: #ff4400;
       font-size: 1.4em;

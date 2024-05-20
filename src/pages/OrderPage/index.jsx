@@ -12,31 +12,16 @@ import { userState } from "../../recoil/atoms/userState.js";
 import Header from "../../layouts/Header/index.jsx";
 import { useEffect, useRef, useState } from "react";
 import { getKRW } from "../../utils/formats.js";
-import { createClient } from "@supabase/supabase-js";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { IoClose } from "@react-icons/all-files/io5/IoClose.js";
 import { IoRemove } from "@react-icons/all-files/io5/IoRemove.js";
 import { IoAdd } from "@react-icons/all-files/io5/IoAdd.js";
-
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_CLIENT_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY,
-);
-
-const getCategory = async () => {
-  const { data, error } = await supabase.from("category").select();
-  if (error) throw new Error("카테고리를 가져오지 못했습니다.");
-  return data;
-};
-
-const getProduct = async () => {
-  const { data, error } = await supabase
-    .from("category")
-    .select(`id, product(*)`);
-  if (error) throw new Error("상품을 가져오지 못했습니다.");
-  return data;
-};
+import {
+  getCategory,
+  getProduct,
+  supabase,
+} from "../../network/request/supabase.js";
 
 const OrderPage = () => {
   const MIN_BASKET_ITEM_CNT = 1;
@@ -100,12 +85,12 @@ const OrderPage = () => {
       gender: user.gender,
     };
 
-    const { data: orderData } = await supabase
+    const { data: orderData, error } = await supabase
       .from("order")
       .insert(orderPayload)
       .select();
 
-    if (orderData.length === 0) {
+    if (orderData.length === 0 || error) {
       setIsOrderLoading(false);
       console.error("주문에 실패했습니다.");
       return;
@@ -312,8 +297,10 @@ const OrderPage = () => {
       >
         <p>주문이 완료되었습니다</p>
         <p>음식이 준비되면 락커키 번호로 불러드리겠습니다</p>
-
-        <span>{landingTimer}초 뒤에 처음으로 이동합니다</span>
+        <p className="landing-timer">
+          화면을 터치하거나 {landingTimer}초 후에 <br />
+          처음화면으로 이동합니다
+        </p>
       </SucceedOrderPopup>
       <Screen className={succeedOrder && "show"} />
     </Container>

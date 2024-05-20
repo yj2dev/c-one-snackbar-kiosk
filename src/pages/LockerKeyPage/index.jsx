@@ -61,7 +61,7 @@ const LockerKeyPage = () => {
       <button className="back-btn" onClick={onClickReset}>
         처음으로
       </button>
-      <h1>
+      <h1 className={gender !== "" && "hidden"}>
         <span>락커키 정보</span>를
         <br />
         입력해주세요

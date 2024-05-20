@@ -5,7 +5,7 @@ const AdminLandingPage = () => {
   return (
     <Container>
       <Link to="/admin/order">주문 내역</Link> <br />
-      <Link to="/admin/menu">메뉴 편집</Link>
+      <Link to="/admin/menu">메뉴 수정</Link>
     </Container>
   );
 };
