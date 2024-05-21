@@ -1,6 +1,6 @@
 import { Container } from "./styled.js";
 import { useNavigate } from "react-router-dom";
-import COneLogoIcon from "../../../public/assets/images/c-one-logo-icon.png";
+import COneLogoIcon from "/public/assets/images/c-one-logo-icon.png";
 
 const Header = ({ user }) => {
   const navigate = useNavigate();

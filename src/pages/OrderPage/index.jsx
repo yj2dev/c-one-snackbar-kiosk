@@ -79,10 +79,17 @@ const OrderPage = () => {
   const onSubmitOrder = async () => {
     setIsOrderLoading(true);
 
+    // 성별에 따른 유저번호 부가
+
+    let uid = user.gender === "M" ? "0" : "5";
+    uid += user.number.toString().padStart(3, "0");
+
     const orderPayload = {
       number: user.number,
       gender: user.gender,
+      quantity: sumCnt(basket),
       price: sumPrice(basket),
+      uid,
     };
 
     const { data: orderData, error } = await supabase
@@ -160,7 +167,7 @@ const OrderPage = () => {
       <Header user={user} />
       <TabSection>
         <ul>
-          {product &&
+          {product?.length > 0 &&
             product.map((v, i) => (
               <li
                 key={i}
@@ -175,7 +182,7 @@ const OrderPage = () => {
       </TabSection>
 
       <ContentSection className={cornerState}>
-        {product && product[curTab].product?.length > 0 ? (
+        {product?.length > 0 && product[curTab].product?.length > 0 ? (
           product?.[curTab]?.product?.map((v, i) => (
             <dl
               key={i}
