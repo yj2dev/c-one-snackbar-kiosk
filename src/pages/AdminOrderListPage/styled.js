@@ -8,17 +8,20 @@ export const Container = styled.div`
   }
 
   section.order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
     .order-item {
+      //box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+      border-bottom: 3px solid #f3f3f3;
+
       display: flex;
       flex-direction: row;
       gap: 24px;
       padding: 16px;
-      //border: 1px solid #000;
-      border-bottom: 3px solid #f3f3f3;
-      border: 1px solid red;
 
       article.order-info {
-        //border: 1px solid red;
         font-size: 1.3em;
         font-weight: 600;
         width: 100px;
@@ -58,7 +61,7 @@ export const Container = styled.div`
       }
 
       article.order-detail {
-        border: 1px solid red;
+        width: 300px;
         display: flex;
         flex-direction: column;
         gap: 8px;
@@ -68,6 +71,55 @@ export const Container = styled.div`
         }
         .order-product {
           color: #868686;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          white-space: pre-wrap;
+          span {
+          }
+        }
+      }
+
+      article.btn {
+        margin-left: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        button {
+          cursor: pointer;
+          width: 84px;
+          height: 84px;
+          color: #000;
+          font-weight: 800;
+          font-size: 1.2em;
+          box-sizing: border-box;
+          border: 6px solid #000;
+          border-radius: 4px;
+          position: relative;
+          background-color: transparent;
+          transition: 0.2s;
+          letter-spacing: 2px;
+          line-height: 1.1;
+
+          &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background-color: #1a7cff;
+            z-index: -1;
+            transition: 0.2s;
+          }
+
+          &:hover {
+            color: #fff;
+            &::before {
+              height: 100%;
+            }
+          }
         }
       }
     }

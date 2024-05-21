@@ -29,8 +29,6 @@ export const getOrderList = async () => {
 
   if (error) console.error("주문 목록을 가져오지 못했습니다.");
 
-  console.log("data >> ", data);
-
   return data;
 };
 

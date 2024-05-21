@@ -43,14 +43,14 @@ const OrderListPage = () => {
 
   return (
     <Container>
-      <button
-        onClick={() => {
-          refetch();
-          playAlertSound();
-        }}
-      >
-        새로고침
-      </button>
+      {/*<button*/}
+      {/*  onClick={() => {*/}
+      {/*    refetch();*/}
+      {/*    playAlertSound();*/}
+      {/*  }}*/}
+      {/*>*/}
+      {/*  새로고침*/}
+      {/*</button>*/}
       <div
         className="back-btn"
         onClick={() => {
@@ -87,16 +87,16 @@ const OrderListPage = () => {
 
               <div className="order-product">
                 {v.order_detail.map((x, i) => (
-                  <>
+                  <span key={i}>
                     {i === 0 ? "" : " / "}
                     {x.product.name}&nbsp;{x.quantity}개
-                  </>
+                  </span>
                 ))}
               </div>
 
-              <div className="order-state">
-                {v.complete ? "준비완료" : "준비중"}
-              </div>
+              {/*<div className="order-state">*/}
+              {/*  {v.complete ? "준비완료" : "준비중"}*/}
+              {/*</div>*/}
             </article>
             {/*<button*/}
             {/*  onClick={async () => {*/}
@@ -106,14 +106,17 @@ const OrderListPage = () => {
             {/*>*/}
             {/*  삭제*/}
             {/*</button>*/}
-            <button
-              onClick={async () => {
-                await updateOrderItem(v.id, true);
-                refetch();
-              }}
-            >
-              준비완료
-            </button>
+            <article className="btn">
+              <button
+                onClick={async () => {
+                  await updateOrderItem(v.id, true);
+                  refetch();
+                }}
+              >
+                준비 <br />
+                완료
+              </button>
+            </article>
           </div>
         ))}
       </section>
