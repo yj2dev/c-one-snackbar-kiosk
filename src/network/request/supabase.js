@@ -42,8 +42,6 @@ export const getOrderList = async () => {
   // 상품 아이디순으로 오름차순 정렬
   data.map((v) => v.order_detail.sort((a, b) => a.id - b.id));
 
-  console.log("data >> ", data);
-
   return data;
 };
 

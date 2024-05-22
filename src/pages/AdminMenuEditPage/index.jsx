@@ -226,7 +226,6 @@ const MenuEdit = () => {
               <td>
                 <button
                   onClick={async () => {
-                    console.log("삭제");
                     const { data, error } = await supabase
                       .from("product")
                       .delete()
@@ -352,7 +351,6 @@ const MenuEdit = () => {
       <br />
       <button
         onClick={async () => {
-          console.log(resizedImage);
           const { data: imgData, error: imgError } = await supabase.storage
             .from("product-image")
             .upload(`${Date.now()}.jpeg`, resizedImage);
@@ -377,8 +375,6 @@ const MenuEdit = () => {
               .from("product")
               .insert(payload)
               .select();
-
-            console.log(productData, productError);
 
             if (productData) {
               initProduct();

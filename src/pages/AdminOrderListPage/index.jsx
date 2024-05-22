@@ -122,10 +122,6 @@ const OrderListPage = () => {
                     </div>
                   ))}
                 </div>
-
-                {/*<div className="order-state">*/}
-                {/*  {v.complete ? "준비완료" : "준비중"}*/}
-                {/*</div>*/}
               </article>
 
               {v.complete ? (
