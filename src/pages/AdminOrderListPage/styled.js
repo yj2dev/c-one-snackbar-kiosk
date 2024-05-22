@@ -8,23 +8,60 @@ export const Container = styled.div`
   }
 
   section.order-list {
+    .empty-message {
+      padding: 48px 0;
+      display: flex;
+      justify-content: center;
+    }
+
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
+
+    ul.tab {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      //background-color: #dddddd;
+
+      li {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12px 0;
+        width: 100%;
+        border-top: 3px solid #f3f3f3;
+        border-right: 3px solid #f3f3f3;
+        border-bottom: 3px solid #f3f3f3;
+
+        &:last-child {
+          border-right: none;
+        }
+
+        &.active {
+          font-weight: 600;
+          border-bottom: none;
+          background-color: #fff;
+        }
+      }
+    }
 
     .order-item {
-      //box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+      position: relative;
       border-bottom: 3px solid #f3f3f3;
+      //box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
 
       display: flex;
       flex-direction: row;
-      gap: 24px;
-      padding: 16px;
+      justify-content: space-between;
+      padding: 0 16px 16px 16px;
+      gap: 12px;
 
       article.order-info {
         font-size: 1.3em;
         font-weight: 600;
-        width: 100px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -69,19 +106,72 @@ export const Container = styled.div`
         .order-title {
           font-weight: 600;
         }
-        .order-product {
+        .order-product-container {
           color: #868686;
           display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          white-space: pre-wrap;
-          span {
+          flex-direction: column;
+
+          .order-product {
+            span {
+              margin: 4px;
+              position: relative;
+              display: inline-flex;
+              cursor: pointer;
+
+              &::before {
+                content: "";
+                width: 0;
+                height: 3px;
+                top: 50%;
+                background-color: rgba(255, 0, 0, 0.5);
+                position: absolute;
+                transform: rotate(-4deg);
+                transition: 0.1s width;
+              }
+
+              &:hover {
+                &::before {
+                  width: 100%;
+                }
+              }
+
+              &.ready {
+                &::before {
+                  background-color: rgba(255, 0, 0, 1);
+                  width: 100%;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .delete-btn-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .delete-btn {
+          transition: 0.1s;
+          font-size: 32px;
+          color: #000;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          width: 50px;
+          height: 50px;
+          border-radius: 50px;
+          background-color: transparent;
+          border: none;
+          outline: none;
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.2);
           }
         }
       }
 
       article.btn {
-        margin-left: 24px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -94,7 +184,7 @@ export const Container = styled.div`
           font-weight: 800;
           font-size: 1.2em;
           box-sizing: border-box;
-          border: 6px solid #000;
+          border: 5px solid #000;
           border-radius: 4px;
           position: relative;
           background-color: transparent;
@@ -111,7 +201,7 @@ export const Container = styled.div`
             height: 0;
             background-color: #1a7cff;
             z-index: -1;
-            transition: 0.2s;
+            transition: 0.15s;
           }
 
           &:hover {

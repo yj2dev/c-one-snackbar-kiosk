@@ -8,6 +8,7 @@ import supabase, {
   getProduct,
 } from "../../network/request/supabase.js";
 import { getKRW } from "../../utils/formats.js";
+import { IoClose } from "@react-icons/all-files/io5/IoClose.js";
 
 const MenuEdit = () => {
   const queryClient = useQueryClient();
@@ -52,7 +53,10 @@ const MenuEdit = () => {
       .insert({ name: categoryName });
 
     setCategoryName("");
-    onShowCategory();
+
+    queryClient.invalidateQueries("categories");
+
+    await onShowCategory();
   };
 
   const onClickDeleteCategory = async (id) => {
@@ -115,7 +119,7 @@ const MenuEdit = () => {
       <h2>
         카테고리
         <p>
-          <span>*</span> 최대 {MAX_CATEGORY_CNT}개
+          <span>*</span> 최대 {MAX_CATEGORY_CNT}개<br />
         </p>
       </h2>
       <div className="category-list">
@@ -175,8 +179,8 @@ const MenuEdit = () => {
             >
               <div onClick={() => {}}>{v.name}</div>
               <button
-                onClick={() => {
-                  onClickDeleteCategory(v.id);
+                onClick={async () => {
+                  await onClickDeleteCategory(v.id);
                 }}
               >
                 삭제

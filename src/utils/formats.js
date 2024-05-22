@@ -23,6 +23,11 @@ export const nowDate = (date) => {
   }
 };
 
+export const formatTime = (date) => {
+  const inputDate = dayjs(date);
+  return inputDate.format("HH:mm");
+};
+
 export const formatKR = (date) => {
   const inputDate = dayjs(date);
   return inputDate.format("YYYY년 MM월 DD일 HH시 mm분");

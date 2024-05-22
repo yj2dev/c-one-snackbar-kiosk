@@ -4,12 +4,22 @@ const CLIENT_URL = import.meta.env.VITE_SUPABASE_CLIENT_URL;
 const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(CLIENT_URL, ANON_KEY);
 
+export const updateOrderDetailItem = async (id, isReady) => {
+  const { data, error } = await supabase
+    .from("order_detail")
+    .update({ ready: isReady })
+    .eq("id", id);
+  if (error) console.error("상품 상태를 변경하지 못했습니다.");
+
+  return data;
+};
+
 export const updateOrderItem = async (id, isComplete) => {
   const { data, error } = await supabase
     .from("order")
     .update({ complete: isComplete })
     .eq("id", id);
-  if (error) console.error("주문 항목을 삭제하지 못했습니다.");
+  if (error) console.error("주문 상태를 변경하지 못했습니다.");
 
   return data;
 };
@@ -28,6 +38,11 @@ export const getOrderList = async () => {
     .order("created_at", { ascending: false });
 
   if (error) console.error("주문 목록을 가져오지 못했습니다.");
+
+  // 상품 아이디순으로 오름차순 정렬
+  data.map((v) => v.order_detail.sort((a, b) => a.id - b.id));
+
+  console.log("data >> ", data);
 
   return data;
 };
