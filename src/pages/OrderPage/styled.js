@@ -128,23 +128,60 @@ export const BasketSection = styled.section`
           padding: 6px 4px;
 
           button {
+            &.delete-btn {
+              position: relative;
+              &::before {
+                content: "";
+                width: 16px;
+                height: 3px;
+                background-color: #fff;
+                border-radius: 6px;
+                transform: rotate(135deg);
 
-              
-              &.delete-btn {
-                  font-size:16px;
+                position: absolute;
               }
-              &.increase-btn{
-                  //font-size:24px;
-                  //font-weight: 200;
-                  //padding-bottom: 12px;
+              &::after {
+                content: "";
+                width: 16px;
+                height: 3px;
+                background-color: #fff;
+                border-radius: 6px;
+                transform: rotate(45deg);
+                position: absolute;
               }
-              &.decrease-btn{
-                  font-size:34px;
-                  font-weight: 200;
-                  padding-bottom: 12px;
+            }
+            &.increase-btn {
+              position: relative;
+              &::before {
+                content: "";
+                width: 16px;
+                height: 3px;
+                background-color: #fff;
+                border-radius: 6px;
+                position: absolute;
               }
-              
-              
+              &::after {
+                content: "";
+                width: 16px;
+                height: 3px;
+                background-color: #fff;
+                border-radius: 6px;
+                transform: rotate(90deg);
+                position: absolute;
+              }
+            }
+            &.decrease-btn {
+              position: relative;
+              &::before {
+                content: "";
+                width: 16px;
+                height: 3px;
+                background-color: #fff;
+                border-radius: 6px;
+                position: absolute;
+              }
+            }
+
             cursor: pointer;
             border-radius: 12px;
             width: 32px;

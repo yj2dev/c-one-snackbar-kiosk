@@ -113,7 +113,7 @@ export const Container = styled.div`
     overflow: hidden;
     height: 0;
     &.active {
-      height: 524px;
+      height: 564px;
     }
   }
 
