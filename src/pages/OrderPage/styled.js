@@ -129,6 +129,15 @@ export const BasketSection = styled.section`
 
           button {
 
+              
+              &.delete-btn {
+                  font-size:16px;
+              }
+              &.increase-btn{
+                  //font-size:24px;
+                  //font-weight: 200;
+                  //padding-bottom: 12px;
+              }
               &.decrease-btn{
                   font-size:34px;
                   font-weight: 200;

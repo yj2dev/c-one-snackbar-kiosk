@@ -255,6 +255,8 @@ const OrderPage = () => {
                   <td>{getKRW(v.cnt * v.price)}원</td>
                   <td>
                     <button
+                        className='delete-btn'
+
                       onClick={() => {
                         deleteBasketItem(i);
                       }}
