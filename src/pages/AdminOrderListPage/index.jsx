@@ -154,12 +154,13 @@ const OrderListPage = () => {
                         refetch();
                       }}
                     >
-                      <IoClose
-                        stlye={{
-                          width: "100%",
-                          height: "100%",
-                        }}
-                      />
+                        &times;
+                      {/*<IoClose*/}
+                      {/*  stlye={{*/}
+                      {/*    width: "100%",*/}
+                      {/*    height: "100%",*/}
+                      {/*  }}*/}
+                      {/*/>*/}
                     </button>
                   </div>
                 </>

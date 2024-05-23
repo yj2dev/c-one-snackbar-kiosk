@@ -128,6 +128,14 @@ export const BasketSection = styled.section`
           padding: 6px 4px;
 
           button {
+
+              &.decrease-btn{
+                  font-size:34px;
+                  font-weight: 200;
+                  padding-bottom: 12px;
+              }
+              
+              
             cursor: pointer;
             border-radius: 12px;
             width: 32px;

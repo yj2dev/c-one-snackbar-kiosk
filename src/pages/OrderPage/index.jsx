@@ -233,19 +233,23 @@ const OrderPage = () => {
                   <td>{v.name}</td>
                   <td>
                     <button
+                        className='decrease-btn'
                       onClick={() => {
                         decreaseBasketItem(i);
                       }}
                     >
-                      <IoRemove stlye={{ width: "100%", height: "100%" }} />
+                      -
+                      {/*<IoRemove stlye={{ width: "100%", height: "100%" }} />*/}
                     </button>
                     <p>{v.cnt}</p>
                     <button
+                        className='increase-btn'
                       onClick={() => {
                         increaseBasketItem(i);
                       }}
                     >
-                      <IoAdd stlye={{ width: "100%", height: "100%" }} />
+                      +
+                      {/*<IoAdd stlye={{ width: "100%", height: "100%" }} />*/}
                     </button>
                   </td>
                   <td>{getKRW(v.cnt * v.price)}원</td>
@@ -255,7 +259,8 @@ const OrderPage = () => {
                         deleteBasketItem(i);
                       }}
                     >
-                      <IoClose stlye={{ width: "100%", height: "100%" }} />
+                      &times;
+                      {/*<IoClose stlye={{ width: "100%", height: "100%" }} />*/}
                     </button>
                   </td>
                 </tr>
