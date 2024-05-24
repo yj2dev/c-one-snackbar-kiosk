@@ -3,11 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon"  href="/public/assets/images/c-one-logo-icon.png" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="manifest.json" />
     <title>씨원리조트 스낵바</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        // Register a service worker hosted at the root of the
+        // site using the default scope.
+        navigator.serviceWorker
+                .register("/sw.js")
+                .then((registration) => {
+                  console.log("Service worker registration succeeded:", registration);
+                })
+                .catch((err) => {
+                  console.log("Service worker registration failed:", error);
+                });
+      } else {
+        console.log("Service workers are not supported.");
+      }
+    </script>
+
   </body>
 </html>
