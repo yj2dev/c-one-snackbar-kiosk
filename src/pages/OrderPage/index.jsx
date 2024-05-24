@@ -230,27 +230,21 @@ const OrderPage = () => {
               basket.map((v, i) => (
                 <tr key={i}>
                   <td>{i + 1}</td>
-                  <td>{v.name}</td>
+                  <td>{v.name}가나다라마바사아자차카타파하</td>
                   <td>
                     <button
                       className="decrease-btn"
                       onClick={() => {
                         decreaseBasketItem(i);
                       }}
-                    >
-                      {/*-*/}
-                      {/*<IoRemove stlye={{ width: "100%", height: "100%" }} />*/}
-                    </button>
+                    ></button>
                     <p>{v.cnt}</p>
                     <button
                       className="increase-btn"
                       onClick={() => {
                         increaseBasketItem(i);
                       }}
-                    >
-                      {/*+*/}
-                      {/*<IoAdd stlye={{ width: "100%", height: "100%" }} />*/}
-                    </button>
+                    ></button>
                   </td>
                   <td>{getKRW(v.cnt * v.price)}원</td>
                   <td>
@@ -259,10 +253,7 @@ const OrderPage = () => {
                       onClick={() => {
                         deleteBasketItem(i);
                       }}
-                    >
-                      {/*&times;*/}
-                      {/*<IoClose stlye={{ width: "100%", height: "100%" }} />*/}
-                    </button>
+                    ></button>
                   </td>
                 </tr>
               ))}

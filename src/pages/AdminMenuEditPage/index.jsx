@@ -321,7 +321,7 @@ const MenuEdit = () => {
         value={productName}
         placeholder="상품명"
         onChange={(e) => {
-          if (e.target.value.length > 7) return;
+          if (e.target.value.length > 18) return;
           setProductName(e.target.value);
         }}
       />

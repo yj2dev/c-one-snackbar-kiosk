@@ -209,7 +209,7 @@ export const BasketSection = styled.section`
           }
           &:nth-child(2) {
             justify-content: start;
-            width: 150px;
+            width: 280px;
           }
           &:nth-child(3) {
             width: 120px;
@@ -244,8 +244,7 @@ export const BasketSection = styled.section`
   article.order-info {
     position: fixed;
 
-    top: 604px; // 컨텐츠 2줄 일때
-    //top: 834px; // 컨텐츠 3줄 일때
+    top: 652px;
 
     bottom: 0;
     right: 0;
@@ -327,8 +326,7 @@ export const ContentSection = styled.section`
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   grid-gap: 16px;
-  //height: 666px;
-  height: 436px; //컨텐츠 2줄일 때
+  height: 484px; //컨텐츠 2줄일 때
   overflow: scroll;
   transition: 0.1s;
 
@@ -349,15 +347,17 @@ export const ContentSection = styled.section`
   }
 
   dl {
-    height: 210px;
+    height: 234px;
     margin: 0;
+    padding-bottom: 28px;
+    text-align: center;
     display: flex;
     flex-direction: column;
     cursor: pointer;
-    padding-bottom: 4px;
     box-sizing: border-box;
     border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
 
     img {
       border-radius: 4px 4px 0 0;
@@ -367,11 +367,18 @@ export const ContentSection = styled.section`
     }
 
     dt {
-      margin-top: 4px;
-      text-align: center;
+      margin: 4px 16px 0 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
     }
 
     dd {
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
       text-align: center;
       font-size: 1.2em;
       font-weight: 600;
