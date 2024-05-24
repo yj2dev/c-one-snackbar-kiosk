@@ -8,7 +8,6 @@ import supabase, {
   getProduct,
 } from "../../network/request/supabase.js";
 import { getKRW } from "../../utils/formats.js";
-import { IoClose } from "@react-icons/all-files/io5/IoClose.js";
 
 const MenuEdit = () => {
   const queryClient = useQueryClient();
@@ -20,6 +19,7 @@ const MenuEdit = () => {
   const [resizedImage, setResizedImage] = useState(null);
 
   const dragCatrogryIndex = useRef(null);
+  const dragProductIndex = useRef(null);
 
   const navigate = useNavigate();
   const [categoryName, setCategoryName] = useState("");
@@ -31,6 +31,7 @@ const MenuEdit = () => {
   const [productCategoryId, setProductCategoryId] = useState("");
 
   const [categoryList, setCategoryList] = useState([]);
+  const [productList, setProductList] = useState([]);
 
   const [image, setImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
@@ -103,6 +104,35 @@ const MenuEdit = () => {
     setPreviewImage(null);
     setProductName("");
     setProductPrice("");
+  };
+
+  const onDragStartProduct = (index) => {
+    dragProductIndex.current = index;
+  };
+
+  const onDropProduct = async (index) => {
+    if (dragProductIndex.current === index) return;
+
+    let updatedProductList = [...product[curTab].product];
+    const fromIndex = dragProductIndex.current;
+
+    const draggedProduct = updatedProductList.splice(fromIndex, 1)[0];
+    updatedProductList.splice(index, 0, draggedProduct);
+
+    setProductList(updatedProductList);
+
+    for (const [idx, item] of updatedProductList.entries()) {
+      const { error } = await supabase
+        .from("product")
+        .update({ display_sort: idx })
+        .eq("id", item.id);
+
+      if (error) {
+        console.error("상품 정렬에 실패했습니다.");
+      }
+    }
+
+    await queryClient.invalidateQueries("products");
   };
 
   return (
@@ -203,7 +233,13 @@ const MenuEdit = () => {
         {product &&
           product?.[curTab]?.product?.length > 0 &&
           product?.[curTab]?.product?.map((v, i) => (
-            <tr key={i}>
+            <tr
+              key={i}
+              draggable={true}
+              onDragStart={() => onDragStartProduct(i)}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={() => onDropProduct(i)}
+            >
               <td>
                 <img
                   src={`${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`}

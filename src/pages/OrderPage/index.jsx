@@ -14,9 +14,6 @@ import { useEffect, useRef, useState } from "react";
 import { getKRW } from "../../utils/formats.js";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { IoClose } from "@react-icons/all-files/io5/IoClose.js";
-import { IoRemove } from "@react-icons/all-files/io5/IoRemove.js";
-import { IoAdd } from "@react-icons/all-files/io5/IoAdd.js";
 import supabase, {
   getCategory,
   getProduct,
@@ -230,7 +227,7 @@ const OrderPage = () => {
               basket.map((v, i) => (
                 <tr key={i}>
                   <td>{i + 1}</td>
-                  <td>{v.name}가나다라마바사아자차카타파하</td>
+                  <td>{v.name}</td>
                   <td>
                     <button
                       className="decrease-btn"
