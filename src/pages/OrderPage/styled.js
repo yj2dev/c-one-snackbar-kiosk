@@ -244,7 +244,8 @@ export const BasketSection = styled.section`
   article.order-info {
     position: fixed;
 
-    top: 652px;
+    //top: 652px;
+    top: 718px;
 
     bottom: 0;
     right: 0;
@@ -324,9 +325,11 @@ export const ContentSection = styled.section`
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-gap: 16px;
-  height: 484px; //컨텐츠 2줄일 때
+  //height: 484px; //컨텐츠 2줄일 때
+  height: 550px; //컨텐츠 2줄, 아래 항목 보이게
+
   overflow: scroll;
   transition: 0.1s;
 
