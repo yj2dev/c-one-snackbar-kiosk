@@ -7,7 +7,7 @@ import {
   Screen,
   AlreadyItemAlert,
 } from "./styled.js";
-import { useRecoilValue, useResetRecoilState, waitForAllSettled } from "recoil";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import { userState } from "../../recoil/atoms/userState.js";
 import Header from "../../layouts/Header/index.jsx";
 import { useEffect, useRef, useState } from "react";

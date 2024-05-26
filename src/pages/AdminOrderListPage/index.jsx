@@ -38,7 +38,7 @@ const OrderListPage = () => {
           schema: "public",
           table: "order",
         },
-        (payload) => {
+        () => {
           playAlertSound();
           refetch();
         },
@@ -154,7 +154,7 @@ const OrderListPage = () => {
                         refetch();
                       }}
                     >
-                        &times;
+                      &times;
                       {/*<IoClose*/}
                       {/*  stlye={{*/}
                       {/*    width: "100%",*/}
