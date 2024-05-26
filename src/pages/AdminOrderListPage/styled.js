@@ -129,11 +129,11 @@ export const Container = styled.div`
                 transition: 0.1s width;
               }
 
-              &:hover {
-                &::before {
-                  width: 100%;
-                }
-              }
+              //&:hover {
+              //  &::before {
+              //    width: 100%;
+              //  }
+              //}
 
               &.ready {
                 &::before {
@@ -154,7 +154,7 @@ export const Container = styled.div`
         .delete-btn {
           transition: 0.1s;
           font-size: 28px;
-            font-weight: 800;
+          font-weight: 800;
           color: #000;
           display: flex;
           justify-content: center;
