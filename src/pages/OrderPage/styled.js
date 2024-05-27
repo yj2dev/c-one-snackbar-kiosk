@@ -245,7 +245,7 @@ export const BasketSection = styled.section`
     position: fixed;
 
     //top: 652px;
-    top: 718px;
+    top: 702px;
 
     bottom: 0;
     right: 0;
@@ -321,7 +321,7 @@ export const ContentSection = styled.section`
   border-radius: 8px;
   background-color: #fff;
   margin: 0 16px 16px 16px;
-  padding: 16px;
+  padding: 16px 16px 0 16px;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;

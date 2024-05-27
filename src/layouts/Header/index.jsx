@@ -7,19 +7,19 @@ const Header = ({ user }) => {
 
   return (
     <Container>
-      <button className="back-btn" onClick={() => navigate(-1)}>
-        뒤로가기
-      </button>
+      {/*<button className="back-btn" onClick={() => navigate(-1)}>*/}
+      {/*  뒤로가기*/}
+      {/*</button>*/}
       <div className="title">
         <img className="c-one-logo" src={COneLogoIcon} alt="씨원리조트 로고" />
         씨원리조트 스낵바
       </div>
-      <div className="user-info">
-        <span className={`gender-badge ${user.gender}`}>
-          {user.gender === "M" ? "남" : "여"}
-        </span>
-        {user.number}
-      </div>
+      {/*<div className="user-info">*/}
+      {/*  <span className={`gender-badge ${user.gender}`}>*/}
+      {/*    {user.gender === "M" ? "남" : "여"}*/}
+      {/*  </span>*/}
+      {/*  {user.number}*/}
+      {/*</div>*/}
     </Container>
   );
 };

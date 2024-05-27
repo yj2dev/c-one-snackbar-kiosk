@@ -7,17 +7,15 @@ import {
   Screen,
   AlreadyItemAlert,
 } from "./styled.js";
-import { useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { userState } from "../../recoil/atoms/userState.js";
 import Header from "../../layouts/Header/index.jsx";
 import { useEffect, useRef, useState } from "react";
 import { getKRW } from "../../utils/formats.js";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import supabase, {
-  getCategory,
-  getProduct,
-} from "../../network/request/supabase.js";
+import { getCategory, getProduct } from "../../network/request/supabase.js";
+import { basketState } from "../../recoil/atoms/basketState.js";
 
 const OrderPage = () => {
   const MIN_BASKET_ITEM_CNT = 1;
@@ -31,12 +29,16 @@ const OrderPage = () => {
   const { data: category } = useQuery("categories", getCategory);
   const { data: product } = useQuery("products", getProduct);
   const [curTab, setCurTab] = useState(0);
-  const [basket, setBasket] = useState([]);
+  const [basket, setBasket] = useRecoilState(basketState);
   const [cornerState, setCornerState] = useState("");
-  const [isOrderLoading, setIsOrderLoading] = useState(false);
-  const [succeedOrder, setSucceedOrder] = useState(false);
-  const [landingTimer, setLandingTimer] = useState(5);
+
   const [showAlreadyItemAlert, setShowAlreadyItemAlert] = useState(false);
+
+  useEffect(() => {
+    // if (!user.number || !user.gender) {
+    //   navigate(-1);
+    // }
+  }, []);
 
   const sumPrice = (arr) => {
     if (arr.length > 0) {
@@ -54,12 +56,6 @@ const OrderPage = () => {
   };
 
   useEffect(() => {
-    if (!user.number || !user.gender) {
-      navigate(-1);
-    }
-  }, []);
-
-  useEffect(() => {
     if (curTab === 0) {
       setCornerState("l-corner");
     } else if (curTab === category.length - 1) {
@@ -73,87 +69,26 @@ const OrderPage = () => {
     setCurTab(e.target.value);
   };
 
-  const onSubmitOrder = async () => {
-    setIsOrderLoading(true);
-
-    // 성별에 따른 유저번호 부가
-
-    let uid = user.gender === "M" ? "0" : "5";
-    uid += user.number.toString().padStart(3, "0");
-
-    const orderPayload = {
-      number: user.number,
-      gender: user.gender,
-      quantity: sumCnt(basket),
-      price: sumPrice(basket),
-      uid,
-    };
-
-    const { data: orderData, error } = await supabase
-      .from("order")
-      .insert(orderPayload)
-      .select();
-
-    if (orderData.length === 0 || error) {
-      setIsOrderLoading(false);
-      console.error("주문에 실패했습니다.");
-      return;
-    }
-
-    const orderDetailPayload = [];
-    basket.map((v) => {
-      orderDetailPayload.push({
-        order_id: orderData[0].id,
-        product_id: v.id,
-        quantity: v.cnt,
-      });
-    });
-
-    const { data: detailData } = await supabase
-      .from("order_detail")
-      .insert(orderDetailPayload)
-      .select();
-
-    if (detailData.length === basket.length) {
-      setBasket([]);
-      setSucceedOrder(true);
-
-      const landingIntervalId = setInterval(() => {
-        setLandingTimer((prev) => {
-          if (prev <= 1) {
-            clearInterval(landingIntervalId);
-            navigate("/");
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    } else {
-      console.error("주문이 누락되었습니다. 직원을 통해 주문해주세요.");
-    }
-    setIsOrderLoading(false);
-  };
-
   const increaseBasketItem = (index) => {
-    const _basket = [...basket];
-    if (_basket[index].cnt < MAX_BASKET_ITEM_CNT) {
-      _basket[index].cnt += 1;
-    }
-    setBasket([..._basket]);
+    setBasket((prevBasket) =>
+      prevBasket.map((item, i) =>
+        i === index ? { ...item, cnt: item.cnt + 1 } : item,
+      ),
+    );
   };
 
   const decreaseBasketItem = (index) => {
-    const _basket = [...basket];
-
-    if (_basket[index].cnt > MIN_BASKET_ITEM_CNT) {
-      _basket[index].cnt -= 1;
-    }
-    setBasket(_basket);
+    setBasket((prevBasket) =>
+      prevBasket.map((item, i) =>
+        i === index
+          ? { ...item, cnt: Math.max(item.cnt - 1, MIN_BASKET_ITEM_CNT) }
+          : item,
+      ),
+    );
   };
 
   const deleteBasketItem = (index) => {
-    let _basket = [...basket];
-    _basket.splice(index, 1);
-    setBasket(_basket);
+    setBasket((prevBasket) => prevBasket.filter((_, i) => i !== index));
   };
 
   return (
@@ -283,27 +218,15 @@ const OrderPage = () => {
           </button>
           <button
             className="submit"
-            disabled={basket.length === 0 || isOrderLoading}
-            onClick={onSubmitOrder}
+            disabled={basket.length === 0}
+            onClick={() => {
+              navigate("/locker");
+            }}
           >
             주문하기
           </button>
         </article>
       </BasketSection>
-      <SucceedOrderPopup
-        className={succeedOrder ? "show" : ""}
-        onClick={() => {
-          navigate("/");
-        }}
-      >
-        <p>주문이 완료되었습니다</p>
-        <p>음식이 준비되면 락커키 번호로 불러드리겠습니다</p>
-        <p className="landing-timer">
-          화면을 터치하거나 {landingTimer}초 후에 <br />
-          처음화면으로 이동합니다
-        </p>
-      </SucceedOrderPopup>
-      <Screen className={succeedOrder ? "show" : ""} />
     </Container>
   );
 };

@@ -45,8 +45,25 @@ const OrderListPage = () => {
       )
       .subscribe();
 
+    const channel2 = supabase
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "order_detail",
+        },
+        () => {
+          console.log("완료");
+          refetch();
+        },
+      )
+      .subscribe();
+
     return () => {
       channel.unsubscribe();
+      channel2.unsubscribe();
     };
   }, [refetch]);
 

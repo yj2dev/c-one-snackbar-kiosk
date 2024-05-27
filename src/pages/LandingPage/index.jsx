@@ -12,7 +12,7 @@ const LandingPage = () => {
   const resetUserState = useResetRecoilState(userState);
 
   const next = () => {
-    navigate("/locker");
+    navigate("/order");
   };
 
   useEffect(() => {
