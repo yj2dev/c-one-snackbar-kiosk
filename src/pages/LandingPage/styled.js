@@ -13,18 +13,22 @@ export const Container = styled.div`
   user-select: none;
   justify-content: center;
 
+  img.snackbar-img {
+    z-index: -1;
+    position: absolute;
+
+    opacity: 0.5;
+  }
+
   h1 {
     text-align: center;
     font-size: 5.4em;
     padding: 0;
     color: #111f90;
-    //margin: 1.4em 0 1.5em 0;
   }
 
   img.c-one-logo {
     width: 100px;
-    //position: absolute;
-    //bottom: 28%;
     margin: 0 0 4em 0;
   }
 
@@ -37,8 +41,6 @@ export const Container = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
-    //position: absolute;
     bottom: 15%;
     font-family: "Forum", sans-serif;
     font-size: 1.5em;
@@ -46,13 +48,6 @@ export const Container = styled.div`
     padding: 0;
 
     margin: 0 0 6em 0;
-  }
-
-  img.snackbar-img {
-    z-index: -1;
-    position: absolute;
-
-    opacity: 0.5;
   }
 
   span {

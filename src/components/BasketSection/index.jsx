@@ -2,12 +2,9 @@ import { Container } from "./styled.js";
 import { getKRW } from "../../utils/formats.js";
 import { sumCnt, sumPrice } from "../../utils/calc.js";
 import { useNavigate } from "react-router-dom";
-import { useResetRecoilState } from "recoil";
-import { basketState } from "../../recoil/atoms/basketState.js";
 
 const BasketSection = ({ basket, setBasket }) => {
   const navigate = useNavigate();
-  const resetBasketState = useResetRecoilState(basketState);
 
   const MIN_BASKET_ITEM_CNT = 1;
   const MAX_BASKET_ITEM_CNT = 32;
@@ -37,7 +34,6 @@ const BasketSection = ({ basket, setBasket }) => {
   };
 
   const onClickCancel = () => {
-    resetBasketState();
     navigate("/");
   };
 

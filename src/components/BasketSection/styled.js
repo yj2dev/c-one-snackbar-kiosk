@@ -40,11 +40,11 @@ export const Container = styled.section`
         }
 
         td {
-          font-size: 1.2em;
+          font-size: 1.1em;
           display: flex;
           justify-content: center;
           align-items: center;
-          padding: 6px 4px;
+          padding: 8px 4px;
 
           button {
             &.delete-btn {
@@ -128,7 +128,7 @@ export const Container = styled.section`
           }
           &:nth-child(2) {
             justify-content: start;
-            width: 280px;
+            width: 250px;
           }
           &:nth-child(3) {
             width: 120px;

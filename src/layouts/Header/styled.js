@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const Container = styled.header`
   display: flex;
-  //justify-content: space-between;
   justify-content: center;
   border-radius: 0 0 20px 20px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);

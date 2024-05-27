@@ -1,38 +1,40 @@
 import { Container } from "./styled.js";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useResetRecoilState } from "recoil";
+import { useQuery } from "react-query";
+import { getProduct } from "../../network/request/supabase.js";
+import { basketState } from "../../recoil/atoms/basketState.js";
+
 import COneLogo from "/public/assets/images/c-one-logo.png";
 import islandIcon from "/public/assets/images/island_icon.png";
 import snackbar from "/public/assets/images/snackbar.jpg";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useResetRecoilState, useSetRecoilState } from "recoil";
-import { userState } from "../../recoil/atoms/userState.js";
-import { getProduct } from "../../network/request/supabase.js";
-import { useQuery } from "react-query";
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const resetUserState = useResetRecoilState(userState);
+  const resetBasketState = useResetRecoilState(basketState);
 
   const { data } = useQuery("products", getProduct);
 
-  useEffect(() => {
+  const preLoadImg = () => {
     data?.map((item) => {
       item.product.map((v) => {
         const img = new Image();
         img.src = `${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`;
       });
     });
+  };
 
-    const img = new Image();
-    img.src = "";
-  }, [data]);
+  useEffect(() => {
+    preLoadImg();
+  }, []);
 
   const next = () => {
     navigate("/order");
   };
 
   useEffect(() => {
-    resetUserState();
+    resetBasketState();
   }, []);
 
   return (
@@ -43,7 +45,6 @@ const LandingPage = () => {
         <br />
         주문하세요!
       </h1>
-      {/*<button className="order-start-btn">주문 시작</button>*/}
       <img className="c-one-logo" src={COneLogo} alt="씨원리조트 로고" />
       <p>
         <img
