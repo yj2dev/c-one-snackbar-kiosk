@@ -2,9 +2,7 @@ import {
   BasketSection,
   Container,
   ContentSection,
-  SucceedOrderPopup,
   TabSection,
-  Screen,
   AlreadyItemAlert,
 } from "./styled.js";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
@@ -158,37 +156,39 @@ const OrderPage = () => {
       <BasketSection>
         <article className="content">
           <table className="basket-list">
-            {basket.length > 0 &&
-              basket.map((v, i) => (
-                <tr key={i}>
-                  <td>{i + 1}</td>
-                  <td>{v.name}</td>
-                  <td>
-                    <button
-                      className="decrease-btn"
-                      onClick={() => {
-                        decreaseBasketItem(i);
-                      }}
-                    ></button>
-                    <p>{v.cnt}</p>
-                    <button
-                      className="increase-btn"
-                      onClick={() => {
-                        increaseBasketItem(i);
-                      }}
-                    ></button>
-                  </td>
-                  <td>{getKRW(v.cnt * v.price)}원</td>
-                  <td>
-                    <button
-                      className="delete-btn"
-                      onClick={() => {
-                        deleteBasketItem(i);
-                      }}
-                    ></button>
-                  </td>
-                </tr>
-              ))}
+            <tbody>
+              {basket.length > 0 &&
+                basket.map((v, i) => (
+                  <tr key={i}>
+                    <td>{i + 1}</td>
+                    <td>{v.name}</td>
+                    <td>
+                      <button
+                        className="decrease-btn"
+                        onClick={() => {
+                          decreaseBasketItem(i);
+                        }}
+                      ></button>
+                      <p>{v.cnt}</p>
+                      <button
+                        className="increase-btn"
+                        onClick={() => {
+                          increaseBasketItem(i);
+                        }}
+                      ></button>
+                    </td>
+                    <td>{getKRW(v.cnt * v.price)}원</td>
+                    <td>
+                      <button
+                        className="delete-btn"
+                        onClick={() => {
+                          deleteBasketItem(i);
+                        }}
+                      ></button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
           </table>
           {basket.length === 0 && (
             <div className="center">주문할 상품을 선택해주세요</div>

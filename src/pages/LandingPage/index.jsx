@@ -4,12 +4,28 @@ import islandIcon from "/public/assets/images/island_icon.png";
 import snackbar from "/public/assets/images/snackbar.jpg";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useResetRecoilState } from "recoil";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
 import { userState } from "../../recoil/atoms/userState.js";
+import { getProduct } from "../../network/request/supabase.js";
+import { useQuery } from "react-query";
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const resetUserState = useResetRecoilState(userState);
+
+  const { data } = useQuery("products", getProduct);
+
+  useEffect(() => {
+    data?.map((item) => {
+      item.product.map((v) => {
+        const img = new Image();
+        img.src = `${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`;
+      });
+    });
+
+    const img = new Image();
+    img.src = "";
+  }, [data]);
 
   const next = () => {
     navigate("/order");
