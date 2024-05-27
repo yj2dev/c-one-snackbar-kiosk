@@ -1,6 +1,6 @@
 {
-  "name": "c-one-snackbar-kiosk",
-  "short_name": "snackbar",
+  "name": "씨원리조트 스낵바",
+  "short_name": "스낵바",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

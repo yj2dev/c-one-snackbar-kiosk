@@ -8,25 +8,13 @@ import supabase, {
 } from "../../network/request/supabase.js";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import {
-  formatKR,
-  formatTime,
-  getGender,
-  getKRW,
-  nowDate,
-} from "../../utils/formats.js";
-import alertSoundSrc from "/public/assets/sounds/alert_sound.wav";
-import { IoClose } from "@react-icons/all-files/io5/IoClose.js";
+import { formatTime, getGender, getKRW } from "../../utils/formats.js";
+import { playAlertSound } from "../../utils/sound.js";
 
 const OrderListPage = () => {
   const navigate = useNavigate();
   const { data: orderData, refetch } = useQuery("orderList", getOrderList);
   const [isSuccess, setIsSuccess] = useState(false);
-
-  const playAlertSound = () => {
-    const audio = new Audio(alertSoundSrc);
-    audio.play();
-  };
 
   useEffect(() => {
     const channel = supabase
@@ -45,32 +33,10 @@ const OrderListPage = () => {
       )
       .subscribe();
 
-    const channel2 = supabase
-      .channel("schema-db-changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "order_detail",
-        },
-        () => {
-          console.log("완료");
-          refetch();
-        },
-      )
-      .subscribe();
-
     return () => {
       channel.unsubscribe();
-      channel2.unsubscribe();
     };
-  }, [refetch]);
-
-  const toggleSuccess = async (orderId, success) => {
-    await updateOrderItem(orderId, success);
-    refetch();
-  };
+  }, []);
 
   return (
     <Container>
@@ -172,12 +138,6 @@ const OrderListPage = () => {
                       }}
                     >
                       &times;
-                      {/*<IoClose*/}
-                      {/*  stlye={{*/}
-                      {/*    width: "100%",*/}
-                      {/*    height: "100%",*/}
-                      {/*  }}*/}
-                      {/*/>*/}
                     </button>
                   </div>
                 </>

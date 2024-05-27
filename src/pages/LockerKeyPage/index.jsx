@@ -1,12 +1,14 @@
 import { Container } from "./styled.js";
 import { useEffect, useRef, useState } from "react";
-import { FaDeleteLeft } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { userState } from "../../recoil/atoms/userState.js";
 import supabase from "../../network/request/supabase.js";
-import { Screen, SucceedOrderPopup } from "../OrderPage/styled.js";
 import { basketState } from "../../recoil/atoms/basketState.js";
+import { sumCnt, sumPrice } from "../../utils/calc.js";
+import SucceedOrderPopup from "../../components/SucceedOrderPopup/index.jsx";
+import { RiDeleteBackFill } from "@react-icons/all-files/ri/RiDeleteBackFill.js";
+import { FiDelete } from "@react-icons/all-files/fi/FiDelete.js";
 
 const LockerKeyPage = () => {
   const navigate = useNavigate();
@@ -15,7 +17,6 @@ const LockerKeyPage = () => {
 
   const [number, setNumber] = useState("");
   const [user, setUser] = useRecoilState(userState);
-  const resetUserState = useResetRecoilState(userState);
 
   const [basket, setBasket] = useRecoilState(basketState);
 
@@ -23,9 +24,9 @@ const LockerKeyPage = () => {
 
   const [gender, setGender] = useState("");
 
-  const [landingTimer, setLandingTimer] = useState(5);
-  const [succeedOrder, setSucceedOrder] = useState(false);
   const [isOrderLoading, setIsOrderLoading] = useState(false);
+  const [succeedOrder, setSucceedOrder] = useState(false);
+  const [landingTimer, setLandingTimer] = useState(5);
 
   useEffect(() => {
     numberRef.current.focus();
@@ -67,26 +68,12 @@ const LockerKeyPage = () => {
     navigate(-1);
   };
 
-  const sumPrice = (arr) => {
-    if (arr.length > 0) {
-      return arr.reduce((prev, cur) => prev + cur.price * cur.cnt, 0);
-    }
-
-    return null;
-  };
-  const sumCnt = (arr) => {
-    if (arr.length > 0) {
-      return arr.reduce((prev, cur) => prev + cur.cnt, 0);
-    }
-
-    return null;
-  };
-
   const onSubmitOrder = async () => {
+    if (number.length === 0) return;
+
     setIsOrderLoading(true);
 
     // 성별에 따른 유저번호 부가
-
     let uid = gender === "M" ? "0" : "5";
     uid += number.toString().padStart(3, "0");
 
@@ -148,6 +135,7 @@ const LockerKeyPage = () => {
         뒤로가기
       </button>
       <h1 className={gender !== "" ? "hidden" : ""}>
+        결제&nbsp;
         <span>락커키 정보</span>를
         <br />
         입력해주세요
@@ -192,38 +180,21 @@ const LockerKeyPage = () => {
           ))}
 
           <button onClick={onClickDelete}>
-            <FaDeleteLeft />
+            <FiDelete />
           </button>
           <button
+            disabled={isOrderLoading}
             className={number.length > 0 ? "active" : ""}
-            onClick={() => {
-              if (number === "") return;
-              if (number === 0) return;
-
-              setUser({ number, gender });
-              // navigate("/order");
-
-              onSubmitOrder();
-            }}
+            onClick={() => onSubmitOrder()}
           >
             주문완료
           </button>
         </div>
       </div>
       <SucceedOrderPopup
-        className={succeedOrder ? "show" : ""}
-        onClick={() => {
-          navigate("/");
-        }}
-      >
-        <p>주문이 완료되었습니다</p>
-        <p>음식이 준비되면 락커키 번호로 불러드리겠습니다</p>
-        <p className="landing-timer">
-          화면을 터치하거나 {landingTimer}초 후에 <br />
-          처음화면으로 이동합니다
-        </p>
-      </SucceedOrderPopup>
-      <Screen className={succeedOrder ? "show" : ""} />
+        succeedOrder={succeedOrder}
+        landingTimer={landingTimer}
+      />
     </Container>
   );
 };

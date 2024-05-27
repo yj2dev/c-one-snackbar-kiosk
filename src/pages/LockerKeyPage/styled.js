@@ -46,7 +46,7 @@ export const Container = styled.div`
 
     span {
       color: #ff4400;
-      font-size: 1.4em;
+      //font-size: 1.4em;
       padding: 0;
       margin: 0;
     }
