@@ -59,6 +59,10 @@ export const Container = styled.div`
       padding: 0 16px 16px 16px;
       gap: 12px;
 
+      @media (max-width: 768px) {
+        flex-direction: column;
+      }
+
       article.order-info {
         font-size: 1.3em;
         font-weight: 600;
@@ -68,6 +72,11 @@ export const Container = styled.div`
         padding: 0;
         margin: 0;
         gap: 0;
+
+        @media (max-width: 768px) {
+          align-items: start;
+        }
+
         .order-now {
           margin-bottom: 12px;
         }

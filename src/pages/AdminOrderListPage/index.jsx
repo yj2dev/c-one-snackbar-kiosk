@@ -99,7 +99,6 @@ const OrderListPage = () => {
                           refetch();
                         }}
                       >
-                        {/*{i === 0 ? "" : " / "}*/}
                         {x.product.name}&nbsp;{x.quantity}개
                       </span>
                     </div>
