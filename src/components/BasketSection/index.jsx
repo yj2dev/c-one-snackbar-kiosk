@@ -104,7 +104,7 @@ const BasketSection = ({ basket, setBasket }) => {
           disabled={basket.length === 0}
           onClick={() => onSubmit()}
         >
-          주문하기
+          결제하기
         </button>
       </article>
     </Container>
