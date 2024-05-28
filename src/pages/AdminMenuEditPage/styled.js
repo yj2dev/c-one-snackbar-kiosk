@@ -59,6 +59,7 @@ export const Container = styled.div`
       display: flex;
       border-bottom: 1px solid #000;
       padding: 4px 0;
+      cursor: pointer;
 
       &:last-child {
         border-bottom: none;

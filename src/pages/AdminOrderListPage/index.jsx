@@ -14,7 +14,13 @@ import {
   getGender,
   getKRW,
 } from "../../utils/formats.js";
-import { playSound } from "../../utils/sound.js";
+import {
+  orderDetailUpdateChannel,
+  orderInsertChannel,
+  orderUpdateChannel,
+  unsubscribeChannel,
+} from "../../network/request/supabaseChannels.js";
+import AdminOrderList from "../../components/AdminOrderList/index.jsx";
 
 const OrderListPage = () => {
   const navigate = useNavigate();
@@ -22,40 +28,16 @@ const OrderListPage = () => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    const channel = supabase
-      .channel("schema-db-changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "order",
-        },
-        () => {
-          playSound.alert();
-          refetch();
-        },
-      )
-      .subscribe();
-
-    const channel2 = supabase
-      .channel("schema-db-changes2")
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "order_detail",
-        },
-        () => {
-          refetch();
-        },
-      )
-      .subscribe();
+    const _orderInsertChannel = orderInsertChannel(refetch);
+    const _orderUpdateChannel = orderUpdateChannel(refetch);
+    const _orderDetailUpdateChannel = orderDetailUpdateChannel(refetch);
 
     return () => {
-      channel.unsubscribe();
-      channel2.unsubscribe();
+      unsubscribeChannel([
+        _orderInsertChannel,
+        _orderUpdateChannel,
+        _orderDetailUpdateChannel,
+      ]);
     };
   }, []);
 
@@ -86,109 +68,11 @@ const OrderListPage = () => {
           </li>
         </ul>
 
-        {orderData
-          ?.filter((v) => v.complete === isSuccess)
-          .map((v, i) => (
-            <div className="order-item" key={i}>
-              <article className="order-info">
-                {v.complete && (
-                  <div className="order-detail-now">
-                    {formatDateKR(v.created_at)}
-                  </div>
-                )}
-                <div className="order-now">{formatTime(v.created_at)}</div>
-                <div className="order-user">
-                  <span
-                    className={`gender-badge ${v.gender === "M" ? "M" : "F"}`}
-                  >
-                    {getGender(v.gender)}
-                  </span>
-                  {v.number}
-                </div>
-
-                <span className="order-uid">({v.uid})</span>
-              </article>
-
-              <article className="order-detail">
-                <div className="order-title">
-                  [메뉴&nbsp;{v.quantity}개]&nbsp;{getKRW(v.price)}원
-                </div>
-
-                <div className="order-product-container">
-                  {v.order_detail.map((x, detaili) => (
-                    <div className="order-product">
-                      <span
-                        key={detaili}
-                        className={x.ready ? "ready" : ""}
-                        onClick={async () => {
-                          await updateOrderDetailItem(x.id, !x.ready);
-                          refetch();
-                        }}
-                      >
-                        {x.product.name}&nbsp;{x.quantity}개
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </article>
-
-              {v.complete ? (
-                <>
-                  <article className="btn">
-                    <button
-                      onClick={async () => {
-                        const isConfirm =
-                          window.confirm("완료된 주문을 복구하시겠습니까?");
-
-                        if (!isConfirm) return;
-
-                        await updateOrderItem(v.id, false);
-                        refetch();
-                      }}
-                    >
-                      복구
-                    </button>
-                  </article>
-                  <div className="delete-btn-container">
-                    <button
-                      className="delete-btn"
-                      onClick={async () => {
-                        const isDelete =
-                          window.confirm(`정말 삭제하시겠습니까?`);
-
-                        if (!isDelete) return;
-
-                        await deleteOrderItem(v.id);
-                        refetch();
-                      }}
-                    >
-                      &times;
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <article className="btn">
-                  <button
-                    onClick={async () => {
-                      await updateOrderItem(v.id, true);
-                      refetch();
-                    }}
-                  >
-                    조리 <br />
-                    완료
-                  </button>
-                </article>
-              )}
-            </div>
-          ))}
-        {/* 주문내역이 없을 경우 메시지 표시 */}
-        {orderData && orderData.length === 0 && (
-          <div className="empty-message">
-            {isSuccess
-              ? "조리완료된 주문내역이 없습니다"
-              : "조리중인 주문내역이 없습니다"}
-          </div>
-        )}
+        <AdminOrderList
+          orderData={orderData}
+          isSuccess={isSuccess}
+          refetch={refetch}
+        />
       </section>
     </Container>
   );

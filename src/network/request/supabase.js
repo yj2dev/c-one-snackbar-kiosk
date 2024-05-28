@@ -36,6 +36,7 @@ export const getOrderList = async () => {
     .from("order")
     .select(`*, order_detail(*, product(*))`)
     .order("created_at", { ascending: false });
+  // .range(0, 10);
 
   if (error) console.error("주문 목록을 가져오지 못했습니다.");
 
