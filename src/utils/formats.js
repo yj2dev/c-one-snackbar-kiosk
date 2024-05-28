@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-
+import "dayjs/locale/ko";
 export const nowDate = (date) => {
   const now = new Date();
   const past = new Date(date);
@@ -28,9 +28,9 @@ export const formatTime = (date) => {
   return inputDate.format("HH:mm");
 };
 
-export const formatKR = (date) => {
+export const formatDateKR = (date) => {
   const inputDate = dayjs(date);
-  return inputDate.format("YYYY년 MM월 DD일 HH시 mm분");
+  return inputDate.locale("ko").format("YY년 MM월 DD일(ddd)");
 };
 
 export const getGender = (char) => {

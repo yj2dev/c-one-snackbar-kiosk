@@ -8,8 +8,13 @@ import supabase, {
 } from "../../network/request/supabase.js";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { formatTime, getGender, getKRW } from "../../utils/formats.js";
-import { playAlertSound } from "../../utils/sound.js";
+import {
+  formatDateKR,
+  formatTime,
+  getGender,
+  getKRW,
+} from "../../utils/formats.js";
+import { playSound } from "../../utils/sound.js";
 
 const OrderListPage = () => {
   const navigate = useNavigate();
@@ -27,7 +32,22 @@ const OrderListPage = () => {
           table: "order",
         },
         () => {
-          playAlertSound();
+          playSound.alert();
+          refetch();
+        },
+      )
+      .subscribe();
+
+    const channel2 = supabase
+      .channel("schema-db-changes2")
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "order_detail",
+        },
+        () => {
           refetch();
         },
       )
@@ -35,6 +55,7 @@ const OrderListPage = () => {
 
     return () => {
       channel.unsubscribe();
+      channel2.unsubscribe();
     };
   }, []);
 
@@ -70,6 +91,11 @@ const OrderListPage = () => {
           .map((v, i) => (
             <div className="order-item" key={i}>
               <article className="order-info">
+                {v.complete && (
+                  <div className="order-detail-now">
+                    {formatDateKR(v.created_at)}
+                  </div>
+                )}
                 <div className="order-now">{formatTime(v.created_at)}</div>
                 <div className="order-user">
                   <span

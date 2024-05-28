@@ -77,6 +77,9 @@ export const Container = styled.div`
           align-items: start;
         }
 
+        .order-detail-now {
+          font-size: 12px;
+        }
         .order-now {
           margin-bottom: 12px;
         }
