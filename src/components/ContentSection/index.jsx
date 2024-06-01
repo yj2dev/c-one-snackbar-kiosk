@@ -1,12 +1,45 @@
 import { getKRW } from "../../utils/formats.js";
 import { AlreadyItemAlert, Container } from "./styled.js";
 import { useEffect, useRef, useState } from "react";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
+import { timerState } from "../../recoil/atoms/timerState.js";
+import { useNavigate } from "react-router-dom";
 
 const ContentSection = ({ curTab, product, basket, setBasket }) => {
-  const [cornerState, setCornerState] = useState("");
+  const navigate = useNavigate();
 
   let alreadyItemAlertId = useRef(null);
+  const [cornerState, setCornerState] = useState("");
   const [showAlreadyItemAlert, setShowAlreadyItemAlert] = useState(false);
+
+  const setSec = useSetRecoilState(timerState);
+  const resetSec = useResetRecoilState(timerState);
+  const timerId = useRef(null);
+  const toggleTimer = () => {
+    resetSec();
+
+    if (timerId.current !== null) {
+      clearInterval(timerId.current);
+    }
+
+    timerId.current = setInterval(() => {
+      setSec((prev) => {
+        if (prev <= 1) {
+          navigate("/");
+        } else {
+          return prev - 1;
+        }
+      });
+    }, 1000);
+  };
+
+  useEffect(() => {
+    toggleTimer();
+
+    return () => {
+      clearInterval(timerId.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (curTab === 0) {
@@ -29,6 +62,8 @@ const ContentSection = ({ curTab, product, basket, setBasket }) => {
           <dl
             key={i}
             onClick={() => {
+              toggleTimer();
+
               const item = {
                 cnt: 1,
                 id: v.id,

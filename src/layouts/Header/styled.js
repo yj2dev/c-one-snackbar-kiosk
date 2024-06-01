@@ -1,12 +1,26 @@
 import styled from "styled-components";
 
 export const Container = styled.header`
-  display: flex;
+  display: grid;
   justify-content: center;
+  grid-template-columns: 1fr 1fr 1fr;
   border-radius: 0 0 20px 20px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   background-color: #fff;
   padding: 8px;
+
+  .right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 400;
+    span {
+      //font-weight: 600;
+    }
+  }
+
+  .left {
+  }
 
   button.back-btn {
     border: none;
