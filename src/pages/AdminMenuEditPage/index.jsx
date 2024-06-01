@@ -8,6 +8,8 @@ import supabase, {
   getProduct,
 } from "../../network/request/supabase.js";
 import { getKRW } from "../../utils/formats.js";
+import { useRecoilState } from "recoil";
+import { timerState } from "../../recoil/atoms/timerState.js";
 
 const MenuEdit = () => {
   const queryClient = useQueryClient();
@@ -37,6 +39,14 @@ const MenuEdit = () => {
   const [previewImage, setPreviewImage] = useState(null);
 
   const [curTab, setCurTab] = useState(0);
+
+  const [timerValue, setTimerValue] = useState();
+
+  const [sec, setSec] = useRecoilState(timerState);
+
+  useEffect(() => {
+    setTimerValue(sec);
+  }, []);
 
   const onSubmitCreateCategory = async () => {
     if (categoryName.trim().length === 0) {
@@ -145,6 +155,28 @@ const MenuEdit = () => {
       >
         뒤로가기
       </div>
+      <h1>주문 화면</h1>
+      <h2>타이머</h2>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+
+          localStorage.setItem("prod_sec", timerValue);
+          alert("타이머 변경 완료");
+        }}
+      >
+        <input
+          type="number"
+          max={120}
+          min={10}
+          value={timerValue}
+          onChange={(e) => {
+            console.log(e.target.value);
+            setTimerValue(e.target.value);
+          }}
+        />
+        <button type="submit">변경</button>
+      </form>
       <h1>메뉴 수정</h1>
       <h2>
         카테고리
