@@ -4,7 +4,16 @@ const CLIENT_URL = import.meta.env.VITE_SUPABASE_CLIENT_URL;
 const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(CLIENT_URL, ANON_KEY);
 
-export const updateOrderDetailItem = async (id, isReady) => {
+export const updateOrderDetailCooking = async (id, isCooking) => {
+  const { data, error } = await supabase
+    .from("order_detail")
+    .update({ is_cooking: isCooking })
+    .eq("id", id);
+  if (error) console.error("상품 상태를 변경하지 못했습니다.");
+
+  return data;
+};
+export const updateOrderDetailComplete = async (id, isReady) => {
   const { data, error } = await supabase
     .from("order_detail")
     .update({ ready: isReady })

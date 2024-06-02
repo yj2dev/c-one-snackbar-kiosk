@@ -1,19 +1,9 @@
 import { Container } from "./styled.js";
 import { useNavigate } from "react-router-dom";
-import supabase, {
-  deleteOrderItem,
-  getOrderList,
-  updateOrderDetailItem,
-  updateOrderItem,
-} from "../../network/request/supabase.js";
+import { getOrderList } from "../../network/request/supabase.js";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import {
-  formatDateKR,
-  formatTime,
-  getGender,
-  getKRW,
-} from "../../utils/formats.js";
+
 import {
   orderDetailUpdateChannel,
   orderInsertChannel,

@@ -171,7 +171,6 @@ const MenuEdit = () => {
           min={10}
           value={timerValue}
           onChange={(e) => {
-            console.log(e.target.value);
             setTimerValue(e.target.value);
           }}
         />

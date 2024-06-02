@@ -6,12 +6,12 @@ import {
 } from "../../utils/formats.js";
 import {
   deleteOrderItem,
-  updateOrderDetailItem,
+  updateOrderDetailComplete,
+  updateOrderDetailCooking,
   updateOrderItem,
 } from "../../network/request/supabase.js";
 
 const AdminOrderList = ({ orderData, isSuccess, refetch }) => {
-  console.log(orderData);
   return (
     <>
       {orderData
@@ -47,11 +47,24 @@ const AdminOrderList = ({ orderData, isSuccess, refetch }) => {
                     <span
                       className={x.ready ? "ready" : ""}
                       onClick={async () => {
-                        await updateOrderDetailItem(x.id, !x.ready);
+                        if (!x.is_cooking) {
+                          await updateOrderDetailCooking(x.id, true);
+                        }
+
+                        if (x.is_cooking) {
+                          await updateOrderDetailComplete(x.id, true);
+                        }
+
+                        if (x.is_cooking && x.ready) {
+                          await updateOrderDetailCooking(x.id, false);
+                          await updateOrderDetailComplete(x.id, false);
+                        }
+
                         refetch();
                       }}
                     >
-                      {x.product.name}&nbsp;{x.quantity}개
+                      {x.product.name}&nbsp;{x.quantity}개&nbsp;
+                      {!x.ready && x.is_cooking && "(조리시작)"}
                     </span>
                   </div>
                 ))}
