@@ -1,6 +1,5 @@
 import { Container } from "./styled.js";
 import COneLogoIcon from "/public/assets/images/c-one-logo-icon.png";
-import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { timerState } from "../../recoil/atoms/timerState.js";
 

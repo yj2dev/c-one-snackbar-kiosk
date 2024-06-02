@@ -34,9 +34,6 @@ const ContentSection = ({ curTab, product, basket, setBasket }) => {
   };
 
   useEffect(() => {
-    console.log("sc");
-    console.log(localStorage.getItem("3222"));
-
     toggleTimer();
 
     return () => {
