@@ -2,7 +2,7 @@
   "name": "씨원리조트 스낵바",
   "short_name": "스낵바",
   "start_url": "/",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#ffffff",
   "theme_color": "#485EEE",
   "icons": [
