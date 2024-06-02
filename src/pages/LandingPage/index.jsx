@@ -1,5 +1,5 @@
 import { Container } from "./styled.js";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useResetRecoilState } from "recoil";
 import { useQuery } from "react-query";
@@ -15,6 +15,8 @@ const LandingPage = () => {
   const resetBasketState = useResetRecoilState(basketState);
 
   const { data } = useQuery("products", getProduct);
+
+  const timerRef = useRef(null);
 
   const preLoadImg = () => {
     data?.map((item) => {
@@ -37,8 +39,45 @@ const LandingPage = () => {
     resetBasketState();
   }, []);
 
+  const handleMouseDown = (e) => {
+    if (e.clientX < 50 && e.clientY < 50) {
+      timerRef.current = setTimeout(() => {
+        navigate("/admin");
+      }, 1000);
+    }
+  };
+
+  const handleMouseUp = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  const handleTouchStart = (e) => {
+    const touch = e.touches[0];
+    if (touch.clientX < 50 && touch.clientY < 50) {
+      timerRef.current = setTimeout(() => {
+        navigate("/admin");
+      }, 1000);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
   return (
-    <Container onClick={() => next()}>
+    <Container
+      onClick={() => next()}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       <img className="snackbar-img" src={snackbar} alt="스낵바 배경이미지" />
       <h1>
         여기에서
