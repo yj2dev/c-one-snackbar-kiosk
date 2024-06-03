@@ -54,7 +54,7 @@ const OrderListPage = () => {
               setIsSuccess(false);
             }}
           >
-            조리중
+            주문
           </li>
           <li
             className={1 === tabIndex ? "active" : ""}

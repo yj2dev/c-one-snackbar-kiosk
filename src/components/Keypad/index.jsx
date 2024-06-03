@@ -92,10 +92,10 @@ const KeyPad = ({ gender }) => {
       });
     });
 
-    const { data: detailData } = await supabase
+    const { data: detailData, error: detailError } = await supabase
       .from("order_detail")
       .insert(orderDetailPayload)
-      .select();
+      .select("*");
 
     if (detailData.length === basket.length) {
       setBasket([]);
