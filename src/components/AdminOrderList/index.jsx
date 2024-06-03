@@ -47,18 +47,20 @@ const AdminOrderList = ({ orderData, isSuccess, refetch }) => {
                     <span
                       className={x.ready ? "ready" : ""}
                       onClick={async () => {
-                        if (!x.is_cooking) {
-                          await updateOrderDetailCooking(x.id, true);
-                        }
+                        await updateOrderDetailComplete(x.id, !x.ready);
 
-                        if (x.is_cooking) {
-                          await updateOrderDetailComplete(x.id, true);
-                        }
+                        // if (!x.is_cooking) {
+                        //   await updateOrderDetailCooking(x.id, true);
+                        // }
 
-                        if (x.is_cooking && x.ready) {
-                          await updateOrderDetailCooking(x.id, false);
-                          await updateOrderDetailComplete(x.id, false);
-                        }
+                        // if (x.is_cooking) {
+                        //   await updateOrderDetailComplete(x.id, true);
+                        // }
+
+                        // if (x.is_cooking && x.ready) {
+                        //   await updateOrderDetailCooking(x.id, false);
+                        //   await updateOrderDetailComplete(x.id, false);
+                        // }
 
                         refetch();
                       }}

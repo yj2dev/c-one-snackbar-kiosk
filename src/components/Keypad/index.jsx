@@ -88,6 +88,7 @@ const KeyPad = ({ gender }) => {
         order_id: orderData[0].id,
         product_id: v.id,
         quantity: v.cnt,
+        ready_quantity: v.cnt,
       });
     });
 

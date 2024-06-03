@@ -16,7 +16,7 @@ const MenuEdit = () => {
   const MAX_CATEGORY_CNT = 5;
 
   const { data: category } = useQuery("categories", getCategory);
-  const { data: product } = useQuery("products", getProduct);
+  const { data: product, refetch } = useQuery("products", getProduct);
 
   const [resizedImage, setResizedImage] = useState(null);
 
@@ -261,69 +261,86 @@ const MenuEdit = () => {
       </div>
 
       <table className="product-list">
-        {product &&
-          product?.[curTab]?.product?.length > 0 &&
-          product?.[curTab]?.product?.map((v, i) => (
-            <tr
-              key={i}
-              draggable={true}
-              onDragStart={() => onDragStartProduct(i)}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={() => onDropProduct(i)}
-            >
-              <td>
-                <img
-                  src={`${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`}
-                />
-              </td>
-              <td>{v.name}</td>
-              <td>{getKRW(v.price)}원</td>
-              <td>
-                <select
-                  value={v.state}
-                  onChange={(e) => {
-                    setProductState(e.target.value);
-                  }}
-                >
-                  <option value="판매중">판매중</option>
-                  <option value="품절">품절</option>
-                  <option value="숨기기">숨기기</option>
-                </select>
-              </td>
-              <td>
-                <button
+        <tbody>
+          {product &&
+            product?.[curTab]?.product?.length > 0 &&
+            product?.[curTab]?.product?.map((v, i) => (
+              <tr
+                key={i}
+                draggable={true}
+                onDragStart={() => onDragStartProduct(i)}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={() => onDropProduct(i)}
+              >
+                <td>
+                  <img
+                    src={`${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`}
+                  />
+                </td>
+                <td>{v.name}</td>
+                <td>{getKRW(v.price)}원</td>
+                <td>
+                  <select
+                    value={v.state}
+                    onChange={(e) => {
+                      setProductState(e.target.value);
+                    }}
+                  >
+                    <option value="판매중">판매중</option>
+                    <option value="품절">품절</option>
+                    <option value="숨기기">숨기기</option>
+                  </select>
+                </td>
+                <td
                   onClick={async () => {
                     const { data, error } = await supabase
                       .from("product")
-                      .delete()
+                      .update({ is_cook: !v.is_cook })
                       .eq("id", v.id);
 
                     if (error) {
-                      alert("상품 삭제에 실패했습니다.");
+                      alert("조리 여부를 반영하지 못했습니다.");
                     }
 
-                    const { data: imageData, imageError } =
-                      await supabase.storage
-                        .from("product-image")
-                        .remove([v.img]);
-
-                    if (imageError) {
-                      alert("상품 이미지 삭제에 실패했습니다.");
-                    }
-
-                    // onShowCategory();
-                    await queryClient.invalidateQueries("categories");
-                    await queryClient.invalidateQueries("products");
+                    refetch();
                   }}
                 >
-                  삭제
-                </button>
-              </td>
-            </tr>
-          ))}
+                  {v.is_cook ? "조리" : "비조리"}
+                </td>
+                <td>
+                  <button
+                    onClick={async () => {
+                      const { data, error } = await supabase
+                        .from("product")
+                        .delete()
+                        .eq("id", v.id);
+
+                      if (error) {
+                        alert("상품 삭제에 실패했습니다.");
+                      }
+
+                      const { data: imageData, imageError } =
+                        await supabase.storage
+                          .from("product-image")
+                          .remove([v.img]);
+
+                      if (imageError) {
+                        alert("상품 이미지 삭제에 실패했습니다.");
+                      }
+
+                      // onShowCategory();
+                      await queryClient.invalidateQueries("categories");
+                      await queryClient.invalidateQueries("products");
+                    }}
+                  >
+                    삭제
+                  </button>
+                </td>
+              </tr>
+            ))}
+        </tbody>
       </table>
 
-      <hr />
       <h2>상품 추가</h2>
       <label
         className={isDrag ? "active" : ""}

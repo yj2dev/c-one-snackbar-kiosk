@@ -141,11 +141,11 @@ export const Container = styled.div`
                 transition: 0.1s width;
               }
 
-              &:hover {
-                &::before {
-                  width: 100%;
-                }
-              }
+              //&:hover {
+              //  &::before {
+              //    width: 100%;
+              //  }
+              //}
 
               @media (max-width: 768px) {
                 &:hover::before {

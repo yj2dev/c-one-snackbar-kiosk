@@ -4,6 +4,81 @@ const CLIENT_URL = import.meta.env.VITE_SUPABASE_CLIENT_URL;
 const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(CLIENT_URL, ANON_KEY);
 
+export const updateOrderDetailReadyQuantity = async (id, cnt) => {
+  if (cnt < 0) {
+    console.error("올바를 숫자를 입력해주세요.");
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from("order_detail")
+    .update({ ready_quantity: cnt })
+    .eq("id", id)
+    .select();
+
+  if (error) console.error("상품 준비 개수를 변경하지 못했습니다.");
+
+  return data;
+};
+
+export const getProductState = async () => {
+  const { data, error } = await supabase
+    .from("order")
+    .select("*, order_detail(*, product(*))")
+    .eq("complete", false);
+
+  if (error) {
+    console.error("상품 상태를 가져오지 못했습니다.");
+    return [];
+  }
+
+  const filteredData = data
+    .map((order) => {
+      return {
+        ...order,
+        order_detail: order.order_detail.filter(
+          (detail) => detail.product.is_cook,
+        ),
+      };
+    })
+    .filter((order) => order.order_detail.length > 0);
+
+  const productMap = new Map();
+
+  filteredData.forEach((order) => {
+    order.order_detail.forEach((detail) => {
+      const productId = detail.product_id;
+      const productName = detail.product.name;
+      const quantity = detail.ready_quantity;
+
+      if (productMap.has(productId)) {
+        productMap.get(productId).quantity += quantity;
+        productMap.get(productId).orderDetails.push({
+          orderDetailId: detail.id,
+          readyQuantity: detail.ready_quantity,
+        });
+      } else {
+        productMap.set(productId, {
+          id: productId,
+          name: productName,
+          quantity: quantity,
+          orderDetails: [
+            {
+              orderDetailId: detail.id,
+              readyQuantity: detail.ready_quantity,
+            },
+          ],
+        });
+      }
+    });
+  });
+
+  let result = Array.from(productMap.values());
+  result = result.sort((a, b) => a.id - b.id);
+
+  return result;
+};
+
 export const updateOrderDetailCooking = async (id, isCooking) => {
   const { data, error } = await supabase
     .from("order_detail")
@@ -13,6 +88,7 @@ export const updateOrderDetailCooking = async (id, isCooking) => {
 
   return data;
 };
+
 export const updateOrderDetailComplete = async (id, isReady) => {
   const { data, error } = await supabase
     .from("order_detail")
