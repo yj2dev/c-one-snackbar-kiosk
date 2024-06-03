@@ -1,16 +1,28 @@
 import { Container } from "./styled.js";
-import React from "react";
-import { useQuery, useMutation } from "react-query";
+import React, { useEffect } from "react";
+import { useQuery } from "react-query";
 import {
   updateOrderDetailReadyQuantity,
   getProductState,
 } from "../../network/request/supabase.js";
+import {
+  orderDetailUpdateChannel,
+  unsubscribeChannel,
+} from "../../network/request/supabaseChannels.js";
 
 const AdminOrderState = () => {
   const { data: stateList, refetch } = useQuery(
     "orderStateList",
     getProductState,
   );
+
+  useEffect(() => {
+    const _orderDetailUpdateChannel = orderDetailUpdateChannel(refetch);
+
+    return () => {
+      unsubscribeChannel([_orderDetailUpdateChannel]);
+    };
+  }, []);
 
   return (
     <Container>
