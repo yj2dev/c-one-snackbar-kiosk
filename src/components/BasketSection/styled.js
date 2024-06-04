@@ -153,6 +153,10 @@ export const Container = styled.section`
     }
 
     .center {
+      @media (max-width: 768px) {
+        font-size: 1em;
+      }
+
       margin: auto auto;
       color: #111f90;
       font-size: 1.5em;
@@ -162,6 +166,10 @@ export const Container = styled.section`
 
   article.order-info {
     position: fixed;
+
+    @media (max-width: 768px) {
+      top: 512px;
+    }
 
     //top: 652px;
     top: 702px;
@@ -180,6 +188,9 @@ export const Container = styled.section`
       height: 100%;
 
       p {
+        @media (max-width: 768px) {
+          font-size: 1em;
+        }
         text-align: end;
         font-size: 1.5em;
         font-weight: 600;
@@ -196,6 +207,10 @@ export const Container = styled.section`
       }
     }
     button {
+      @media (max-width: 768px) {
+        font-size: 1.2em;
+      }
+
       border: none;
       outline: none;
       background-color: #111f90;

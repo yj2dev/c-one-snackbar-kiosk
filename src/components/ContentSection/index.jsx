@@ -92,7 +92,10 @@ const ContentSection = ({ curTab, product, basket, setBasket }) => {
           >
             <img src={`${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`} />
             <dt>{v.name}</dt>
-            <dd>{getKRW(v.price)}원</dd>
+            <dd>
+              {getKRW(v.price)}
+              <span className="m-none">원</span>
+            </dd>
           </dl>
         ))
       ) : (

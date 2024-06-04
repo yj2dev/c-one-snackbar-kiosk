@@ -8,13 +8,14 @@ const Header = () => {
 
   return (
     <Container>
-      <div className="left"></div>
+      <div className="left m-none"></div>
       <div className="title">
         <img className="c-one-logo" src={COneLogoIcon} alt="씨원리조트 로고" />
         씨원리조트 스낵바
       </div>
       <div className="right">
-        <span>{sec}초</span>&nbsp;후에 처음화면으로 이동합니다
+        {sec}초&nbsp;후에 처음화면
+        <span className="m-none">으로 이동합니다</span>
       </div>
     </Container>
   );

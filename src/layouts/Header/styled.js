@@ -9,34 +9,17 @@ export const Container = styled.header`
   background-color: #fff;
   padding: 8px;
 
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+    font-size: 14px;
+  }
+
   .right {
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: 400;
-    span {
-      //font-weight: 600;
-    }
-  }
-
-  .left {
-  }
-
-  button.back-btn {
-    border: none;
-    outline: none;
-    font-size: 1em;
-    cursor: pointer;
-    padding: 6px 10px;
-    color: rgba(17, 31, 144, 1);
-    background-color: transparent;
-    font-weight: 600;
-    transition: 0.1s;
-
-    &:active {
-      background-color: rgba(17, 31, 144, 1);
-      color: #fff;
-    }
+    word-break: keep-all;
   }
 
   .title {

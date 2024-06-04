@@ -8,9 +8,12 @@ export const Container = styled.section`
     padding: 0;
     grid-gap: 8px;
     margin: 16px;
-    //border-bottom: 1px solid #111f90;
 
     li {
+      @media (max-width: 768px) {
+        font-size: 1em;
+      }
+
       padding: 4px 0;
       font-size: 1.2em;
       cursor: pointer;

@@ -13,3 +13,9 @@ body {
     margin: 0;
     background-color: #fff;
 }
+
+.m-none {
+    @media (max-width: 768px) {
+        display: none;
+    }
+}

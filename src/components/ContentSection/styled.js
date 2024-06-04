@@ -18,6 +18,10 @@ export const Container = styled.section`
   //height: 484px; //컨텐츠 2줄일 때
   height: 550px; //컨텐츠 2줄, 아래 항목 보이게
 
+  @media (max-width: 768px) {
+    height: 370px;
+  }
+
   overflow: scroll;
   transition: 0.1s;
 
@@ -38,6 +42,9 @@ export const Container = styled.section`
   }
 
   dl {
+    @media (max-width: 768px) {
+      height: 150px;
+    }
     height: 234px;
     margin: 0;
     padding-bottom: 28px;
@@ -58,6 +65,9 @@ export const Container = styled.section`
     }
 
     dt {
+      @media (max-width: 768px) {
+        font-size: 12px;
+      }
       margin: 4px 16px 0 16px;
       display: flex;
       justify-content: center;
@@ -66,6 +76,10 @@ export const Container = styled.section`
     }
 
     dd {
+      @media (max-width: 768px) {
+        font-size: 12px;
+      }
+
       position: absolute;
       bottom: 4px;
       left: 50%;
