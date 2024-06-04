@@ -96,6 +96,10 @@ export const Container = styled.section`
 `;
 
 export const AlreadyItemAlert = styled.div`
+  @media (max-width: 768px) {
+    font-size: 0.8em;
+  }
+
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   transition: 0.2s;
   position: fixed;

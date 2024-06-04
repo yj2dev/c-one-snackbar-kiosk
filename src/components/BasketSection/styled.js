@@ -165,7 +165,7 @@ export const Container = styled.section`
           }
           &:nth-child(2) {
             @media (max-width: 768px) {
-              width: 76px;
+              width: 84px;
             }
 
             justify-content: start;
@@ -237,7 +237,8 @@ export const Container = styled.section`
 
       p {
         @media (max-width: 768px) {
-          font-size: 1em;
+          font-size: 0.8em;
+          padding: 0 0 0 8px;
         }
         text-align: end;
         font-size: 1.5em;
