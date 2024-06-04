@@ -7,6 +7,10 @@ export const Container = styled.div`
   justify-content: center;
 
   h1 {
+    @media (max-width: 768px) {
+      font-size: 2.5em;
+    }
+
     text-align: center;
     font-size: 4em;
     padding: 0;
@@ -19,7 +23,6 @@ export const Container = styled.div`
 
     span {
       color: #ff4400;
-      //font-size: 1.4em;
       padding: 0;
       margin: 0;
     }
@@ -37,7 +40,6 @@ export const Container = styled.div`
 
   ul.select-gender {
     list-style: none;
-    //border: 1px solid #111f90;
     font-size: 2em;
     width: 350px;
     border-radius: 12px;

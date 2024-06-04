@@ -13,6 +13,13 @@ export const Screen = styled.div`
   }
 `;
 export const Popup = styled.div`
+  @media (max-width: 768px) {
+    width: 260px;
+    height: 300px;
+    font-size: 1.2em;
+    padding: 12px 32px;
+  }
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,7 +38,6 @@ export const Popup = styled.div`
   left: 50%;
   transition: 0.2s;
   transform: translate(-50%, -50%);
-  //bottom: -150%;
   top: -400px;
   &.show {
     top: calc(50%);
