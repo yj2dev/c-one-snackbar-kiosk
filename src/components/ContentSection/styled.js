@@ -43,7 +43,7 @@ export const Container = styled.section`
 
   dl {
     @media (max-width: 768px) {
-      height: 134px;
+      height: 146px;
     }
     height: 234px;
     margin: 0;

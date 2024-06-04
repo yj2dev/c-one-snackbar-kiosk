@@ -47,7 +47,7 @@ export const Container = styled.section`
           padding: 8px 4px;
 
           @media (max-width: 768px) {
-            padding: 4px 2px;
+            padding: 8px 2px;
           }
 
           button {

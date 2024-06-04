@@ -9,6 +9,7 @@ import { basketState } from "../../recoil/atoms/basketState.js";
 import COneLogo from "/public/assets/images/c-one-logo.png";
 import islandIcon from "/public/assets/images/island_icon.png";
 import snackbar from "/public/assets/images/snackbar.jpg";
+import { QRCodeCanvas } from "qrcode.react";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -79,6 +80,11 @@ const LandingPage = () => {
       onTouchEnd={handleTouchEnd}
     >
       <img className="snackbar-img" src={snackbar} alt="스낵바 배경이미지" />
+      {/*<QRCodeCanvas*/}
+      {/*  bgColor="transparent"*/}
+      {/*  size={84}*/}
+      {/*  value="https://snackbar.netlify.app/order"*/}
+      {/*/>*/}
       <h1>
         여기에서
         <br />

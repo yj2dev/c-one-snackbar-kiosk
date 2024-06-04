@@ -33,7 +33,14 @@ const AdminOrderState = () => {
       console.error("주문내역이 없습니다.");
       return;
     }
-    const filterDetails = orderDetails.filter((v) => v.readyQuantity !== 0);
+
+    // 조리할 개수가 없는 아이디 제거
+    let filterDetails = orderDetails.filter((v) => v.readyQuantity !== 0);
+
+    // 아이디 내림차순 정렬
+    filterDetails = filterDetails.sort(
+      (a, b) => b.orderDetailId - a.orderDetailId,
+    );
 
     if (filterDetails.length <= 0) {
       console.error("처리가능한 상태가 없습니다.");
@@ -42,12 +49,16 @@ const AdminOrderState = () => {
 
     const { orderDetailId, readyQuantity } = filterDetails.pop();
 
+    console.log(filterDetails);
+    console.log(orderDetailId, readyQuantity);
+
     if (readyQuantity <= 0) {
       console.error("수량은 0보다 작아질 수 없습니다.");
       return;
     }
 
     await updateOrderDetailReadyQuantity(orderDetailId, readyQuantity - 1);
+
     refetch();
   };
 
