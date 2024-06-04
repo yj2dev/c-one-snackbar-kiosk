@@ -43,7 +43,7 @@ export const Container = styled.div`
       &.not-state {
         padding: 32px 0;
         td {
-          font-size: 1.2em;
+          font-size: 1rem;
           width: 100%;
           display: flex;
           align-items: center;
