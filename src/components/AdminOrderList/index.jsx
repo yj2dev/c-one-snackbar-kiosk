@@ -7,7 +7,6 @@ import {
 import {
   deleteOrderItem,
   updateOrderDetailComplete,
-  updateOrderDetailCooking,
   updateOrderItem,
 } from "../../network/request/supabase.js";
 
