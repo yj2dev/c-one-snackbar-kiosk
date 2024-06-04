@@ -8,6 +8,9 @@ export const Container = styled.div`
   table {
     border-collapse: collapse;
     font-size: 1.2em;
+    @media (max-width: 768px) {
+      width: 100%;
+    }
 
     tr {
       display: flex;
@@ -24,18 +27,59 @@ export const Container = styled.div`
         align-items: center;
 
         &:nth-child(1) {
+          @media (max-width: 768px) {
+            min-width: auto;
+            flex: 1;
+          }
+          white-space: nowrap;
           min-width: 250px;
           justify-content: start;
         }
         &:nth-child(2) {
+          @media (max-width: 768px) {
+            min-width: auto;
+            flex: 1;
+          }
           min-width: 64px;
         }
         &:nth-child(3) {
-          min-width: 200px;
+          @media (max-width: 768px) {
+            flex: 1;
+            min-width: auto;
+            flex-direction: column;
+          }
 
+          min-width: 200px;
           gap: 12px;
           button {
+            white-space: nowrap;
             padding: 6px 12px;
+            color: #000;
+            background-color: transparent;
+            border: 2px solid #000;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.1s;
+
+            @media (max-width: 768px) {
+              flex: 1;
+              min-width: auto;
+              flex-direction: column;
+              &:hover {
+                background-color: transparent;
+                color: #000;
+              }
+            }
+
+            &:hover {
+              background-color: #000;
+              color: #fff;
+            }
+
+            &:active {
+              background-color: #000;
+              color: #fff;
+            }
           }
         }
       }

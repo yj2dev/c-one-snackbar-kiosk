@@ -81,7 +81,7 @@ const AdminOrderState = () => {
       <table>
         <thead>
           <tr>
-            <td>조리필요 품목</td>
+            <td>품목</td>
             <td>수량</td>
             <td>상태변경</td>
           </tr>
