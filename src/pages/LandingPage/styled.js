@@ -25,16 +25,25 @@ export const Container = styled.div`
     font-size: 5.4em;
     padding: 0;
     color: #111f90;
+    @media (max-width: 768px) {
+      font-size: 12vw;
+    }
   }
 
   img.c-one-logo {
     width: 100px;
     margin: 0 0 4em 0;
+    @media (max-width: 768px) {
+      width: 72px;
+    }
   }
 
   p {
     img.island-icon {
       width: 64px;
+      @media (max-width: 768px) {
+        width: 48px;
+      }
     }
 
     display: flex;
@@ -46,8 +55,11 @@ export const Container = styled.div`
     font-size: 1.5em;
     font-weight: 800;
     padding: 0;
-
     margin: 0 0 6em 0;
+
+    @media (max-width: 768px) {
+      font-size: 4.5vw;
+    }
   }
 
   span {
@@ -59,5 +71,9 @@ export const Container = styled.div`
     text-align: center;
     color: #fff;
     background-color: rgba(66, 135, 245, 0.7);
+
+    @media (max-width: 768px) {
+      font-size: 6vw;
+    }
   }
 `;

@@ -2,7 +2,6 @@ import { Container } from "./styled.js";
 import { useEffect } from "react";
 import { useQuery } from "react-query";
 import {
-  // updateOrderDetailReadyQuantity,
   getProductState,
   updateOrderDetailReadyQuantity,
 } from "../../network/request/supabase.js";
