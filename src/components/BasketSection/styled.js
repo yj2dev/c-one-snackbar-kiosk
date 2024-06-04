@@ -46,10 +46,19 @@ export const Container = styled.section`
           align-items: center;
           padding: 8px 4px;
 
+          @media (max-width: 768px) {
+            padding: 4px 2px;
+          }
+
           button {
             &.delete-btn {
               position: relative;
               &::before {
+                @media (max-width: 768px) {
+                  width: 10px;
+                  height: 2px;
+                }
+
                 content: "";
                 width: 16px;
                 height: 3px;
@@ -60,6 +69,10 @@ export const Container = styled.section`
                 position: absolute;
               }
               &::after {
+                @media (max-width: 768px) {
+                  width: 10px;
+                  height: 2px;
+                }
                 content: "";
                 width: 16px;
                 height: 3px;
@@ -72,6 +85,10 @@ export const Container = styled.section`
             &.increase-btn {
               position: relative;
               &::before {
+                @media (max-width: 768px) {
+                  width: 10px;
+                  height: 2px;
+                }
                 content: "";
                 width: 16px;
                 height: 3px;
@@ -80,6 +97,10 @@ export const Container = styled.section`
                 position: absolute;
               }
               &::after {
+                @media (max-width: 768px) {
+                  width: 10px;
+                  height: 2px;
+                }
                 content: "";
                 width: 16px;
                 height: 3px;
@@ -92,6 +113,10 @@ export const Container = styled.section`
             &.decrease-btn {
               position: relative;
               &::before {
+                @media (max-width: 768px) {
+                  width: 10px;
+                  height: 2px;
+                }
                 content: "";
                 width: 16px;
                 height: 3px;
@@ -99,6 +124,12 @@ export const Container = styled.section`
                 border-radius: 6px;
                 position: absolute;
               }
+            }
+
+            @media (max-width: 768px) {
+              width: 22px;
+              height: 22px;
+              border-radius: 6px;
             }
 
             cursor: pointer;
@@ -120,19 +151,36 @@ export const Container = styled.section`
               transform: translate(1px, 1px);
             }
           }
-
+          @media (max-width: 768px) {
+            font-size: 0.8em;
+          }
           &:nth-child(1) {
+            @media (max-width: 768px) {
+              width: 8px;
+            }
+
             width: 28px;
             color: #111f90;
             font-weight: 600;
           }
           &:nth-child(2) {
+            @media (max-width: 768px) {
+              width: 76px;
+            }
+
             justify-content: start;
             width: 250px;
           }
           &:nth-child(3) {
+            @media (max-width: 768px) {
+              width: 70px;
+            }
+
             width: 120px;
             p {
+              @media (max-width: 768px) {
+                width: 20px;
+              }
               text-align: center;
               width: 44px;
               padding: 0;
@@ -208,7 +256,7 @@ export const Container = styled.section`
     }
     button {
       @media (max-width: 768px) {
-        font-size: 1.2em;
+        font-size: 1.1em;
       }
 
       border: none;
