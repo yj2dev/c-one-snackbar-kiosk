@@ -56,7 +56,7 @@ export const isInitQRToken = async () => {
       console.log("토큰 재생성");
       return { isToken: false, token: "" };
     } else {
-      return { isToken: true, token: token[0]?.token };
+      return { isToken: false, token: token[0]?.token };
     }
   }
 

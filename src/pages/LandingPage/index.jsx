@@ -19,7 +19,7 @@ const LandingPage = () => {
     useCornorAction();
   const mode = useRecoilValue(modeState);
 
-  console.log(mode.qrUrl);
+  console.log("mode.qrUrl >> ", mode.qrUrl);
 
   const authorization = () => {
     console.log(mode);
