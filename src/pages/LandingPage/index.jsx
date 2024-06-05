@@ -15,23 +15,6 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const resetBasketState = useResetRecoilState(basketState);
 
-  const { data } = useQuery("products", getProduct);
-
-  const timerRef = useRef(null);
-
-  const preLoadImg = () => {
-    data?.map((item) => {
-      item.product.map((v) => {
-        const img = new Image();
-        img.src = `${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`;
-      });
-    });
-  };
-
-  useEffect(() => {
-    preLoadImg();
-  }, []);
-
   const next = () => {
     navigate("/order");
   };
