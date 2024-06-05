@@ -3,7 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useResetRecoilState } from "recoil";
 
-import { createQRToken } from "../../network/request/supabase.js";
+import {
+  createQRToken,
+  validateQRToken,
+} from "../../network/request/supabase.js";
 import { basketState } from "../../recoil/atoms/basketState.js";
 
 import COneLogo from "/public/assets/images/c-one-logo.png";
@@ -58,7 +61,15 @@ const LandingPage = () => {
     >
       <img className="snackbar-img" src={snackbar} alt="스낵바 배경이미지" />
 
-      {/*<QRCodeCanvas bgColor="transparent" size={84} value={QRURL} />*/}
+      <button
+        onClick={() => {
+          validateQRToken();
+        }}
+      >
+        check
+      </button>
+
+      <QRCodeCanvas bgColor="transparent" size={84} value={QRURL} />
       <h1>
         여기에서
         <br />

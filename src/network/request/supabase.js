@@ -5,10 +5,20 @@ const CLIENT_URL = import.meta.env.VITE_SUPABASE_CLIENT_URL;
 const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(CLIENT_URL, ANON_KEY);
 
+export const validateQRToken = async () => {
+  const curDate = new Date().toISOString();
+
+  const { data, error } = await supabase.from("qr_token").select();
+  // .lte("expires_at", curDate);
+
+  console.log(data, error);
+};
+
 export const createQRToken = async () => {
   const token = uuidv4();
   let curTime = new Date();
-  let expTime = new Date(curTime.getTime() + 1000 * 60 * 20);
+  // let expTime = new Date(curTime.getTime() + 1000 * 60 * 20);
+  let expTime = new Date(curTime.getTime() + 1000 * 60 * 1);
 
   curTime = curTime.toISOString();
   expTime = expTime.toISOString();
