@@ -4,9 +4,11 @@ import { FiDelete } from "@react-icons/all-files/fi/FiDelete.js";
 import SucceedOrderPopup from "../SucceedOrderPopup/index.jsx";
 import { sumCnt, sumPrice } from "../../utils/calc.js";
 import supabase from "../../network/request/supabase.js";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { basketState } from "../../recoil/atoms/basketState.js";
 import { useNavigate } from "react-router-dom";
+import { modeState } from "../../recoil/atoms/modeState.js";
+import QRNotFoundPopup from "../QRNotFoundPopup/index.jsx";
 
 const KeyPad = ({ gender }) => {
   const keyList = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "C", "0"];
@@ -20,6 +22,9 @@ const KeyPad = ({ gender }) => {
   const [isOrderLoading, setIsOrderLoading] = useState(false);
   const [succeedOrder, setSucceedOrder] = useState(false);
   const [landingTimer, setLandingTimer] = useState(5);
+
+  const [notFoundShow, setNotFoundShow] = useState(false);
+  const mode = useRecoilValue(modeState);
 
   useEffect(() => {
     numberRef.current.focus();
@@ -69,6 +74,7 @@ const KeyPad = ({ gender }) => {
       uid,
       quantity: sumCnt(basket),
       price: sumPrice(basket),
+      is_qr: mode.is_qr,
     };
 
     const { data: orderData, error } = await supabase
@@ -105,7 +111,12 @@ const KeyPad = ({ gender }) => {
         setLandingTimer((prev) => {
           if (prev <= 1) {
             clearInterval(landingIntervalId);
-            navigate("/");
+
+            if (mode.isQr) {
+              setNotFoundShow(true);
+            } else {
+              navigate("/");
+            }
           }
           return prev - 1;
         });
@@ -153,6 +164,8 @@ const KeyPad = ({ gender }) => {
         succeedOrder={succeedOrder}
         landingTimer={landingTimer}
       />
+
+      <QRNotFoundPopup show={notFoundShow} />
     </Container>
   );
 };

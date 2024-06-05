@@ -1,12 +1,8 @@
 import { Container } from "./styled.js";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useResetRecoilState } from "recoil";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 
-import {
-  createQRToken,
-  validateQRToken,
-} from "../../network/request/supabase.js";
 import { basketState } from "../../recoil/atoms/basketState.js";
 
 import COneLogo from "/public/assets/images/c-one-logo.png";
@@ -14,41 +10,27 @@ import islandIcon from "/public/assets/images/island_icon.png";
 import snackbar from "/public/assets/images/snackbar.jpg";
 import { QRCodeCanvas } from "qrcode.react";
 import useCornorAction from "../../hooks/useCornorAction/index.jsx";
+import { modeState } from "../../recoil/atoms/modeState.js";
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const resetBasketState = useResetRecoilState(basketState);
   const [handleMouseDown, handleMouseUp, handleTouchStart, handleTouchEnd] =
     useCornorAction();
+  const mode = useRecoilValue(modeState);
 
-  const [QRURL, setQRURL] = useState("");
+  console.log(mode.qrUrl);
 
-  const generateQRCode = async () => {
-    const token = await createQRToken();
-    let url = null;
-
-    if (import.meta.env.MODE === "production") {
-      const baseUrl = import.meta.env.VITE_QR_BASE_URL;
-      url = `${baseUrl}/${token}/qro`;
-    } else {
-      url = `http://localhost:5173/${token}/qro`;
-    }
-
-    console.log(url);
-
-    if (token) {
-      setQRURL(url);
+  const authorization = () => {
+    console.log(mode);
+    if (mode.isQr) {
+      navigate(`${mode.token}/qro`);
     }
   };
 
   useEffect(() => {
     resetBasketState();
-
-    generateQRCode();
-
-    const genQRId = setInterval(generateQRCode, 1000 * 60 * 10);
-
-    return () => clearInterval(genQRId);
+    authorization();
   }, []);
 
   return (
@@ -61,15 +43,12 @@ const LandingPage = () => {
     >
       <img className="snackbar-img" src={snackbar} alt="스낵바 배경이미지" />
 
-      <button
-        onClick={() => {
-          validateQRToken();
-        }}
-      >
-        check
-      </button>
-
-      <QRCodeCanvas bgColor="transparent" size={84} value={QRURL} />
+      <QRCodeCanvas
+        bgColor="transparent"
+        fgColor="#111f90"
+        size={100}
+        value={mode?.qrUrl}
+      />
       <h1>
         여기에서
         <br />
