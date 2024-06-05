@@ -6,8 +6,8 @@ import {
   updateOrderDetailReadyQuantity,
 } from "../../network/request/supabase.js";
 import {
-  orderDetailUpdateChannel,
-  orderInsertChannel,
+  orderDetailUpdateChannelState,
+  orderInsertChannelState,
   unsubscribeChannel,
 } from "../../network/request/supabaseChannels.js";
 
@@ -17,14 +17,16 @@ const AdminOrderState = () => {
     getProductState,
   );
 
-  console.log("stateList >> ", stateList);
-
   useEffect(() => {
-    const _orderDetailUpdateChannel = orderDetailUpdateChannel(refetch);
-    const _orderInsertChannel = orderInsertChannel(refetch);
+    const _orderDetailUpdateChannelState =
+      orderDetailUpdateChannelState(refetch);
+    const _orderInsertChannelState = orderInsertChannelState(refetch);
 
     return () => {
-      unsubscribeChannel([_orderDetailUpdateChannel, _orderInsertChannel]);
+      unsubscribeChannel([
+        _orderDetailUpdateChannelState,
+        _orderInsertChannelState,
+      ]);
     };
   }, []);
 

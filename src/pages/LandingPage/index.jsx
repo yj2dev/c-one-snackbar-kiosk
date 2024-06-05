@@ -21,11 +21,20 @@ const LandingPage = () => {
   const [QRURL, setQRURL] = useState("");
 
   const generateQRCode = async () => {
-    const baseUrl = import.meta.env.VITE_QR_BASE_URL;
     const token = await createQRToken();
+    let url = null;
+
+    if (import.meta.env.MODE === "production") {
+      const baseUrl = import.meta.env.VITE_QR_BASE_URL;
+      url = `${baseUrl}/${token}/qro`;
+    } else {
+      url = `http://localhost:5173/${token}/qro`;
+    }
+
+    console.log(url);
 
     if (token) {
-      setQRURL(`${baseUrl}/${token}`);
+      setQRURL(url);
     }
   };
 
@@ -41,7 +50,7 @@ const LandingPage = () => {
 
   return (
     <Container
-      // onClick={() => navigate("/order")}
+      onClick={() => navigate("/order")}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onTouchStart={handleTouchStart}

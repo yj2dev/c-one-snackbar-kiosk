@@ -36,7 +36,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/locker" element={<LockerKeyPage />} />
           <Route path="/order" element={<OrderPage />} />
-          <Route path="/order/:token" element={<QROrderPage />} />
+          <Route path="/:token/qro" element={<QROrderPage />} />
           <Route path="/admin" element={<AdminLandingPage />} />
           <Route path="/admin/order" element={<OrderListPage />} />
           <Route path="/admin/menu" element={<MenuEditPage />} />
