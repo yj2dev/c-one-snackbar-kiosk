@@ -9,11 +9,15 @@ import Header from "../../layouts/Header/index.jsx";
 import TabSection from "../../components/TabSection/index.jsx";
 import ContentSection from "../../components/ContentSection/index.jsx";
 import BasketSection from "../../components/BasketSection/index.jsx";
+import { useParams } from "react-router-dom";
 
-const QRorderPage = () => {
+const QROrderPage = () => {
   const { data: product } = useQuery("products", getProduct);
   const [curTab, setCurTab] = useState(0);
   const [basket, setBasket] = useRecoilState(basketState);
+
+  const { token } = useParams();
+  console.log(token);
 
   return (
     <Container>
@@ -30,4 +34,4 @@ const QRorderPage = () => {
   );
 };
 
-export default QRorderPage;
+export default QROrderPage;

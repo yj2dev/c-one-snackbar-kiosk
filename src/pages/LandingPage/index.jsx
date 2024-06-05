@@ -1,73 +1,55 @@
 import { Container } from "./styled.js";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useResetRecoilState } from "recoil";
-import { useQuery } from "react-query";
-import { getProduct } from "../../network/request/supabase.js";
+
+import { createQRToken } from "../../network/request/supabase.js";
 import { basketState } from "../../recoil/atoms/basketState.js";
 
 import COneLogo from "/public/assets/images/c-one-logo.png";
 import islandIcon from "/public/assets/images/island_icon.png";
 import snackbar from "/public/assets/images/snackbar.jpg";
 import { QRCodeCanvas } from "qrcode.react";
+import useCornorAction from "../../hooks/useCornorAction/index.jsx";
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const resetBasketState = useResetRecoilState(basketState);
+  const [handleMouseDown, handleMouseUp, handleTouchStart, handleTouchEnd] =
+    useCornorAction();
 
-  const next = () => {
-    navigate("/order");
+  const [QRURL, setQRURL] = useState("");
+
+  const generateQRCode = async () => {
+    const baseUrl = import.meta.env.VITE_QR_BASE_URL;
+    const token = await createQRToken();
+
+    if (token) {
+      setQRURL(`${baseUrl}/${token}`);
+    }
   };
 
   useEffect(() => {
     resetBasketState();
+
+    generateQRCode();
+
+    const genQRId = setInterval(generateQRCode, 1000 * 60 * 10);
+
+    return () => clearInterval(genQRId);
   }, []);
-
-  const handleMouseDown = (e) => {
-    if (e.clientX < 50 && e.clientY < 50) {
-      timerRef.current = setTimeout(() => {
-        navigate("/admin");
-      }, 1000);
-    }
-  };
-
-  const handleMouseUp = () => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-  };
-
-  const handleTouchStart = (e) => {
-    const touch = e.touches[0];
-    if (touch.clientX < 50 && touch.clientY < 50) {
-      timerRef.current = setTimeout(() => {
-        navigate("/admin");
-      }, 1000);
-    }
-  };
-
-  const handleTouchEnd = () => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-  };
 
   return (
     <Container
-      onClick={() => next()}
+      // onClick={() => navigate("/order")}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
       <img className="snackbar-img" src={snackbar} alt="스낵바 배경이미지" />
-      {/*<QRCodeCanvas*/}
-      {/*  bgColor="transparent"*/}
-      {/*  size={84}*/}
-      {/*  value="https://snackbar.netlify.app/order"*/}
-      {/*/>*/}
+
+      {/*<QRCodeCanvas bgColor="transparent" size={84} value={QRURL} />*/}
       <h1>
         여기에서
         <br />

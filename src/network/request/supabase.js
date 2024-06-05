@@ -1,8 +1,35 @@
 import { createClient } from "@supabase/supabase-js";
+import { v4 as uuidv4 } from "uuid";
 
 const CLIENT_URL = import.meta.env.VITE_SUPABASE_CLIENT_URL;
 const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(CLIENT_URL, ANON_KEY);
+
+export const createQRToken = async () => {
+  const token = uuidv4();
+  let curTime = new Date();
+  let expTime = new Date(curTime.getTime() + 1000 * 60 * 20);
+
+  curTime = curTime.toISOString();
+  expTime = expTime.toISOString();
+
+  const { error } = await supabase
+    .from("qr_token")
+    .update({
+      token,
+      expires_at: expTime,
+      created_at: curTime,
+    })
+    .eq("id", 1)
+    .select();
+
+  if (error) {
+    console.error("QR Token을 생성하지 못했습니다.", error);
+    return null;
+  }
+
+  return token;
+};
 
 export const updateOrderDetailReadyQuantity = async (id, cnt) => {
   if (cnt < 0) {
