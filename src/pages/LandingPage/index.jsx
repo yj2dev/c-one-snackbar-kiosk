@@ -48,6 +48,7 @@ const LandingPage = () => {
         fgColor="#111f90"
         size={100}
         value={mode?.qrUrl}
+        style={{ position: "absolute", left: "16px", top: "16px" }}
       />
       <h1>
         여기에서
