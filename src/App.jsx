@@ -13,7 +13,7 @@ import { useQuery } from "react-query";
 import {
   createQRToken,
   getProduct,
-  getQrToken,
+  getExpireQrToken,
   isCreateQrToken,
 } from "./network/request/supabase.js";
 import { useEffect } from "react";
@@ -33,8 +33,7 @@ function App() {
   };
 
   const generateQrCode = async () => {
-    const { data, token, curDate } = await getQrToken();
-    console.log("data, token >> ", data, token);
+    const { data, token, curDate } = await getExpireQrToken();
 
     const isCreate = isCreateQrToken(data, curDate);
 
@@ -45,8 +44,6 @@ function App() {
       curToken = token[0];
     }
 
-    console.log("curToken >> ", curToken);
-
     let url = null;
 
     if (import.meta.env.MODE === "production") {
@@ -55,7 +52,6 @@ function App() {
     } else {
       url = `http://localhost:5173/${curToken}/qro`;
     }
-    console.log("url >> ", url);
 
     if (curToken) {
       setMode((prev) => ({ ...prev, qrUrl: url, token: [...token] }));
@@ -67,8 +63,6 @@ function App() {
     generateQrCode();
 
     const genQrId = setInterval(generateQrCode, 3000);
-
-    // const genQrId = setInterval(generateQrCode, 15000);
 
     return () => clearInterval(genQrId);
   }, []);

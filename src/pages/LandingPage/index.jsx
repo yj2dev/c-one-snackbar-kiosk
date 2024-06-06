@@ -44,13 +44,13 @@ const LandingPage = () => {
     >
       <img className="snackbar-img" src={snackbar} alt="스낵바 배경이미지" />
 
-      {/*<QRCodeCanvas*/}
-      {/*  bgColor="transparent"*/}
-      {/*  fgColor="#111f90"*/}
-      {/*  size={100}*/}
-      {/*  value={mode?.qrUrl}*/}
-      {/*  style={{ position: "absolute", left: "16px", top: "16px" }}*/}
-      {/*/>*/}
+      <QRCodeCanvas
+        bgColor="transparent"
+        fgColor="#111f90"
+        size={100}
+        value={mode?.qrUrl}
+        style={{ position: "absolute", left: "16px", top: "16px" }}
+      />
       <h1>
         여기에서
         <br />

@@ -22,53 +22,57 @@ export const validateQRToken = async () => {
   console.log("valid >> ", data, error);
 };
 
-export const getQrToken = async () => {
+export const getExpireQrToken = async () => {
   const curDate = new Date();
 
-  // 만료기간이 지난 토큰은 제외하고 가져옴
+  // 만료기간이 지난 토큰을 삭제하고, 만료되지 않은 토큰을 가져옴
+  const { data: expiredTokens, error: expiredError } = await supabase
+    .from("qr_token")
+    .delete()
+    .lt("expires_at", curDate.toISOString())
+    .select();
+
   const { data, error } = await supabase
     .from("qr_token")
     .select()
     .gte("expires_at", curDate.toISOString());
 
-  const sortData = data.sort((a, b) => a.sequence - b.sequence);
-  const token = sortData.map((v) => v.token);
+  if (error) {
+    console.error("Error fetching tokens: ", error);
+    return { data: [], token: [], curDate };
+  }
 
-  return { data, token, curDate };
+  const sortedData = data.sort((a, b) => a.sequence - b.sequence);
+  const token = sortedData.map((v) => v.token);
+
+  return { data: sortedData, token, curDate };
 };
 
 export const isCreateQrToken = (data, curDate) => {
-  const firstToken = data.filter((v) => v.sequence === 1);
+  if (data.length === 0) return true;
 
-  console.log("firstToken", firstToken);
+  const firstToken = data.find((v) => v.sequence === 1);
+  if (!firstToken) return true;
 
-  const tokenDate = new Date(firstToken[0].expires_at);
+  const tokenDate = new Date(firstToken.expires_at);
   const diff = tokenDate - curDate;
 
   const lastTime = diff / 1000 - CREATE_TIME_M * 60;
-  console.log(
-    `남은시간(${CREATE_TIME_M * 60}): ${lastTime.toFixed(2)}s, ${diff} -> ${CREATE_TIME_M * 60 * 1000}`,
-  );
+  // console.log(
+  //   `남은시간(${CREATE_TIME_M * 60}): ${lastTime.toFixed(2)}s, ${diff} -> ${CREATE_TIME_M * 60 * 1000}`,
+  // );
 
-  if (diff <= 1000 * 60 * CREATE_TIME_M) {
-    //   만료시간과 현재 시간의 차가 내가 설정한 생성 시간이 일치할때
-    console.log("재 생성");
-    return true;
-  } else {
-    console.log("유지");
-    return false;
-  }
+  return diff <= 1000 * 60 * CREATE_TIME_M;
 };
 
 export const createQRToken = async () => {
-  let token = uuidv4();
-  token = token.replaceAll("-", "").substring(0, 24);
-  let curTime = new Date();
-  let expTime = new Date(curTime.getTime() + 1000 * 60 * EXPIRE_TIME_M);
-  let isError = [];
+  const token = uuidv4().replaceAll("-", "").substring(0, 24);
+  const curTime = new Date();
+  const expTime = new Date(curTime.getTime() + 1000 * 60 * EXPIRE_TIME_M);
+  const isError = [];
 
-  curTime = curTime.toISOString();
-  expTime = expTime.toISOString();
+  const curTimeStr = curTime.toISOString();
+  const expTimeStr = expTime.toISOString();
 
   const { data: checkData, error: checkError } = await supabase
     .from("qr_token")
@@ -80,34 +84,32 @@ export const createQRToken = async () => {
 
   // 토큰이 2개면 마지막 토큰 제거(sequence 2번 토큰)
   if (checkData.length === 2) {
-    const { data: deleteData, error: deleteError } = await supabase
+    const { error: deleteError } = await supabase
       .from("qr_token")
       .delete()
-      .eq("sequence", 2)
-      .select();
+      .eq("sequence", 2);
+    if (deleteError) {
+      isError.push(deleteError);
+    }
   }
 
-  const { data: secondData, error: secondError } = await supabase
+  const { error: secondError } = await supabase
     .from("qr_token")
     .update({
       sequence: 2,
     })
-    .eq("sequence", 1)
-    .select();
+    .eq("sequence", 1);
 
   if (secondError) {
     isError.push(secondError);
   }
 
-  const { data: firstData, error: firstError } = await supabase
-    .from("qr_token")
-    .insert({
-      token,
-      sequence: 1,
-      expires_at: expTime,
-      created_at: curTime,
-    })
-    .select();
+  const { error: firstError } = await supabase.from("qr_token").insert({
+    token,
+    sequence: 1,
+    expires_at: expTimeStr,
+    created_at: curTimeStr,
+  });
 
   if (firstError) {
     isError.push(firstError);
@@ -120,6 +122,7 @@ export const createQRToken = async () => {
 
   return token;
 };
+
 export const updateOrderDetailReadyQuantity = async (id, cnt) => {
   if (cnt < 0) {
     console.error("올바를 숫자를 입력해주세요.");
