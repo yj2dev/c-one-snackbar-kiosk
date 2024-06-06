@@ -13,7 +13,8 @@ import { useQuery } from "react-query";
 import {
   createQRToken,
   getProduct,
-  isInitQRToken,
+  getQrToken,
+  isCreateQrToken,
 } from "./network/request/supabase.js";
 import { useEffect } from "react";
 import { modeState } from "./recoil/atoms/modeState.js";
@@ -32,24 +33,32 @@ function App() {
   };
 
   const generateQrCode = async () => {
-    const { isToken, token } = await isInitQRToken();
+    const { data, token, curDate } = await getQrToken();
+    console.log("data, token >> ", data, token);
 
-    console.log(isToken, token);
+    const isCreate = isCreateQrToken(data, curDate);
 
-    if (isToken) return;
+    let curToken = null;
+    if (isCreate) {
+      curToken = await createQRToken();
+    } else {
+      curToken = token[0];
+    }
 
-    const createToken = token === "" ? await createQRToken() : token;
+    console.log("curToken >> ", curToken);
+
     let url = null;
 
     if (import.meta.env.MODE === "production") {
       const baseUrl = import.meta.env.VITE_QR_BASE_URL;
-      url = `${baseUrl}/${createToken}/qro`;
+      url = `${baseUrl}/${curToken}/qro`;
     } else {
-      url = `http://localhost:5173/${createToken}/qro`;
+      url = `http://localhost:5173/${curToken}/qro`;
     }
+    console.log("url >> ", url);
 
-    if (createToken) {
-      setMode((prev) => ({ ...prev, qrUrl: url, token }));
+    if (curToken) {
+      setMode((prev) => ({ ...prev, qrUrl: url, token: [...token] }));
     }
   };
 
@@ -57,7 +66,7 @@ function App() {
     preLoadImg();
     generateQrCode();
 
-    const genQrId = setInterval(generateQrCode, 1000);
+    const genQrId = setInterval(generateQrCode, 3000);
 
     // const genQrId = setInterval(generateQrCode, 15000);
 

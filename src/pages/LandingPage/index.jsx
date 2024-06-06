@@ -1,5 +1,5 @@
 import { Container } from "./styled.js";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 
@@ -11,6 +11,7 @@ import snackbar from "/public/assets/images/snackbar.jpg";
 import { QRCodeCanvas } from "qrcode.react";
 import useCornorAction from "../../hooks/useCornorAction/index.jsx";
 import { modeState } from "../../recoil/atoms/modeState.js";
+import QRNotFoundPopup from "../../components/QRNotFoundPopup/index.jsx";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -19,12 +20,12 @@ const LandingPage = () => {
     useCornorAction();
   const mode = useRecoilValue(modeState);
 
-  console.log("mode.qrUrl >> ", mode.qrUrl);
+  const [notFoundShow, setNotFoundShow] = useState(false);
 
   const authorization = () => {
-    console.log(mode);
     if (mode.isQr) {
-      navigate(`${mode.token}/qro`);
+      // navigate(`${mode.token}/qro`);
+      setNotFoundShow(true);
     }
   };
 
@@ -43,13 +44,13 @@ const LandingPage = () => {
     >
       <img className="snackbar-img" src={snackbar} alt="스낵바 배경이미지" />
 
-      <QRCodeCanvas
-        bgColor="transparent"
-        fgColor="#111f90"
-        size={100}
-        value={mode?.qrUrl}
-        style={{ position: "absolute", left: "16px", top: "16px" }}
-      />
+      {/*<QRCodeCanvas*/}
+      {/*  bgColor="transparent"*/}
+      {/*  fgColor="#111f90"*/}
+      {/*  size={100}*/}
+      {/*  value={mode?.qrUrl}*/}
+      {/*  style={{ position: "absolute", left: "16px", top: "16px" }}*/}
+      {/*/>*/}
       <h1>
         여기에서
         <br />
@@ -65,6 +66,7 @@ const LandingPage = () => {
         [ La Pool : Adventure Waterpark & Sauna ]
       </p>
       <span>화면을 터치하세요</span>
+      <QRNotFoundPopup show={notFoundShow} />
     </Container>
   );
 };

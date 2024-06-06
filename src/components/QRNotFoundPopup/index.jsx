@@ -1,8 +1,6 @@
 import { Popup, Screen } from "./styled.js";
 
-const NotFoundPopup = ({ show }) => {
-  if (!show) return;
-
+const NotFoundPopup = ({ show = false }) => {
   return (
     <>
       <Popup className={show ? "show" : ""}>

@@ -32,7 +32,9 @@ const QROrderPage = () => {
   }, []);
 
   useEffect(() => {
-    if (token === mode.token) {
+    console.log(mode.token);
+    console.log(mode.token.includes(token));
+    if (mode.token.includes(token)) {
       setMode((prev) => ({ ...prev, isQr: true }));
       setNotFoundShow(false);
     } else {

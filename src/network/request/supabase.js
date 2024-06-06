@@ -14,54 +14,52 @@ const EXPIRE_TIME_M = 10;
 export const validateQRToken = async () => {
   const curDate = new Date().toISOString();
 
-  const { data, error } = await supabase.from("qr_token").select();
-  // .lte("expires_at", curDate);
+  const { data, error } = await supabase
+    .from("qr_token")
+    .select()
+    .lte("expires_at", curDate);
 
-  console.log(data, error);
+  console.log("valid >> ", data, error);
 };
-export const isInitQRToken = async () => {
+
+export const getQrToken = async () => {
   const curDate = new Date();
 
-  const { data: checkData, error: checkError } = await supabase
-    .from("qr_token")
-    .select();
-
-  console.log("checkData >> ", checkData, checkError);
-
-  if (checkError) {
-    console.error("토큰을 조회할 수 없습니다.");
-    return { isToken: false, token: "" };
-  }
-
-  if (checkData.length === 0) {
-    return { isToken: false, token: "" };
-  }
-
+  // 만료기간이 지난 토큰은 제외하고 가져옴
   const { data, error } = await supabase
     .from("qr_token")
     .select()
     .gte("expires_at", curDate.toISOString());
 
-  console.log(data, error);
+  const sortData = data.sort((a, b) => a.sequence - b.sequence);
+  const token = sortData.map((v) => v.token);
 
-  if (data.length > 0) {
-    const token = data.filter((v) => v.sequence === 1);
-    const token_date = new Date(token[0]?.expires_at);
-    const diff = token_date - curDate;
-
-    const lastTime = diff / 1000 - CREATE_TIME_M * 60;
-    console.log(`토큰 생성까지 남은시간(${CREATE_TIME_M}): ${lastTime}s`);
-
-    if (token.length === 0 || diff <= 1000 * 60 * CREATE_TIME_M) {
-      console.log("토큰 재생성");
-      return { isToken: false, token: "" };
-    } else {
-      return { isToken: false, token: token[0]?.token };
-    }
-  }
-
-  return { isToken: false, token: "" };
+  return { data, token, curDate };
 };
+
+export const isCreateQrToken = (data, curDate) => {
+  const firstToken = data.filter((v) => v.sequence === 1);
+
+  console.log("firstToken", firstToken);
+
+  const tokenDate = new Date(firstToken[0].expires_at);
+  const diff = tokenDate - curDate;
+
+  const lastTime = diff / 1000 - CREATE_TIME_M * 60;
+  console.log(
+    `남은시간(${CREATE_TIME_M * 60}): ${lastTime.toFixed(2)}s, ${diff} -> ${CREATE_TIME_M * 60 * 1000}`,
+  );
+
+  if (diff <= 1000 * 60 * CREATE_TIME_M) {
+    //   만료시간과 현재 시간의 차가 내가 설정한 생성 시간이 일치할때
+    console.log("재 생성");
+    return true;
+  } else {
+    console.log("유지");
+    return false;
+  }
+};
+
 export const createQRToken = async () => {
   let token = uuidv4();
   token = token.replaceAll("-", "").substring(0, 24);
@@ -80,34 +78,25 @@ export const createQRToken = async () => {
     isError.push(checkError);
   }
 
-  if (checkData.length > 0) {
-    if (
-      checkData.length > 1 ||
-      (checkData.length === 1 && checkData[0].sequence === 2)
-    ) {
-      // If there's more than one token or if the only token is sequence 2, delete sequence 2
-      const { data: deleteData, error: deleteError } = await supabase
-        .from("qr_token")
-        .delete()
-        .eq("sequence", 2)
-        .select();
-
-      if (deleteError) {
-        isError.push(deleteError);
-      }
-    }
-
-    const { data: secondData, error: secondError } = await supabase
+  // 토큰이 2개면 마지막 토큰 제거(sequence 2번 토큰)
+  if (checkData.length === 2) {
+    const { data: deleteData, error: deleteError } = await supabase
       .from("qr_token")
-      .update({
-        sequence: 2,
-      })
-      .eq("sequence", 1)
+      .delete()
+      .eq("sequence", 2)
       .select();
+  }
 
-    if (secondError) {
-      isError.push(secondError);
-    }
+  const { data: secondData, error: secondError } = await supabase
+    .from("qr_token")
+    .update({
+      sequence: 2,
+    })
+    .eq("sequence", 1)
+    .select();
+
+  if (secondError) {
+    isError.push(secondError);
   }
 
   const { data: firstData, error: firstError } = await supabase

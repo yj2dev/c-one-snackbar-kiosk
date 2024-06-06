@@ -4,7 +4,7 @@ export const modeState = atom({
   key: "modeState",
   default: {
     qrUrl: "",
-    token: "",
+    token: [],
     isQr: false,
   },
 });
