@@ -15,6 +15,7 @@ import QRNotFoundPopup from "../../components/QRNotFoundPopup/index.jsx";
 import QRContentSection from "../../components/QRContentSection/index.jsx";
 import QRBasketSection from "../../components/QRBasketSection/index.jsx";
 import { timerState } from "../../recoil/atoms/timerState.js";
+import { notFoundPopupState } from "../../recoil/atoms/notFoundPopupState.js";
 
 const QROrderPage = () => {
   const { data: product } = useQuery("products", getProduct);
@@ -22,7 +23,7 @@ const QROrderPage = () => {
   const [basket, setBasket] = useRecoilState(basketState);
 
   const [mode, setMode] = useRecoilState(modeState);
-  const [notFoundShow, setNotFoundShow] = useState(false);
+  const setNotFoundShow = useSetRecoilState(notFoundPopupState);
   const { token } = useParams();
 
   const setTimerState = useSetRecoilState(timerState);
@@ -32,8 +33,6 @@ const QROrderPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log(mode.token);
-    console.log(mode.token.includes(token));
     if (mode.token.includes(token)) {
       setMode((prev) => ({ ...prev, isQr: true }));
       setNotFoundShow(false);
@@ -53,7 +52,6 @@ const QROrderPage = () => {
         setBasket={setBasket}
       />
       <QRBasketSection basket={basket} setBasket={setBasket} />
-      <QRNotFoundPopup show={notFoundShow} />
     </Container>
   );
 };

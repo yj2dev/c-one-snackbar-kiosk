@@ -17,7 +17,7 @@ const Header = () => {
       </div>
       <div className="right">
         {mode.isQr ? (
-          <>{sec}초&nbsp; 후 주문만료</>
+          <>{parseInt(sec / 60)}분&nbsp; 후 주문만료</>
         ) : (
           <>
             {sec}초&nbsp;후에 처음화면

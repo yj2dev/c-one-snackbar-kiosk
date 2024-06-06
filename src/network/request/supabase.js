@@ -11,17 +11,6 @@ const supabase = createClient(CLIENT_URL, ANON_KEY);
 const CREATE_TIME_M = 5;
 const EXPIRE_TIME_M = 10;
 
-export const validateQRToken = async () => {
-  const curDate = new Date().toISOString();
-
-  const { data, error } = await supabase
-    .from("qr_token")
-    .select()
-    .lte("expires_at", curDate);
-
-  console.log("valid >> ", data, error);
-};
-
 export const getExpireQrToken = async () => {
   const curDate = new Date();
 

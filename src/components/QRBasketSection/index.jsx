@@ -2,12 +2,17 @@ import { Container } from "./styled.js";
 import { getKRW } from "../../utils/formats.js";
 import { sumCnt, sumPrice } from "../../utils/calc.js";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { notFoundPopupState } from "../../recoil/atoms/notFoundPopupState.js";
+import { v4 as uuidv4 } from "uuid";
 
 const BasketSection = ({ basket, setBasket }) => {
   const navigate = useNavigate();
 
   const MIN_BASKET_ITEM_CNT = 1;
   const MAX_BASKET_ITEM_CNT = 32;
+
+  const setNotFoundShow = useSetRecoilState(notFoundPopupState);
 
   const increaseBasketItem = (index) => {
     setBasket((prev) =>
@@ -34,7 +39,9 @@ const BasketSection = ({ basket, setBasket }) => {
   };
 
   const onClickCancel = () => {
-    navigate("/");
+    setNotFoundShow(true);
+    const newToken = uuidv4().replaceAll("-", "").substring(0, 24);
+    navigate(`/${newToken}/qro`);
   };
 
   const onSubmit = () => {

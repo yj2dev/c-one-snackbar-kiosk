@@ -1,6 +1,6 @@
 import "./App.css";
-import { useSetRecoilState } from "recoil";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LandingPage from "./pages/LandingPage/index.jsx";
 import OrderPage from "./pages/OrderPage/index.jsx";
@@ -17,11 +17,16 @@ import {
   isCreateQrToken,
 } from "./network/request/supabase.js";
 import { useEffect } from "react";
+
+import QRNotFoundPopup from "./components/QRNotFoundPopup/index.jsx";
+import { notFoundPopupState } from "./recoil/atoms/notFoundPopupState.js";
 import { modeState } from "./recoil/atoms/modeState.js";
 
 function App() {
   const { data } = useQuery("products", getProduct);
   const setMode = useSetRecoilState(modeState);
+
+  const notFoundShow = useRecoilValue(notFoundPopupState);
 
   const preLoadImg = () => {
     data?.map((item) => {
@@ -53,6 +58,8 @@ function App() {
       url = `http://localhost:5173/${curToken}/qro`;
     }
 
+    console.log(url);
+
     if (curToken) {
       setMode((prev) => ({ ...prev, qrUrl: url, token: [...token] }));
     }
@@ -78,6 +85,7 @@ function App() {
         <Route path="/admin/order" element={<OrderListPage />} />
         <Route path="/admin/menu" element={<MenuEditPage />} />
       </Routes>
+      <QRNotFoundPopup show={notFoundShow} />
     </BrowserRouter>
   );
 }
