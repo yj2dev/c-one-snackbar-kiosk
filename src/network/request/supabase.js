@@ -285,7 +285,12 @@ export const getProduct = async () => {
     });
   });
 
-  return data;
+  const filterData = data.map((category) => ({
+    ...category,
+    product: category.product.filter((v) => v.state !== "숨기기"),
+  }));
+
+  return filterData;
 };
 
 export default supabase;

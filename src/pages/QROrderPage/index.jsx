@@ -45,12 +45,10 @@ const QROrderPage = () => {
   }, []);
 
   useEffect(() => {
-    if (mode.token > 0) {
-      if (mode.token.includes(token)) {
-        setNotFoundShow(false);
-      } else {
-        setNotFoundShow(true);
-      }
+    if (mode.token.includes(token)) {
+      setNotFoundShow(false);
+    } else {
+      setNotFoundShow(true);
     }
   }, [token, mode.token]);
 

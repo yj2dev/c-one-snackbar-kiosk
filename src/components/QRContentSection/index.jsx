@@ -1,12 +1,10 @@
 import { getKRW } from "../../utils/formats.js";
-import { AlreadyItemAlert, Container } from "./styled.js";
+import { AlreadyItemAlert, Container } from "../ContentSection/styled.js";
 import { useEffect, useRef, useState } from "react";
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
 import { timerState } from "../../recoil/atoms/timerState.js";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { modeState } from "../../recoil/atoms/modeState.js";
-import { notFoundPopupState } from "../../recoil/atoms/notFoundPopupState.js";
 
 const ContentSection = ({ curTab, product, basket, setBasket }) => {
   const navigate = useNavigate();

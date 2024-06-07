@@ -1,12 +1,9 @@
 import { getKRW } from "../../utils/formats.js";
 import { AlreadyItemAlert, Container } from "./styled.js";
 import { useEffect, useRef, useState } from "react";
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
 import { timerState } from "../../recoil/atoms/timerState.js";
 import { useNavigate } from "react-router-dom";
-import { modeState } from "../../recoil/atoms/modeState.js";
-import { v4 as uuidv4 } from "uuid";
-import { notFoundPopupState } from "../../recoil/atoms/notFoundPopupState.js";
 
 const ContentSection = ({ curTab, product, basket, setBasket }) => {
   const navigate = useNavigate();
@@ -64,8 +61,13 @@ const ContentSection = ({ curTab, product, basket, setBasket }) => {
       {product?.length > 0 && product[curTab].product?.length > 0 ? (
         product?.[curTab]?.product?.map((v, i) => (
           <dl
+            className={v.state === "품절" && "sold-out"}
             key={i}
             onClick={() => {
+              if (v.state === "품절") {
+                return;
+              }
+
               toggleTimer();
 
               const item = {
@@ -100,6 +102,8 @@ const ContentSection = ({ curTab, product, basket, setBasket }) => {
               {getKRW(v.price)}
               <span className="m-none">원</span>
             </dd>
+
+            {v.state === "품절" && <span className="sold-out-title">품절</span>}
           </dl>
         ))
       ) : (

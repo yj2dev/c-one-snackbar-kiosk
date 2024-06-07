@@ -145,6 +145,20 @@ const MenuEdit = () => {
     await queryClient.invalidateQueries("products");
   };
 
+  const updateProductState = async (id, newState) => {
+    const { data, error } = await supabase
+      .from("product")
+      .update({ state: newState })
+      .eq("id", id);
+
+    if (error) {
+      console.error("상품 상태 변경에 실패했습니다.", error);
+      return;
+    }
+
+    await queryClient.invalidateQueries("products");
+  };
+
   return (
     <Container>
       <div
@@ -283,7 +297,7 @@ const MenuEdit = () => {
                   <select
                     value={v.state}
                     onChange={(e) => {
-                      setProductState(e.target.value);
+                      updateProductState(v.id, e.target.value);
                     }}
                   >
                     <option value="판매중">판매중</option>

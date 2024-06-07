@@ -36,7 +36,7 @@ export const Popup = styled.div`
   height: 600px;
   position: fixed;
   left: 50%;
-  transition: 0.2s;
+  //transition: 0.2s;
   transform: translate(-50%, -50%);
   top: -400px;
   gap: 24px;

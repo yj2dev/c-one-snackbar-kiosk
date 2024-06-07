@@ -42,6 +42,16 @@ export const Container = styled.section`
   }
 
   dl {
+    span.sold-out-title {
+      border: 1px solid red;
+      position: absolute;
+    }
+
+    &.sold-out {
+      opacity: 0.5;
+      box-shadow: 0 0 0 #000;
+    }
+
     @media (max-width: 768px) {
       height: 146px;
     }
