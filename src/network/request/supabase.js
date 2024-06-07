@@ -63,7 +63,9 @@ export const validTimeOfQrToken = async (token) => {
 };
 
 export const isCreateQrToken = (data, curDate) => {
-  if (data.length === 0) return true;
+  if (data.length === 0) {
+    return true;
+  }
 
   const firstToken = data.find((v) => v.sequence === 1);
   if (!firstToken) return true;
@@ -74,7 +76,7 @@ export const isCreateQrToken = (data, curDate) => {
   const validTime = diff / 1000 - CREATE_TIME_M * 60;
   console.log(`유효시간(${CREATE_TIME_M * 60}): ${validTime.toFixed(0)}s`);
 
-  return { isCreate: diff <= 1000 * 60 * CREATE_TIME_M };
+  return diff <= 1000 * 60 * CREATE_TIME_M;
 };
 
 export const createQRToken = async () => {
