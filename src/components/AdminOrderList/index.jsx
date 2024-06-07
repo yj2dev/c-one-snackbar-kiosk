@@ -9,11 +9,34 @@ import {
   updateOrderDetailComplete,
   updateOrderItem,
 } from "../../network/request/supabase.js";
+import { useState } from "react";
 
 const AdminOrderList = ({ orderData, isSuccess, refetch }) => {
+  const [searchKeyword, setSearchKeyword] = useState("");
+
+  const filterOrderData = orderData?.filter((v) =>
+    v.uid.includes(searchKeyword),
+  );
+
   return (
     <>
-      {orderData
+      <div className="search-orderlist">
+        <input
+          type="text"
+          placeholder="라커키로 검색"
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+        />
+        {searchKeyword.length > 0 && (
+          <button
+            className="delete-btn"
+            onClick={() => {
+              setSearchKeyword("");
+            }}
+          />
+        )}
+      </div>
+      {filterOrderData
         ?.filter((v) => v.complete === isSuccess)
         .map((v, i) => (
           <div className="order-item" key={i}>
@@ -47,19 +70,6 @@ const AdminOrderList = ({ orderData, isSuccess, refetch }) => {
                       className={x.ready ? "ready" : ""}
                       onClick={async () => {
                         await updateOrderDetailComplete(x.id, !x.ready);
-
-                        // if (!x.is_cooking) {
-                        //   await updateOrderDetailCooking(x.id, true);
-                        // }
-
-                        // if (x.is_cooking) {
-                        //   await updateOrderDetailComplete(x.id, true);
-                        // }
-
-                        // if (x.is_cooking && x.ready) {
-                        //   await updateOrderDetailCooking(x.id, false);
-                        //   await updateOrderDetailComplete(x.id, false);
-                        // }
 
                         refetch();
                       }}
@@ -119,13 +129,19 @@ const AdminOrderList = ({ orderData, isSuccess, refetch }) => {
             )}
           </div>
         ))}
-      {orderData && orderData.length === 0 && (
-        <div className="empty-message">
-          {isSuccess
-            ? "조리완료된 주문내역이 없습니다"
-            : "조리중인 주문내역이 없습니다"}
-        </div>
-      )}
+      {filterOrderData &&
+        filterOrderData.filter((v) => v.complete === isSuccess).length === 0 &&
+        (searchKeyword.length !== 0 ? (
+          <div className="empty-message">
+            {searchKeyword}로 검색된 내용이 없습니다
+          </div>
+        ) : (
+          <div className="empty-message">
+            {isSuccess
+              ? "조리완료된 주문내역이 없습니다"
+              : "등록된 주문이 없습니다"}
+          </div>
+        ))}
     </>
   );
 };

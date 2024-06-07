@@ -249,12 +249,17 @@ export const deleteOrderItem = async (id) => {
   return data;
 };
 
-export const getOrderList = async () => {
+export const getOrderList = async (date = new Date()) => {
+  const targetDate = new Date(date);
+  const startOfDay = new Date(targetDate.setHours(0, 0, 0, 0)).toISOString();
+  const endOfDay = new Date(targetDate.setHours(23, 59, 59, 999)).toISOString();
+
   const { data, error } = await supabase
     .from("order")
     .select(`*, order_detail(*, product(*))`)
+    .gte("created_at", startOfDay)
+    .lt("created_at", endOfDay)
     .order("created_at", { ascending: false });
-  // .range(0, 10);
 
   if (error) console.error("주문 목록을 가져오지 못했습니다.");
 

@@ -3,8 +3,75 @@ import styled from "styled-components";
 export const Container = styled.div`
   padding: 48px;
 
+  .search-orderlist {
+    width: 100%;
+    position: relative;
+    input {
+      width: 100%;
+      border: 3px solid #f3f3f3;
+      box-sizing: border-box;
+      padding: 8px 40px 8px 12px;
+      outline: none;
+      font-size: 1em;
+      transition: 0.1s;
+
+      &:focus {
+        border: 3px solid #d4d4d4;
+      }
+    }
+    button.delete-btn {
+      cursor: pointer;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translate(-50%, -50%);
+      &::before {
+        @media (max-width: 768px) {
+          width: 10px;
+          height: 2px;
+        }
+
+        content: "";
+        width: 16px;
+        height: 3px;
+        background-color: #d4d4d4;
+        border-radius: 6px;
+        transform: rotate(135deg);
+        position: absolute;
+      }
+
+      &::after {
+        @media (max-width: 768px) {
+          width: 10px;
+          height: 2px;
+        }
+        content: "";
+        width: 16px;
+        height: 3px;
+        background-color: #d4d4d4;
+        border-radius: 6px;
+        transform: rotate(45deg);
+        position: absolute;
+      }
+    }
+  }
+
   .back-btn {
     cursor: pointer;
+  }
+
+  h1 {
+    .date-picker {
+      margin-left: 16px;
+      border: none;
+      outline: none;
+      width: 120px;
+      font-size: 0.5em;
+      text-align: center;
+    }
   }
 
   section.order-list {
@@ -80,9 +147,11 @@ export const Container = styled.div`
         .order-detail-now {
           font-size: 12px;
         }
+
         .order-now {
           margin-bottom: 12px;
         }
+
         .order-user {
           font-size: 1rem;
 
@@ -103,6 +172,7 @@ export const Container = styled.div`
             }
           }
         }
+
         span.order-uid {
           font-size: 1rem;
           color: #868686;
@@ -118,6 +188,7 @@ export const Container = styled.div`
         .order-title {
           font-weight: 600;
         }
+
         .order-product-container {
           color: #868686;
           display: flex;
@@ -184,6 +255,7 @@ export const Container = styled.div`
           background-color: transparent;
           border: none;
           outline: none;
+
           &:hover {
             background-color: rgba(0, 0, 0, 0.2);
           }
@@ -225,6 +297,7 @@ export const Container = styled.div`
 
           &:hover {
             color: #fff;
+
             &::before {
               height: 100%;
             }

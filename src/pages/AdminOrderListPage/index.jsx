@@ -12,10 +12,25 @@ import {
 } from "../../network/request/supabaseChannels.js";
 import AdminOrderList from "../../components/AdminOrderList/index.jsx";
 import AdminOrderState from "../../components/AdminOrderState/index.jsx";
+import DatePicker, { registerLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import ko from "date-fns/locale/ko";
 
-const OrderListPage = () => {
+registerLocale("ko", ko); // 한국어 로케일 등록
+
+const AdminOrderListPage = () => {
   const navigate = useNavigate();
-  const { data: orderData, refetch } = useQuery("orderList", getOrderList);
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const { data: orderData, refetch } = useQuery(
+    ["orderList", selectedDate],
+    () => getOrderList(selectedDate),
+    {
+      // Optional: Refetch the data every x milliseconds
+      // refetchInterval: 60000, // Refetch every minute
+    },
+  );
 
   const [isSuccess, setIsSuccess] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
@@ -44,7 +59,21 @@ const OrderListPage = () => {
       >
         뒤로가기
       </div>
-      <h1>주문내역</h1>
+
+      <h1>
+        주문내역
+        <DatePicker
+          className="date-picker"
+          selected={selectedDate}
+          onChange={(date) => {
+            setSelectedDate(date);
+            refetch();
+          }}
+          locale="ko"
+          dateFormat="yyyy년 MM월 dd일"
+        />
+      </h1>
+
       <section className="order-list">
         <ul className="tab">
           <li
@@ -89,4 +118,4 @@ const OrderListPage = () => {
   );
 };
 
-export default OrderListPage;
+export default AdminOrderListPage;

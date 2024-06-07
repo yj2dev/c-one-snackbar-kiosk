@@ -8,7 +8,7 @@ import { basketState } from "../../recoil/atoms/basketState.js";
 import Header from "../../layouts/Header/index.jsx";
 import TabSection from "../../components/TabSection/index.jsx";
 import ContentSection from "../../components/ContentSection/index.jsx";
-import BasketSection from "../../components/QRBasketSection/index.jsx";
+import BasketSection from "../../components/BasketSection/index.jsx";
 
 const OrderPage = () => {
   const { data: product } = useQuery("products", getProduct);
