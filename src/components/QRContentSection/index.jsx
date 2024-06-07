@@ -69,42 +69,52 @@ const ContentSection = ({ curTab, product, basket, setBasket }) => {
 
       {product?.length > 0 && product[curTab].product?.length > 0 ? (
         product?.[curTab]?.product?.map((v, i) => (
-          <dl
-            key={i}
-            onClick={() => {
-              const item = {
-                cnt: 1,
-                id: v.id,
-                name: v.name,
-                price: v.price,
-              };
-
-              const findItem = basket.find((item) => item.id === v.id);
-
-              if (findItem) {
-                setShowAlreadyItemAlert(true);
-
-                if (alreadyItemAlertId.current) {
-                  clearTimeout(alreadyItemAlertId.current);
+          <div className="dl-wrapper">
+            <dl
+              className={v.state === "품절" && "sold-out"}
+              key={i}
+              onClick={() => {
+                if (v.state === "품절") {
+                  return;
                 }
 
-                alreadyItemAlertId.current = setTimeout(() => {
-                  setShowAlreadyItemAlert(false);
-                }, 3000);
+                toggleTimer();
 
-                return;
-              }
+                const item = {
+                  cnt: 1,
+                  id: v.id,
+                  name: v.name,
+                  price: v.price,
+                };
 
-              setBasket((prev) => [...prev, item]);
-            }}
-          >
-            <img src={`${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`} />
-            <dt>{v.name}</dt>
-            <dd>
-              {getKRW(v.price)}
-              <span className="m-none">원</span>
-            </dd>
-          </dl>
+                const findItem = basket.find((item) => item.id === v.id);
+
+                if (findItem) {
+                  setShowAlreadyItemAlert(true);
+
+                  if (alreadyItemAlertId.current) {
+                    clearTimeout(alreadyItemAlertId.current);
+                  }
+
+                  alreadyItemAlertId.current = setTimeout(() => {
+                    setShowAlreadyItemAlert(false);
+                  }, 3000);
+
+                  return;
+                }
+
+                setBasket((prev) => [...prev, item]);
+              }}
+            >
+              <img src={`${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`} />
+              <dt>{v.name}</dt>
+              <dd>
+                {getKRW(v.price)}
+                <span className="m-none">원</span>
+              </dd>
+            </dl>
+            {v.state === "품절" && <span className="sold-out-title">품절</span>}
+          </div>
         ))
       ) : (
         <div className="center">등록된 상품이 없습니다</div>

@@ -295,4 +295,21 @@ export const getProduct = async () => {
   return filterData;
 };
 
+export const getAllProduct = async () => {
+  let { data, error } = await supabase
+    .from("category")
+    .select(`*, product(*)`)
+    .order("display_sort", { ascending: true });
+
+  if (error) throw new Error("상품을 가져오지 못했습니다.");
+
+  data.map((category) => {
+    category.product.sort((a, b) => {
+      return a.display_sort - b.display_sort;
+    });
+  });
+
+  return data;
+};
+
 export default supabase;

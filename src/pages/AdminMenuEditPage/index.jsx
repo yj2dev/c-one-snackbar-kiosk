@@ -4,8 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import { resizeFile } from "../../utils/resize.js";
 import { useQuery, useQueryClient } from "react-query";
 import supabase, {
+  getAllProduct,
   getCategory,
-  getProduct,
 } from "../../network/request/supabase.js";
 import { getKRW } from "../../utils/formats.js";
 import { useRecoilState } from "recoil";
@@ -16,7 +16,7 @@ const MenuEdit = () => {
   const MAX_CATEGORY_CNT = 5;
 
   const { data: category } = useQuery("categories", getCategory);
-  const { data: product, refetch } = useQuery("products", getProduct);
+  const { data: product, refetch } = useQuery("all-products", getAllProduct);
 
   const [resizedImage, setResizedImage] = useState(null);
 
@@ -33,9 +33,7 @@ const MenuEdit = () => {
   const [productCategoryId, setProductCategoryId] = useState("");
 
   const [categoryList, setCategoryList] = useState([]);
-  const [productList, setProductList] = useState([]);
 
-  const [image, setImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
   const [curTab, setCurTab] = useState(0);
@@ -104,13 +102,12 @@ const MenuEdit = () => {
 
   const runResizedImage = async (file) => {
     const resizedImage = await resizeFile(file);
-    setImage(file);
+
     setResizedImage(resizedImage);
     setPreviewImage(URL.createObjectURL(resizedImage));
   };
 
   const initProduct = () => {
-    setImage(null);
     setPreviewImage(null);
     setProductName("");
     setProductPrice("");
@@ -129,8 +126,6 @@ const MenuEdit = () => {
     const draggedProduct = updatedProductList.splice(fromIndex, 1)[0];
     updatedProductList.splice(index, 0, draggedProduct);
 
-    setProductList(updatedProductList);
-
     for (const [idx, item] of updatedProductList.entries()) {
       const { error } = await supabase
         .from("product")
@@ -142,7 +137,7 @@ const MenuEdit = () => {
       }
     }
 
-    await queryClient.invalidateQueries("products");
+    await queryClient.invalidateQueries("all-products");
   };
 
   const updateProductState = async (id, newState) => {
@@ -156,7 +151,7 @@ const MenuEdit = () => {
       return;
     }
 
-    await queryClient.invalidateQueries("products");
+    await queryClient.invalidateQueries("all-products");
   };
 
   return (
@@ -344,7 +339,7 @@ const MenuEdit = () => {
 
                       // onShowCategory();
                       await queryClient.invalidateQueries("categories");
-                      await queryClient.invalidateQueries("products");
+                      await queryClient.invalidateQueries("all-products");
                     }}
                   >
                     삭제

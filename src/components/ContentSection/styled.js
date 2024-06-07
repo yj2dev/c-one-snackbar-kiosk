@@ -41,66 +41,77 @@ export const Container = styled.section`
     align-items: center;
   }
 
-  dl {
-    span.sold-out-title {
-      border: 1px solid red;
-      position: absolute;
-    }
-
-    &.sold-out {
-      opacity: 0.5;
-      box-shadow: 0 0 0 #000;
-    }
-
-    @media (max-width: 768px) {
-      height: 146px;
-    }
-    height: 234px;
-    margin: 0;
-    padding-bottom: 28px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-    box-sizing: border-box;
-    border-radius: 4px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  .dl-wrapper {
     position: relative;
 
-    img {
-      border-radius: 4px 4px 0 0;
-      height: 150px;
-      width: 100%;
-      object-fit: cover;
-    }
-
-    dt {
-      @media (max-width: 768px) {
-        font-size: 12px;
-        margin: 4px 8px 0 8px;
-      }
-      margin: 4px 16px 0 16px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-    }
-
-    dd {
-      @media (max-width: 768px) {
-        font-size: 12px;
-      }
-
+    span.sold-out-title {
       position: absolute;
-      bottom: 4px;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
-      font-size: 1.2em;
-      font-weight: 600;
-      color: #111f90;
-      padding: 0;
+      transform: translate(-50%, -50%) rotate(-12deg);
+      font-weight: 800;
+      font-size: 4vw;
+      color: #d44252;
+      white-space: nowrap;
+      padding: 0 8px;
+      border: 4px solid #d44252;
+    }
+    dl {
+      &.sold-out {
+        opacity: 0.4;
+        box-shadow: 0 0 0 #000;
+      }
+
+      @media (max-width: 768px) {
+        height: 146px;
+      }
+      height: 234px;
       margin: 0;
+      padding-bottom: 28px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      box-sizing: border-box;
+      border-radius: 4px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      position: relative;
+
+      img {
+        border-radius: 4px 4px 0 0;
+        height: 150px;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      dt {
+        @media (max-width: 768px) {
+          font-size: 12px;
+          margin: 4px 8px 0 8px;
+        }
+        margin: 4px 16px 0 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+
+      dd {
+        @media (max-width: 768px) {
+          font-size: 12px;
+        }
+
+        position: absolute;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: 600;
+        color: #111f90;
+        padding: 0;
+        margin: 0;
+      }
     }
   }
 `;
