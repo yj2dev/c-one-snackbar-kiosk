@@ -19,7 +19,7 @@ const ContentSection = ({ curTab, product, basket, setBasket }) => {
   const resetSec = useResetRecoilState(timerState);
   const timerId = useRef(null);
 
-  const setNotFoundShow = useSetRecoilState(notFoundPopupState);
+  // const setNotFoundShow = useSetRecoilState(notFoundPopupState);
 
   const toggleTimer = () => {
     resetSec();

@@ -30,27 +30,29 @@ const QROrderPage = () => {
   const setTimerState = useSetRecoilState(timerState);
 
   useEffect(() => {
-    if (mode.token.includes(token)) {
-      const getTimer = async () => {
-        return setTimerState(await validTimeOfQrToken(token));
-      };
+    const getTimer = async () => {
+      if (mode.token.includes(token)) {
+        const validTime = await validTimeOfQrToken(token);
+        setTimerState(validTime);
+      }
+    };
 
-      getTimer();
-    }
-  }, [token]);
+    getTimer();
+  }, [token, mode.token, setTimerState]);
 
   useEffect(() => {
     setMode((prev) => ({ ...prev, isQr: true }));
   }, []);
 
   useEffect(() => {
-    if (mode.token.includes(token)) {
-      setMode((prev) => ({ ...prev, isQr: true }));
-      setNotFoundShow(false);
-    } else {
-      setNotFoundShow(true);
+    if (mode.token > 0) {
+      if (mode.token.includes(token)) {
+        setNotFoundShow(false);
+      } else {
+        setNotFoundShow(true);
+      }
     }
-  }, [mode.token]);
+  }, [token, mode.token]);
 
   return (
     <Container>
