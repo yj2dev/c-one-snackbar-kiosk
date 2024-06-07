@@ -1,9 +1,12 @@
 import { getKRW } from "../../utils/formats.js";
 import { AlreadyItemAlert, Container } from "./styled.js";
 import { useEffect, useRef, useState } from "react";
-import { useResetRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import { timerState } from "../../recoil/atoms/timerState.js";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import { modeState } from "../../recoil/atoms/modeState.js";
+import { notFoundPopupState } from "../../recoil/atoms/notFoundPopupState.js";
 
 const ContentSection = ({ curTab, product, basket, setBasket }) => {
   const navigate = useNavigate();
@@ -15,6 +18,9 @@ const ContentSection = ({ curTab, product, basket, setBasket }) => {
   const setSec = useSetRecoilState(timerState);
   const resetSec = useResetRecoilState(timerState);
   const timerId = useRef(null);
+
+  const setNotFoundShow = useSetRecoilState(notFoundPopupState);
+
   const toggleTimer = () => {
     resetSec();
 
@@ -25,7 +31,12 @@ const ContentSection = ({ curTab, product, basket, setBasket }) => {
     timerId.current = setInterval(() => {
       setSec((prev) => {
         if (prev <= 1) {
-          navigate("/");
+          clearInterval(timerId.current);
+
+          // setNotFoundShow(true);
+          const newToken = uuidv4().replaceAll("-", "").substring(0, 24);
+          navigate(`/${newToken}/qro`);
+          return prev - 1;
         } else {
           return prev - 1;
         }

@@ -27,7 +27,7 @@ export const getExpireQrToken = async () => {
     .gte("expires_at", curDate.toISOString());
 
   if (error) {
-    console.error("Error fetching tokens: ", error);
+    console.error("토큰을 가져오지 못했습니다.", error);
     return { data: [], token: [], curDate };
   }
 
@@ -35,6 +35,31 @@ export const getExpireQrToken = async () => {
   const token = sortedData.map((v) => v.token);
 
   return { data: sortedData, token, curDate };
+};
+
+export const validTimeOfQrToken = async (token) => {
+  const curDate = new Date();
+
+  const { data, error } = await supabase
+    .from("qr_token")
+    .select()
+    .gte("expires_at", curDate.toISOString());
+
+  if (error) {
+    console.error("토큰을 가져오지 못했습니다.", error);
+  }
+
+  const filterData = data?.filter((v) => v.token === token);
+
+  if (filterData.length <= 0) {
+    console.error("일치하는 토큰이 없습니다");
+  }
+
+  const tokenDate = new Date(filterData[0]?.expires_at);
+  let diff = tokenDate - curDate;
+  diff = diff / 1000;
+
+  return diff;
 };
 
 export const isCreateQrToken = (data, curDate) => {
@@ -46,12 +71,10 @@ export const isCreateQrToken = (data, curDate) => {
   const tokenDate = new Date(firstToken.expires_at);
   const diff = tokenDate - curDate;
 
-  const lastTime = diff / 1000 - CREATE_TIME_M * 60;
-  // console.log(
-  //   `남은시간(${CREATE_TIME_M * 60}): ${lastTime.toFixed(2)}s, ${diff} -> ${CREATE_TIME_M * 60 * 1000}`,
-  // );
+  const validTime = diff / 1000 - CREATE_TIME_M * 60;
+  console.log(`유효시간(${CREATE_TIME_M * 60}): ${validTime.toFixed(0)}s`);
 
-  return diff <= 1000 * 60 * CREATE_TIME_M;
+  return { isCreate: diff <= 1000 * 60 * CREATE_TIME_M };
 };
 
 export const createQRToken = async () => {

@@ -40,7 +40,7 @@ function App() {
   const generateQrCode = async () => {
     const { data, token, curDate } = await getExpireQrToken();
 
-    const isCreate = isCreateQrToken(data, curDate);
+    const { isCreate } = isCreateQrToken(data, curDate);
 
     let curToken = null;
     if (isCreate) {

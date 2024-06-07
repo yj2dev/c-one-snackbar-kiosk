@@ -1,17 +1,18 @@
 import { Container } from "../OrderPage/styled.js";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { getProduct } from "../../network/request/supabase.js";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  getProduct,
+  validTimeOfQrToken,
+} from "../../network/request/supabase.js";
 import { basketState } from "../../recoil/atoms/basketState.js";
 
 import Header from "../../layouts/Header/index.jsx";
 import TabSection from "../../components/TabSection/index.jsx";
-import ContentSection from "../../components/ContentSection/index.jsx";
-import BasketSection from "../../components/QRBasketSection/index.jsx";
 import { useParams } from "react-router-dom";
 import { modeState } from "../../recoil/atoms/modeState.js";
-import QRNotFoundPopup from "../../components/QRNotFoundPopup/index.jsx";
+
 import QRContentSection from "../../components/QRContentSection/index.jsx";
 import QRBasketSection from "../../components/QRBasketSection/index.jsx";
 import { timerState } from "../../recoil/atoms/timerState.js";
@@ -29,7 +30,17 @@ const QROrderPage = () => {
   const setTimerState = useSetRecoilState(timerState);
 
   useEffect(() => {
-    setTimerState(60 * 5);
+    if (mode.token.includes(token)) {
+      const getTimer = async () => {
+        return setTimerState(await validTimeOfQrToken(token));
+      };
+
+      getTimer();
+    }
+  }, [token]);
+
+  useEffect(() => {
+    setMode((prev) => ({ ...prev, isQr: true }));
   }, []);
 
   useEffect(() => {

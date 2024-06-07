@@ -1,7 +1,7 @@
 import { Container } from "./styled.js";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 
 import { basketState } from "../../recoil/atoms/basketState.js";
 
@@ -11,7 +11,7 @@ import snackbar from "/public/assets/images/snackbar.jpg";
 import { QRCodeCanvas } from "qrcode.react";
 import useCornorAction from "../../hooks/useCornorAction/index.jsx";
 import { modeState } from "../../recoil/atoms/modeState.js";
-import QRNotFoundPopup from "../../components/QRNotFoundPopup/index.jsx";
+import { notFoundPopupState } from "../../recoil/atoms/notFoundPopupState.js";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -20,12 +20,13 @@ const LandingPage = () => {
     useCornorAction();
   const mode = useRecoilValue(modeState);
 
-  const [notFoundShow, setNotFoundShow] = useState(false);
+  const setNotFoundShow = useSetRecoilState(notFoundPopupState);
 
   const authorization = () => {
     if (mode.isQr) {
-      // navigate(`${mode.token}/qro`);
       setNotFoundShow(true);
+      const newToken = uuidv4().replaceAll("-", "").substring(0, 24);
+      navigate(`/${newToken}/qro`);
     }
   };
 
@@ -66,7 +67,6 @@ const LandingPage = () => {
         [ La Pool : Adventure Waterpark & Sauna ]
       </p>
       <span>화면을 터치하세요</span>
-      <QRNotFoundPopup show={notFoundShow} />
     </Container>
   );
 };

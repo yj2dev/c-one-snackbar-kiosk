@@ -16,8 +16,14 @@ const Header = () => {
         씨원리조트 스낵바
       </div>
       <div className="right">
-        {mode.isQr ? (
-          <>{parseInt(sec / 60)}분&nbsp; 후 주문만료</>
+        {mode?.isQr ? (
+          <>
+            {sec >= 60 ? (
+              <>{Math.ceil(sec / 60)}분&nbsp; 후 주문만료</>
+            ) : (
+              <>{parseInt(sec)}초&nbsp; 후 주문만료</>
+            )}
+          </>
         ) : (
           <>
             {sec}초&nbsp;후에 처음화면

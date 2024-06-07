@@ -1,9 +1,12 @@
 import { getKRW } from "../../utils/formats.js";
 import { AlreadyItemAlert, Container } from "./styled.js";
 import { useEffect, useRef, useState } from "react";
-import { useResetRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import { timerState } from "../../recoil/atoms/timerState.js";
 import { useNavigate } from "react-router-dom";
+import { modeState } from "../../recoil/atoms/modeState.js";
+import { v4 as uuidv4 } from "uuid";
+import { notFoundPopupState } from "../../recoil/atoms/notFoundPopupState.js";
 
 const ContentSection = ({ curTab, product, basket, setBasket }) => {
   const navigate = useNavigate();
@@ -15,6 +18,7 @@ const ContentSection = ({ curTab, product, basket, setBasket }) => {
   const setSec = useSetRecoilState(timerState);
   const resetSec = useResetRecoilState(timerState);
   const timerId = useRef(null);
+
   const toggleTimer = () => {
     resetSec();
 
