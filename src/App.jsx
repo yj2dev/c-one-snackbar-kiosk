@@ -21,6 +21,7 @@ import { useEffect } from "react";
 import QRNotFoundPopup from "./components/QRNotFoundPopup/index.jsx";
 import { notFoundPopupState } from "./recoil/atoms/notFoundPopupState.js";
 import { modeState } from "./recoil/atoms/modeState.js";
+import QRLockerKeyPage from "./pages/QRLockerKeyPage/index.jsx";
 
 function App() {
   const { data } = useQuery("products", getProduct);
@@ -81,6 +82,7 @@ function App() {
         <Route path="/locker" element={<LockerKeyPage />} />
         <Route path="/order" element={<OrderPage />} />
         <Route path="/:token/qro" element={<QROrderPage />} />
+        <Route path="/:token/qrl" element={<QRLockerKeyPage />} />
         <Route path="/admin" element={<AdminLandingPage />} />
         <Route path="/admin/order" element={<OrderListPage />} />
         <Route path="/admin/menu" element={<MenuEditPage />} />

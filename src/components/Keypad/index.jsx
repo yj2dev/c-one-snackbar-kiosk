@@ -116,7 +116,7 @@ const KeyPad = ({ gender }) => {
             if (mode.isQr) {
               setNotFoundShow(true);
               const newToken = uuidv4().replaceAll("-", "").substring(0, 24);
-              navigate(`/${newToken}/qro`);
+              navigate(`/${newToken}/qro`, { replace: true });
             } else {
               navigate("/");
             }

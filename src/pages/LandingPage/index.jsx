@@ -1,5 +1,5 @@
 import { Container } from "./styled.js";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 
@@ -26,7 +26,7 @@ const LandingPage = () => {
     if (mode.isQr) {
       setNotFoundShow(true);
       const newToken = uuidv4().replaceAll("-", "").substring(0, 24);
-      navigate(`/${newToken}/qro`);
+      navigate(`/${newToken}/qro`, { replace: true });
     }
   };
 

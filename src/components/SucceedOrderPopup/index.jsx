@@ -1,14 +1,13 @@
 import { Popup, Screen } from "./styled.js";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { modeState } from "../../recoil/atoms/modeState.js";
-import { notFoundPopupState } from "../../recoil/atoms/notFoundPopupState.js";
 
 const SucceedOrderPopup = ({ succeedOrder, landingTimer }) => {
   const navigate = useNavigate();
   const [mode, setMode] = useRecoilState(modeState);
-  const setNotFoundShow = useSetRecoilState(notFoundPopupState);
+  // const setNotFoundShow = useSetRecoilState(notFoundPopupState);
 
   return (
     <>
@@ -16,9 +15,9 @@ const SucceedOrderPopup = ({ succeedOrder, landingTimer }) => {
         className={succeedOrder ? "show" : ""}
         onClick={() => {
           if (mode.isQr) {
-            setNotFoundShow(true);
+            // setNotFoundShow(true);
             const newToken = uuidv4().replaceAll("-", "").substring(0, 24);
-            navigate(`/${newToken}/qro`);
+            navigate(`/${newToken}/qro`, { replace: true });
           } else {
             navigate("/");
           }

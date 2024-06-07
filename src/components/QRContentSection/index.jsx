@@ -33,7 +33,8 @@ const ContentSection = ({ curTab, product, basket, setBasket }) => {
 
           // setNotFoundShow(true);
           const newToken = uuidv4().replaceAll("-", "").substring(0, 24);
-          navigate(`/${newToken}/qro`);
+          navigate(`/${newToken}/qro`, { replace: true });
+
           return prev - 1;
         } else {
           return prev - 1;
