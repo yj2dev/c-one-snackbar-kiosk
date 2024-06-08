@@ -22,21 +22,14 @@ import QRNotFoundPopup from "./components/QRNotFoundPopup/index.jsx";
 import { notFoundPopupState } from "./recoil/atoms/notFoundPopupState.js";
 import { modeState } from "./recoil/atoms/modeState.js";
 import QRLockerKeyPage from "./pages/QRLockerKeyPage/index.jsx";
+import usePreloadImages from "./hooks/usePreloadImages/index.jsx";
 
 function App() {
-  const { data } = useQuery("products", getProduct);
+  usePreloadImages();
+
   const setMode = useSetRecoilState(modeState);
 
   const notFoundShow = useRecoilValue(notFoundPopupState);
-
-  const preLoadImg = () => {
-    data?.map((item) => {
-      item.product.map((v) => {
-        const img = new Image();
-        img.src = `${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`;
-      });
-    });
-  };
 
   const generateQrCode = async () => {
     const { data, token, curDate } = await getExpireQrToken();
@@ -67,7 +60,6 @@ function App() {
   };
 
   useEffect(() => {
-    preLoadImg();
     generateQrCode();
 
     const genQrId = setInterval(generateQrCode, 3000);

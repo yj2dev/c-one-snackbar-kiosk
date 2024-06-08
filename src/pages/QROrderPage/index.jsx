@@ -17,8 +17,11 @@ import QRContentSection from "../../components/QRContentSection/index.jsx";
 import QRBasketSection from "../../components/QRBasketSection/index.jsx";
 import { timerState } from "../../recoil/atoms/timerState.js";
 import { notFoundPopupState } from "../../recoil/atoms/notFoundPopupState.js";
+import usePreloadImages from "../../hooks/usePreloadImages/index.jsx";
 
 const QROrderPage = () => {
+  usePreloadImages();
+
   const navigate = useNavigate();
   const { data: product } = useQuery("products", getProduct);
   const [curTab, setCurTab] = useState(0);
