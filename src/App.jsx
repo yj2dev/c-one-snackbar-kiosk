@@ -54,7 +54,7 @@ function App() {
 
     if (import.meta.env.MODE === "production") {
       const baseUrl = import.meta.env.VITE_QR_BASE_URL;
-      url = `${baseUrl}/${curToken}/qro`;
+      url = `${baseUrl}/qro/${curToken}`;
     } else {
       url = `http://localhost:5173/qro/${curToken}`;
     }

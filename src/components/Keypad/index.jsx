@@ -75,7 +75,7 @@ const KeyPad = ({ gender }) => {
       uid,
       quantity: sumCnt(basket),
       price: sumPrice(basket),
-      is_qr: mode.is_qr,
+      is_qr: mode.isQr,
     };
 
     const { data: orderData, error } = await supabase

@@ -36,6 +36,12 @@ const AdminOrderList = ({ orderData, isSuccess, refetch }) => {
           />
         )}
       </div>
+      {filterOrderData?.filter((v) => v.complete === isSuccess).length !==
+        0 && (
+        <div className="orderlist-cnt">
+          {filterOrderData?.filter((v) => v.complete === isSuccess).length}건
+        </div>
+      )}
       {filterOrderData
         ?.filter((v) => v.complete === isSuccess)
         .map((v, i) => (
@@ -44,6 +50,8 @@ const AdminOrderList = ({ orderData, isSuccess, refetch }) => {
               {isSuccess && (
                 <div className="order-detail-now">
                   {formatDateKR(v.created_at)}
+                  <br />
+                  {v.is_qr ? "QR 주문" : "키오스크 주문"}
                 </div>
               )}
               <div className="order-now">{formatTime(v.created_at)}</div>

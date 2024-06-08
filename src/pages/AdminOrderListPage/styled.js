@@ -3,6 +3,9 @@ import styled from "styled-components";
 export const Container = styled.div`
   padding: 48px;
 
+  .orderlist-cnt {
+    text-align: right;
+  }
   .search-orderlist {
     width: 100%;
     position: relative;
@@ -69,6 +72,9 @@ export const Container = styled.div`
 
   h1 {
     .date-picker {
+      caret-color: transparent;
+      cursor: pointer;
+      user-select: none;
       margin-left: 16px;
       border: none;
       outline: none;
