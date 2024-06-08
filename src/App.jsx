@@ -56,7 +56,7 @@ function App() {
       const baseUrl = import.meta.env.VITE_QR_BASE_URL;
       url = `${baseUrl}/${curToken}/qro`;
     } else {
-      url = `http://localhost:5173/${curToken}/qro`;
+      url = `http://localhost:5173/qro/${curToken}`;
     }
 
     console.log(url);
@@ -81,8 +81,9 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/locker" element={<LockerKeyPage />} />
         <Route path="/order" element={<OrderPage />} />
-        <Route path="/:token/qro" element={<QROrderPage />} />
-        <Route path="/:token/qrl" element={<QRLockerKeyPage />} />
+        <Route path="/qro" element={<QROrderPage />} />
+        <Route path="/qro/:token" element={<QROrderPage />} />
+        <Route path="/qrl" element={<QRLockerKeyPage />} />
         <Route path="/admin" element={<AdminLandingPage />} />
         <Route path="/admin/order" element={<OrderListPage />} />
         <Route path="/admin/menu" element={<MenuEditPage />} />

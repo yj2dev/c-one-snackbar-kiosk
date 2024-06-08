@@ -42,11 +42,11 @@ const BasketSection = ({ basket, setBasket }) => {
   const onClickCancel = () => {
     setNotFoundShow(true);
     const newToken = uuidv4().replaceAll("-", "").substring(0, 24);
-    navigate(`/${newToken}/qro`, { replace: true });
+    sessionStorage.setItem("qr_token", newToken);
   };
 
   const onSubmit = () => {
-    navigate(`/${token}/qrl`);
+    navigate(`/qrl`);
   };
 
   return (

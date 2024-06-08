@@ -25,13 +25,17 @@ export const Container = styled.div`
       border: none;
       outline: none;
       position: absolute;
+      width: 32px;
+      height: 32px;
+      padding: 0 14px 0 0;
       top: 50%;
-      right: 20px;
+      right: 0;
       transform: translate(-50%, -50%);
+
       &::before {
         @media (max-width: 768px) {
-          width: 10px;
-          height: 2px;
+          width: 16px;
+          height: 3px;
         }
 
         content: "";
@@ -45,8 +49,8 @@ export const Container = styled.div`
 
       &::after {
         @media (max-width: 768px) {
-          width: 10px;
-          height: 2px;
+          width: 16px;
+          height: 3px;
         }
         content: "";
         width: 16px;
