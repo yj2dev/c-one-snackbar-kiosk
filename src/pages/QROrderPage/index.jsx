@@ -31,9 +31,7 @@ const QROrderPage = () => {
 
   const setTimerState = useSetRecoilState(timerState);
 
-  useEffect(() => {
-    console.log("urlToken >> ", urlToken);
-
+  const initToken = () => {
     // 1. QR 모드 활성화
     setMode((prev) => ({ ...prev, isQr: true }));
 
@@ -56,25 +54,35 @@ const QROrderPage = () => {
         // 2-2-2. session storage 에 토큰이 없을때
         setNotFoundShow(true);
       }
-
-      // 2-3. url에 토큰이 없으면 session storage에 저장되어 있는지 확인
-      // sessionStorage.getItem();
     }
 
     // 3. url에서 토큰 정보 제거
     navigate("/qro");
+  };
+
+  useEffect(() => {
+    initToken();
   }, []);
+
+  const getToken = () => {
+    if (urlToken) return urlToken;
+
+    const sessionToken = sessionStorage.getItem("qr_token");
+    if (sessionToken) return sessionToken;
+  };
 
   useEffect(() => {
     const getTimer = async () => {
-      if (mode.token.includes(urlToken)) {
-        const validTime = await validTimeOfQrToken(urlToken);
+      const token = getToken();
+
+      if (mode.token.includes(token)) {
+        const validTime = await validTimeOfQrToken(token);
         setTimerState(validTime);
       }
     };
 
     getTimer();
-  }, [urlToken, mode.token, setTimerState]);
+  }, [urlToken, mode.token]);
 
   useEffect(() => {
     // if (mode.token.includes(urlToken)) {

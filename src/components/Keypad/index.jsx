@@ -114,9 +114,10 @@ const KeyPad = ({ gender }) => {
             clearInterval(landingIntervalId);
 
             if (mode.isQr) {
-              setNotFoundShow(true);
-              const newToken = uuidv4().replaceAll("-", "").substring(0, 24);
-              navigate(`/${newToken}/qro`, { replace: true });
+              // setNotFoundShow(true);
+              // const newToken = uuidv4().replaceAll("-", "").substring(0, 24);
+              // navigate(`/${newToken}/qro`, { replace: true });
+              sessionStorage.removeItem("qr_token");
             } else {
               navigate("/");
             }

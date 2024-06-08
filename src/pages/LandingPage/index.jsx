@@ -24,9 +24,9 @@ const LandingPage = () => {
 
   const authorization = () => {
     if (mode.isQr) {
+      // 최소한의 인가
+      sessionStorage.removeItem("qr_token");
       setNotFoundShow(true);
-      const newToken = uuidv4().replaceAll("-", "").substring(0, 24);
-      navigate(`/${newToken}/qro`, { replace: true });
     }
   };
 

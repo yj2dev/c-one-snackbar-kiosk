@@ -60,9 +60,9 @@ const ContentSection = ({ curTab, product, basket, setBasket }) => {
 
       {product?.length > 0 && product[curTab].product?.length > 0 ? (
         product?.[curTab]?.product?.map((v, i) => (
-          <div className="dl-wrapper">
+          <div className="dl-wrapper" key={i}>
             <dl
-              className={v.state === "품절" && "sold-out"}
+              className={v.state === "품절" ? "sold-out" : ""}
               key={i}
               onClick={() => {
                 if (v.state === "품절") {
