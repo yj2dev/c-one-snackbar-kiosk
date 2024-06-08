@@ -10,6 +10,7 @@ import {
   updateOrderItem,
 } from "../../network/request/supabase.js";
 import { useState } from "react";
+// import SelectedProduct from "../SelectedProduct/index.jsx";
 
 const AdminOrderList = ({ orderData, isSuccess, refetch }) => {
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -75,6 +76,7 @@ const AdminOrderList = ({ orderData, isSuccess, refetch }) => {
                 {v.order_detail.map((x, detaili) => (
                   <div key={detaili} className="order-product">
                     <span
+                      style={{ position: "relative" }}
                       className={x.ready ? "ready" : ""}
                       onClick={async () => {
                         await updateOrderDetailComplete(x.id, !x.ready);
@@ -83,7 +85,7 @@ const AdminOrderList = ({ orderData, isSuccess, refetch }) => {
                       }}
                     >
                       {x.product.name}&nbsp;{x.quantity}개&nbsp;
-                      {!x.ready && x.is_cooking && "(조리시작)"}
+                      {/*<SelectedProduct />*/}
                     </span>
                   </div>
                 ))}

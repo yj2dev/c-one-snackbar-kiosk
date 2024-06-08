@@ -11,7 +11,6 @@ const usePreloadImages = () => {
         item.product.map((v) => {
           const img = new Image();
           img.src = `${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`;
-          console.log(img);
         });
       });
     }

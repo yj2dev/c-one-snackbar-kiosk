@@ -278,6 +278,17 @@ export const getCategory = async () => {
   return data;
 };
 
+export const getSelectedProduct = async () => {
+  let { data, error } = await supabase
+    .from("product")
+    .select(`*`)
+    .eq("state", "판매중");
+
+  if (error) throw new Error("상품을 가져오지 못했습니다.");
+
+  return data;
+};
+
 export const getProduct = async () => {
   let { data, error } = await supabase
     .from("category")
