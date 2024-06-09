@@ -161,7 +161,7 @@ export const getProductState = async () => {
     .eq("complete", false);
 
   if (error) {
-    console.error("상품 상태를 가져오지 못했습니다.");
+    console.error("주문 상태를 가져오지 못했습니다.");
     return [];
   }
 
@@ -293,6 +293,7 @@ export const getProduct = async () => {
   let { data, error } = await supabase
     .from("category")
     .select(`*, product(*)`)
+    .eq("product.is_delete", false)
     .order("display_sort", { ascending: true });
 
   if (error) throw new Error("상품을 가져오지 못했습니다.");
@@ -315,6 +316,7 @@ export const getAllProduct = async () => {
   let { data, error } = await supabase
     .from("category")
     .select(`*, product(*)`)
+    .eq("product.is_delete", false)
     .order("display_sort", { ascending: true });
 
   if (error) throw new Error("상품을 가져오지 못했습니다.");

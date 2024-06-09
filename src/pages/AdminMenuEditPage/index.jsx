@@ -319,13 +319,18 @@ const MenuEdit = () => {
                 <td>
                   <button
                     onClick={async () => {
+                      const isDelete = confirm(`${v.name}을 삭제하시겠습니까?`);
+
+                      if (!isDelete) return;
+
                       const { data, error } = await supabase
                         .from("product")
-                        .delete()
+                        .update({ is_delete: true })
                         .eq("id", v.id);
 
                       if (error) {
                         alert("상품 삭제에 실패했습니다.");
+                        return;
                       }
 
                       const { data: imageData, imageError } =
@@ -335,6 +340,7 @@ const MenuEdit = () => {
 
                       if (imageError) {
                         alert("상품 이미지 삭제에 실패했습니다.");
+                        return;
                       }
 
                       // onShowCategory();
