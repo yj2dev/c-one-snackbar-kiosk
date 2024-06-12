@@ -31,3 +31,9 @@
 ## 시연 영상
 [GIF 특성상 알림사운드는 재생되지 않습니다]
 ![시연](https://github.com/yj2dev/c-one-snackbar-kiosk/assets/72322679/2c5b4d25-a73a-42d9-a3f7-64ddc9f55d55)
+
+## 실제 사용사진
+<div style="display: flex; justify-content: space-between;">
+  <img src="https://github.com/yj2dev/c-one-snackbar-kiosk/assets/72322679/ee0737f5-a2c0-40e9-b4d6-9b6b8691cd77" width="45%">
+  <img src="https://github.com/yj2dev/c-one-snackbar-kiosk/assets/72322679/a4b341bb-513e-4674-853f-6268c0a4791c" width="45%">
+</div>
