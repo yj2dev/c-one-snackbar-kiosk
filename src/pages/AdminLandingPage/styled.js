@@ -37,9 +37,10 @@ export const Container = styled.div`
     position: relative;
     transition: 0.2s;
     display: block;
+    margin-bottom: 16px;
 
-    &:first-child {
-      margin-bottom: 16px;
+    &:last-child {
+      margin-bottom: 0;
     }
 
     &::before {

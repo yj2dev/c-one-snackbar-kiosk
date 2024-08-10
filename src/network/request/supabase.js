@@ -289,6 +289,25 @@ export const getSelectedProduct = async () => {
   return data;
 };
 
+export const getStockTrackedProducts = async () => {
+  let { data, error } = await supabase
+    .from("category")
+    .select(`*, product(*)`)
+    .eq("product.is_delete", false)
+    .eq("product.is_stock_trace", true) // 재고 추적 여부가 true인 것만 가져옴
+    .order("display_sort", { ascending: true });
+
+  if (error) throw new Error("재고 추적 상품을 가져오지 못했습니다.");
+
+  data.map((category) => {
+    category.product.sort((a, b) => {
+      return a.display_sort - b.display_sort;
+    });
+  });
+
+  return data;
+};
+
 export const getProduct = async () => {
   let { data, error } = await supabase
     .from("category")

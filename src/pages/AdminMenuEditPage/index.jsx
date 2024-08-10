@@ -154,6 +154,31 @@ const MenuEdit = () => {
     await queryClient.invalidateQueries("all-products");
   };
 
+  const toggleCookState = async (id, currentState) => {
+    const { data, error } = await supabase
+      .from("product")
+      .update({ is_cook: !currentState })
+      .eq("id", id);
+
+    if (error) {
+      alert("조리 여부를 반영하지 못했습니다.");
+    } else {
+      refetch();
+    }
+  };
+
+  const toggleStockTrace = async (id, currentState) => {
+    const { data, error } = await supabase
+      .from("product")
+      .update({ is_stock_trace: !currentState })
+      .eq("id", id);
+
+    if (error) {
+      alert("재고 추적 여부를 반영하지 못했습니다.");
+    } else {
+      refetch();
+    }
+  };
   return (
     <Container>
       <div
@@ -302,19 +327,17 @@ const MenuEdit = () => {
                 </td>
                 <td
                   onClick={async () => {
-                    const { data, error } = await supabase
-                      .from("product")
-                      .update({ is_cook: !v.is_cook })
-                      .eq("id", v.id);
-
-                    if (error) {
-                      alert("조리 여부를 반영하지 못했습니다.");
-                    }
-
-                    refetch();
+                    await toggleCookState(v.id, v.is_cook);
                   }}
                 >
                   {v.is_cook ? "조리" : "비조리"}
+                </td>
+                <td
+                  onClick={async () => {
+                    await toggleStockTrace(v.id, v.is_stock_trace);
+                  }}
+                >
+                  {v.is_stock_trace ? "재고파악" : "비활성"}
                 </td>
                 <td>
                   <button
@@ -343,7 +366,6 @@ const MenuEdit = () => {
                         return;
                       }
 
-                      // onShowCategory();
                       await queryClient.invalidateQueries("categories");
                       await queryClient.invalidateQueries("all-products");
                     }}

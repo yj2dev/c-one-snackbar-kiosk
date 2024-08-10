@@ -65,10 +65,11 @@ export const Container = styled.div`
         border-bottom: none;
       }
       td {
+        padding: 0 6px;
         display: flex;
         align-items: center;
         &:nth-child(1) {
-          width: 70px;
+          width: 50px;
           img {
             width: 50px;
             height: 50px;
@@ -80,15 +81,19 @@ export const Container = styled.div`
         }
         &:nth-child(3) {
           justify-content: end;
-          width: 100px;
+          width: 70px;
         }
         &:nth-child(4) {
           justify-content: end;
-          width: 100px;
+          width: 50px;
         }
         &:nth-child(5) {
           justify-content: end;
-          width: 80px;
+          width: 45px;
+        }
+        &:nth-child(6) {
+          justify-content: end;
+          width: 60px;
         }
       }
     }

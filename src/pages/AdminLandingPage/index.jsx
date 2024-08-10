@@ -8,6 +8,7 @@ const AdminLandingPage = () => {
       <div className="content">
         <Link to="/admin/order">주문 내역</Link>
         <Link to="/admin/menu">화면 관리</Link>
+        <Link to="/admin/stock">재고 관리</Link>
       </div>
       <Link className="move-landing" to="/">
         손님화면전환

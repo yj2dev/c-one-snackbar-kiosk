@@ -56,15 +56,10 @@ export const Container = styled.section`
       padding: 0 8px;
       border: 4px solid #d44252;
     }
-    dl {
-      &.sold-out {
-        opacity: 0.4;
-        box-shadow: 0 0 0 #000;
-      }
-
-      @media (max-width: 768px) {
-        height: 146px;
-      }
+    button {
+      outline: none;
+      border: none;
+      background-color: transparent;
       height: 234px;
       margin: 0;
       padding-bottom: 28px;
@@ -76,7 +71,21 @@ export const Container = styled.section`
       border-radius: 4px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       position: relative;
+      transition: 0.1s;
 
+      &:not(.sold-out):active {
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
+        transform: translate(2px, 2px);
+      }
+
+      @media (max-width: 768px) {
+        height: 146px;
+      }
+
+      &.sold-out {
+        opacity: 0.4;
+        box-shadow: 0 0 0 #000;
+      }
       img {
         border-radius: 4px 4px 0 0;
         height: 150px;
@@ -84,7 +93,7 @@ export const Container = styled.section`
         object-fit: cover;
       }
 
-      dt {
+      .name {
         @media (max-width: 768px) {
           font-size: 12px;
           margin: 4px 8px 0 8px;
@@ -96,7 +105,7 @@ export const Container = styled.section`
         height: 100%;
       }
 
-      dd {
+      .price {
         @media (max-width: 768px) {
           font-size: 12px;
         }

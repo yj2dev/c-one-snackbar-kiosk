@@ -61,7 +61,7 @@ const ContentSection = ({ curTab, product, basket, setBasket }) => {
       {product?.length > 0 && product[curTab].product?.length > 0 ? (
         product?.[curTab]?.product?.map((v, i) => (
           <div className="dl-wrapper" key={i}>
-            <dl
+            <button
               className={v.state === "품절" ? "sold-out" : ""}
               key={i}
               onClick={() => {
@@ -98,12 +98,12 @@ const ContentSection = ({ curTab, product, basket, setBasket }) => {
               }}
             >
               <img src={`${import.meta.env.VITE_STORAGE_BASE_URL}/${v.img}`} />
-              <dt>{v.name}</dt>
-              <dd>
+              <div className="name">{v.name}</div>
+              <div className="price">
                 {getKRW(v.price)}
                 <span className="m-none">원</span>
-              </dd>
-            </dl>
+              </div>
+            </button>
             {v.state === "품절" && <span className="sold-out-title">품절</span>}
           </div>
         ))
