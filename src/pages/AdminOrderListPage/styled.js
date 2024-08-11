@@ -78,7 +78,7 @@ export const Container = styled.div`
       margin-left: 16px;
       border: none;
       outline: none;
-      width: 120px;
+      width: 126px;
       font-size: 0.5em;
       text-align: center;
     }
@@ -184,8 +184,10 @@ export const Container = styled.div`
         }
 
         span.order-uid {
-          font-size: 1rem;
+          font-size: 1.5rem;
           color: #868686;
+          letter-spacing: 1px;
+          margin-bottom: 2px;
         }
       }
 

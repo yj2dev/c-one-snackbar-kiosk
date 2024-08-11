@@ -348,5 +348,52 @@ export const getAllProduct = async () => {
 
   return data;
 };
+// 수량 업데이트
+export const updateProductQuantity = async ({ productId, quantity }) => {
+  const { data, error } = await supabase
+    .from("product")
+    .update({ quantity })
+    .eq("id", productId)
+    .select();
 
+  if (error) {
+    console.error("Error updating product quantity:", error);
+    throw error;
+  }
+
+  return data;
+};
+
+export const getDailySales = async (productId) => {
+  // 현재 대한민국(KST) 시간을 UTC로 변환
+  const today = new Date();
+  const utcYear = today.getUTCFullYear();
+  const utcMonth = String(today.getUTCMonth() + 1).padStart(2, "0");
+  const utcDate = String(today.getUTCDate()).padStart(2, "0");
+
+  const utcTodayStart = `${utcYear}-${utcMonth}-${utcDate}T00:00:00Z`;
+  const utcTodayEnd = `${utcYear}-${utcMonth}-${utcDate}T23:59:59Z`;
+
+  const { data, error } = await supabase
+    .from("order_detail")
+    .select("quantity")
+    .eq("product_id", productId)
+    .gte("created_at", utcTodayStart) // UTC 기준 오늘 날짜의 시작부터
+    .lte("created_at", utcTodayEnd); // UTC 기준 오늘 날짜의 끝까지
+
+  console.log("utcTodayStart >> ", utcTodayStart);
+  console.log("utcTodayEnd >> ", utcTodayEnd);
+  console.log("data >> ", data);
+
+  if (error) {
+    console.error("Error fetching daily sales:", error);
+    throw error;
+  }
+
+  const totalSales = data.reduce((total, order) => total + order.quantity, 0);
+
+  console.log("totalSales >> ", totalSales);
+
+  return totalSales;
+};
 export default supabase;

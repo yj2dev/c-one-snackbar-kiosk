@@ -56,6 +56,7 @@ const AdminOrderList = ({ orderData, isSuccess, refetch }) => {
                 </div>
               )}
               <div className="order-now">{formatTime(v.created_at)}</div>
+              <span className="order-uid">{v.uid}</span>
               <div className="order-user">
                 <span
                   className={`gender-badge ${v.gender === "M" ? "M" : "F"}`}
@@ -64,8 +65,6 @@ const AdminOrderList = ({ orderData, isSuccess, refetch }) => {
                 </span>
                 {v.number}
               </div>
-
-              <span className="order-uid">({v.uid})</span>
             </article>
             <article className="order-detail">
               <div className="order-title">
